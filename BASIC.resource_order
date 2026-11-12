@@ -1,0 +1,9 @@
+{
+  "FolderOrderSettings":[],
+  "ResourceOrderSettings":[
+    {"name":"fntDejaVuSansMono","order":1,"path":"fonts/fntDejaVuSansMono/fntDejaVuSansMono.yy",},
+    {"name":"objSystem","order":3,"path":"objects/objSystem/objSystem.yy",},
+    {"name":"Manual","order":4,"path":"scripts/Manual/Manual.yy",},
+    {"name":"SystemMacros","order":2,"path":"scripts/SystemMacros/SystemMacros.yy",},
+  ],
+}

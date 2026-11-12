@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Manual",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Manual",
+  "parent":{
+    "name":"BASIC",
+    "path":"BASIC.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

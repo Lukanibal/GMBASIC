@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"SystemMacros",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"SystemMacros",
+  "parent":{
+    "name":"BASIC",
+    "path":"BASIC.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
