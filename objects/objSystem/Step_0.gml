@@ -6,6 +6,7 @@ if(keyboard_check_pressed(vk_anykey))
         keyboard_string = "";
         keyboard_lastkey = vk_nokey;
         running = false;
+        position --;
     }
     
     if(keyboard_lastkey == vk_escape && running)
@@ -18,6 +19,27 @@ if(keyboard_check_pressed(vk_anykey))
         program.steps = 0;
     }
     
+    /*
+    if(keyboard_lastkey == vk_left)
+    {
+        if(position > 1)
+        {
+            position --;
+        }
+        keyboard_lastkey = vk_nokey;
+        keyboard_string = "";
+    }
+    
+    if(keyboard_lastkey == vk_right)
+    {
+        if(position < (string_length(typed_text)-1))
+        {
+            position ++;
+        }
+        keyboard_lastkey = vk_nokey;
+        keyboard_string = "";
+    }
+    */
     if(keyboard_lastkey == vk_enter && typed_text != "")
     {
         //typed_text += "\r\n";
@@ -86,8 +108,11 @@ if(keyboard_check_pressed(vk_anykey))
         
     }
     
+    
+    
     if(keyboard_lastkey != vk_nokey)
     {
+        position ++;
         typed_text += string_upper(keyboard_string);
         keyboard_string = "";
         keyboard_lastkey = vk_nokey;

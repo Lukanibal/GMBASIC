@@ -150,16 +150,13 @@ function SCRIPT(_text = "") constructor
                     var _op = self.tokens[_i+2].value;
                     var _second = self.tokens[_i+3].value;
                     
-                    if(is_undefined(_first) && _op = "=")
+                    if(is_undefined(_first) && _op = "=")///define a new value
                     {
                         update_variable(self.tokens[_i+1], self.tokens[_i + 3]);///old LET code
                         _i += 3;
                     }
-                    else if(_op == "=")
-                    {
-                        
-                        /// 
-                    }
+                    
+                    ///I DON:T KNOW HOW TO DO THE FUCKING MATH OKAY???
                     
                 }
                 else

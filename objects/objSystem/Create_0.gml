@@ -2,6 +2,14 @@ typed_text = "";
 program_text = "";
 running = false;
 viewing = false;
+position = 1;
+cursor = "_";
+on = true;
+
+call_later(1, time_source_units_seconds, function()
+{
+    on = !on;
+}, true);
 
 tasks = [];
 program = new SCRIPT();
