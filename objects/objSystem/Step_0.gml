@@ -18,14 +18,15 @@ if(keyboard_check_pressed(vk_anykey))
         program.steps = 0;
     }
     
-    if(keyboard_lastkey == vk_enter)
+    if(keyboard_lastkey == vk_enter && typed_text != "")
     {
         //typed_text += "\r\n";
         if(typed_text == "RUN")
         {
             typed_text = "";
             running = true;
-            program.run(1000);
+            program.tokens = tokenize(program);
+            program.run(10);
         }
         else
         if(typed_text == "RESTART")
@@ -35,11 +36,8 @@ if(keyboard_check_pressed(vk_anykey))
         else
         if(typed_text == "CLS")
         {
-            typed_text = "CLEARED PROGRAM OUTPUT";
-            call_later(5, time_source_units_seconds, function()
-            {
-                objSystem.typed_text = "";
-            });
+            notify("CLEARED PROGRAM OUTPUT");
+            typed_text = "";
             program.output = "";
         }
         else
@@ -48,6 +46,7 @@ if(keyboard_check_pressed(vk_anykey))
             typed_text = "";
             program = new SCRIPT();
             program.add_line("10 PRINT \"HELLO WORLD!\"");
+            program.add_line("20 GOTO 10");
         }
         else
         if(typed_text == "SAVE")
@@ -109,7 +108,7 @@ else
     window_set_caption("BASIC - EDITING");
 }
 
-if(!program.running && program.steps == 0 && objSystem.running)
+if(program.running && program.steps <= 0 && objSystem.running)
 {
     program.run(10);
 }

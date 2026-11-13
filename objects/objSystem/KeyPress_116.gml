@@ -1,3 +1,4 @@
 typed_text = "";
 running = true;
-program.run(1000);
+program.tokens = tokenize(program);
+program.run(10);

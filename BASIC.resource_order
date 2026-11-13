@@ -3,7 +3,10 @@
   "ResourceOrderSettings":[
     {"name":"fntDejaVuSansMono","order":1,"path":"fonts/fntDejaVuSansMono/fntDejaVuSansMono.yy",},
     {"name":"objSystem","order":3,"path":"objects/objSystem/objSystem.yy",},
+    {"name":"objSystemNotification","order":7,"path":"objects/objSystemNotification/objSystemNotification.yy",},
     {"name":"Manual","order":4,"path":"scripts/Manual/Manual.yy",},
     {"name":"SystemMacros","order":2,"path":"scripts/SystemMacros/SystemMacros.yy",},
+    {"name":"Sprite2","order":6,"path":"sprites/Sprite2/Sprite2.yy",},
+    {"name":"sprPalette","order":5,"path":"sprites/sprPalette/sprPalette.yy",},
   ],
 }

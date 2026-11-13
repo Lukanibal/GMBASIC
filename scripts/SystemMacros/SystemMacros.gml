@@ -21,8 +21,20 @@ function SCRIPT(_text = "") constructor
     {
         output = "";
         pc = 0;
+        variables = {};
         running = true;
     };
+    
+    tokens_to_string = function()
+    {
+        var _str = [];
+        var _len = array_length(self.tokens);
+        for(var _i = 0; _i < _len; _i ++)
+        {
+            array_push(_str, self.tokens[_i].value);
+        }
+        return _str;
+    }
     
     add_line := function(_line)
     {  
@@ -65,10 +77,10 @@ function SCRIPT(_text = "") constructor
     {
         //output = "";
     
-        var _i = 0;
+        var _i = self.pc;
         var _len = array_length(self.tokens);
         var _running = true;
-        steps := _steps;
+        self.steps := _steps;
     
         while (_i < _len && _running && self.steps > 0)
         {
@@ -129,11 +141,26 @@ function SCRIPT(_text = "") constructor
                 else if (_token.value == "CLS")
                 {
                     output = "";
+                    _i++;
                 }
                 else if(_token.value == "LET")
                 {
-                    update_variable(self.tokens[_i+1], self.tokens[_i + 3]);
-                    _i+=3;
+                    ///update_variable(self.tokens[_i+1], self.tokens[_i + 3]);///old LET code
+                    var _first = get_variable(self.tokens[_i+1].value);
+                    var _op = self.tokens[_i+2].value;
+                    var _second = self.tokens[_i+3].value;
+                    
+                    if(is_undefined(_first) && _op = "=")
+                    {
+                        update_variable(self.tokens[_i+1], self.tokens[_i + 3]);///old LET code
+                        _i += 3;
+                    }
+                    else if(_op == "=")
+                    {
+                        
+                        /// 
+                    }
+                    
                 }
                 else
                 {
@@ -146,6 +173,9 @@ function SCRIPT(_text = "") constructor
             }
             steps --;
         }
+        
+        self.pc = _i;
+        self.running = _running;
         
         if(string_length(self.output) > 2000)
         {
@@ -170,7 +200,7 @@ function get_line_number(_line)
 {
     var _i = 1;
     var _num = "";
-    while(string_char_at(_line, _i) != " " || _i > string_length(_line))
+    while (_i <= string_length(_line) && string_char_at(_line, _i) != " ")
     {
         _num += string_char_at(_line, _i);
         _i ++;
@@ -273,7 +303,7 @@ function get_variable(_var_name)
     if(variable_struct_exists(objSystem.program.variables, _var_name))
     return objSystem.program.variables[$ _var_name];
     else
-    return -1
+    return undefined;
 }
 
 function find_line_token(_number)
@@ -305,6 +335,11 @@ function find_line_token(_number)
     }
 
     return -1;
+}
+
+function notify(_text)
+{
+    instance_create_depth(10, 10, -1, objSystemNotification, {text:_text});
 }
 
 
