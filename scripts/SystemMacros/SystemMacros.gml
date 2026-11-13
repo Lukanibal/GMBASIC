@@ -15,6 +15,7 @@ function SCRIPT(_text = "") constructor
     variables =  {};
     pc = 0;
     running = false;
+    steps := 0;
     
     start := function()
     {
@@ -60,15 +61,16 @@ function SCRIPT(_text = "") constructor
         self.tokens = tokenize(self);
     }
     
-    run := function()
+    run := function( _steps = 1000)
     {
-        output = "";
+        //output = "";
     
         var _i = 0;
         var _len = array_length(self.tokens);
         var _running = true;
+        steps := _steps;
     
-        while (_i < _len && _running)
+        while (_i < _len && _running && self.steps > 0)
         {
             var _token = self.tokens[_i];
     
@@ -85,11 +87,11 @@ function SCRIPT(_text = "") constructor
                         var _var = get_variable(self.tokens[_i + 1].value);
                         if(_var != -1)
                         {
-                            output += string(_var) + "\r\n";
+                            output += string(_var);
                         }
                         else 
                         {
-                            output += string(self.tokens[_i + 1].value) + "\r\n";
+                            output += string(self.tokens[_i + 1].value);
                         }
                         
                         
@@ -108,7 +110,7 @@ function SCRIPT(_text = "") constructor
                 
                         if (_target == -1)
                         {
-                            _running = false; // or report an invalid line number
+                            _running = false;
                         }
                         else
                         {
@@ -124,6 +126,10 @@ function SCRIPT(_text = "") constructor
                 {
                     _running = false;
                 }
+                else if (_token.value == "CLS")
+                {
+                    output = "";
+                }
                 else if(_token.value == "LET")
                 {
                     update_variable(self.tokens[_i+1], self.tokens[_i + 3]);
@@ -138,6 +144,12 @@ function SCRIPT(_text = "") constructor
             {
                 _i++;
             }
+            steps --;
+        }
+        
+        if(string_length(self.output) > 2000)
+        {
+            self.output = string_delete(self.output, 1, 80);
         }
     }
 
@@ -254,6 +266,8 @@ function update_variable(_var_name, _value)///LET
     objSystem.program.variables[$ _var_name.value] = _value.value;
 }
 
+
+///VARIABLE HELPERS
 function get_variable(_var_name)
 {
     if(variable_struct_exists(objSystem.program.variables, _var_name))

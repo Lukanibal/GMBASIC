@@ -1,6 +1,7 @@
 typed_text = "";
 program_text = "";
-running := false;
+running = false;
+viewing = false;
 
 tasks = [];
 program = new SCRIPT();

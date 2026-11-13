@@ -14,6 +14,8 @@ if(keyboard_check_pressed(vk_anykey))
         keyboard_string = "";
         keyboard_lastkey = vk_nokey;
         running = false;
+        program.running := false;
+        program.steps = 0;
     }
     
     if(keyboard_lastkey == vk_enter)
@@ -23,12 +25,22 @@ if(keyboard_check_pressed(vk_anykey))
         {
             typed_text = "";
             running = true;
-            program.run();
+            program.run(1000);
         }
         else
         if(typed_text == "RESTART")
         {
             game_restart();
+        }
+        else
+        if(typed_text == "CLS")
+        {
+            typed_text = "CLEARED PROGRAM OUTPUT";
+            call_later(5, time_source_units_seconds, function()
+            {
+                objSystem.typed_text = "";
+            });
+            program.output = "";
         }
         else
         if(typed_text == "NEW")
@@ -88,7 +100,16 @@ if(running)
 {
     window_set_caption("BASIC - RUNNING");
 }
+else if(viewing)
+{
+    window_set_caption("BASIC - VIEWING PROGRAM OUTPUT");
+}
 else 
 {
     window_set_caption("BASIC - EDITING");
+}
+
+if(!program.running && program.steps == 0 && objSystem.running)
+{
+    program.run(10);
 }

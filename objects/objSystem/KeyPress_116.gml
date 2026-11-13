@@ -1,3 +1,3 @@
 typed_text = "";
 running = true;
-program.run();
+program.run(1000);
