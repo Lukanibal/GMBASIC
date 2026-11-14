@@ -2,20 +2,47 @@
 
 if (program.waiting_for_input)
 {
-    program.input_text = string_upper(keyboard_string);
-
-    if (keyboard_check_pressed(vk_enter))
+    if (program.input_mode == "KEY")
     {
-        program.variables[$ program.input_var] = program.input_text;
+        var _key = "";
 
-        program.waiting_for_input = false;
-        program.running = true;
-        program.input_var = "";
-        program.input_text = "";
-        keyboard_string = "";
-        program.steps = 0
+        if (keyboard_check_pressed(vk_left))       _key = "LEFT";
+        else if (keyboard_check_pressed(vk_right)) _key = "RIGHT";
+        else if (keyboard_check_pressed(vk_up))    _key = "UP";
+        else if (keyboard_check_pressed(vk_down))  _key = "DOWN";
+        else if (mouse_check_button_pressed(mb_left))  _key = "LEFT_CLICK";
+        else if (mouse_check_button_pressed(mb_right))  _key = "RIGHT_CLICK";
+
+        if (_key != "")
+        {
+            program.variables[$ program.input_var] = _key;
+
+            program.waiting_for_input = false;
+            program.running = true;
+            program.input_var = "";
+            program.input_mode = "";
+            program.steps = 0;
+        }
+    }
+    else
+    {
+        program.input_text = string_upper(keyboard_string);
+
+        if (keyboard_check_pressed(vk_enter))
+        {
+            program.variables[$ program.input_var] = program.input_text;
+
+            program.waiting_for_input = false;
+            program.running = true;
+            program.input_var = "";
+            program.input_mode = "";
+            program.input_text = "";
+            keyboard_string = "";
+            program.steps = 0;
+        }
     }
 }
+
 else
 {
     if(keyboard_check_pressed(vk_anykey))
@@ -113,7 +140,7 @@ else
                 _handled = true;
            }
            else
-           if(typed_text == "UPLOAD")
+           if(typed_text == "FLOAD")
            {
                 typed_text = "";
                 position = 1; 
@@ -129,6 +156,26 @@ else
                 _handled = true;
             }
            else
+           if(typed_text == "FSAVE")
+           {
+                typed_text = "";
+                position = 1;
+            
+            
+                var _name = get_save_filename("BASIC Program|*.bas;*.BAS;*.txt", "");
+                var _file = file_text_open_write($"{_name}.BAS");
+                var _len = array_length(program.lines);
+                var _i = 0;
+                while(_i < _len)
+                {
+                    file_text_write_string(_file, program.lines[_i]);
+                    file_text_writeln(_file);
+                    _i++
+                }
+            
+                file_text_close(_file);
+                _handled = true;
+           }
            if(typed_text == "SAVE")
            {
                 typed_text = "";
@@ -372,9 +419,10 @@ else
     window_set_caption("BASIC - EDITING");
 }
 
+///keep running!
 if(program.running && program.steps <= 0 && objSystem.running)
 {
-    program.run(120);
+    program.run();
 }
 
 var _pane_left = row_length + 20;
@@ -398,3 +446,29 @@ var _content_height = string_height_ext( program.text, 24,  _pane_width);
 
 var _max_scroll = max(0, _content_height - _pane_height);
 program_scroll_y = clamp(program_scroll_y, 0, _max_scroll);
+
+if (program.running || program.waiting_for_input)
+{
+    if (program.current_line != last_highlight_line)
+    {
+        last_highlight_line = program.current_line;
+
+        _pane_width = room_width - (row_length + 20);
+        var _b = program_line_bounds(program.current_line, _pane_width);
+
+        if (_b != undefined)
+        {
+            var _view_h = 600;
+            if (_b.top < program_scroll_y || _b.top + _b.height > program_scroll_y + _view_h)
+            {
+                program_scroll_y = max(0, _b.top - _view_h / 2 + _b.height / 2);
+            }
+        }
+    }
+}
+else
+{
+    last_highlight_line = -1;
+}
+
+

@@ -103,34 +103,37 @@ draw_text(10, room_height - 36, ">"+_display_text);
 
 var _pane_left = row_length + 20;
 var _pane_top = 10;
-var _pane_width = room_width - _pane_left;
-var _pane_height = 600; // pane runs from y=10 to y=610
+var _pane_width = window_get_width() - _pane_left;
+var _pane_height = window_get_height() - 168; 
 
-//draw_text_ext(string_width(_display_string), 10, "TOKENS:"+string(program.tokens_to_string()), 36, room_width-string_width(_display_string));
-//draw_text_ext(row_length+20, 10 + program_scroll_y, program.text, 24, room_width - (row_length+20));
 var _scissor = gpu_get_scissor();
+
 gpu_set_scissor(_pane_left, _pane_top, _pane_width, _pane_height);
 
+var _b = program_line_bounds(program.current_line, _pane_width);
+if (_b != undefined)
+{
+    var _hy = _pane_top - program_scroll_y + _b.top;
+    draw_set_color(c_ltgray);
+    draw_rectangle(_pane_left, _hy, _pane_left + _pane_width, _hy + _b.height, false);
+    draw_set_color(text_color);
+}
+draw_text_ext(_pane_left, _pane_top - program_scroll_y, program.text, 24, _pane_width);
 
-draw_text_ext( _pane_left, _pane_top - program_scroll_y, program.text, 24, _pane_width);
 
 gpu_set_scissor(_scissor);
+draw_line_width_colour(row_length+15, 0, row_length+15, window_get_height(), 4, text_color, text_color);
+draw_line_width_colour(0, 610, window_get_width(), 610, 4, text_color, text_color);
 
 
+_pane_left = row_length + 20;
+_pane_top = 615;
+_pane_width = window_get_width() - _pane_left;
+_pane_height = window_get_height(); 
 
-if (program.waiting_for_input)
-{
-    draw_text(10, 610, "INPUT " + program.input_var + ":");
-    draw_text(10, 634, program.input_text + "_");
-}
-draw_text(10, room_height - 72, $"MOUSEX:{mouse_x}, MOUSEY:{mouse_y}");
-draw_set_halign(fa_right);
 
-draw_line_width_colour(row_length+15, 0, row_length+15, 610, 4, text_color, text_color);
-draw_line_width_colour(0, 610, row_length+15, 610, 4, text_color, text_color);
+draw_text_ext(_pane_left, _pane_top, $"VARIABLES:{program.variables}", 24, _pane_width);
 
-draw_text_ext(room_width - 10, room_height - 36, "VARIABLES:"+string(program.variables), 36, room_width-36);
-draw_set_halign(fa_left);
 
 
 

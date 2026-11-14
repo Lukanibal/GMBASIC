@@ -16,11 +16,15 @@ function SCRIPT(_text = "") constructor
     pc = 0;
     running = false;
     steps = 0;
+    _out_of_time = false;
+    
+    current_line = -1;
     
     //input handling
     waiting_for_input = false;
     input_var = "";
     input_text = "";
+    input_mode = "";
     
     //graphics api
     graphics = [];
@@ -38,6 +42,7 @@ function SCRIPT(_text = "") constructor
         graphics = [];
         graphics_build = [];
         has_built_frame = false;
+        current_line = -1;
         running = true;
     };
     
@@ -91,25 +96,31 @@ function SCRIPT(_text = "") constructor
     
     remove_line = function(_num)
     {
-        var _len = array_length(objSystem.program.lines);
-        
-        for(var _i = 0; _i < _len; _i++)
+        for (var _i = array_length(lines) - 1; _i >= 0; _i--)
         {
-            if(get_line_number(objSystem.program.lines[_i]) == _num)
+            if (get_line_number(lines[_i]) == _num)
             {
-                array_delete(objSystem.program.lines, _i, 1);
+                array_delete(lines, _i, 1);
             }
         }
+    
+        text = "";
+        for (var _i = 0; _i < array_length(lines); _i++)
+        {
+            text += lines[_i] + "\r\n";
+        }
+        self.tokens = tokenize(self);
     }
     
     run = function( _steps = 1000)
     {
-        //output = "";
-    
         var _i = self.pc;
         var _len = array_length(self.tokens);
         var _running = true;
+        var _start = get_timer();
         self.steps = _steps;
+        _check = 0;
+        _yield = false;
         
         if (self.waiting_for_input)
         {
@@ -117,11 +128,16 @@ function SCRIPT(_text = "") constructor
         }
 
     
-        while (_i < _len && _running && self.steps > 0)
+        while (_i < _len && _running && self.steps > 0 && !_yield)
         {
             var _token = self.tokens[_i];
     
-            if (_token.kind == "NUMBER" || _token.kind == "NEWLINE")
+            if (_token.kind == "NUMBER" && (_i == 0 || self.tokens[_i - 1].kind == "NEWLINE"))
+            {
+                self.current_line = real(_token.value);
+                _i++;
+            }
+            else if (_token.kind == "NUMBER" || _token.kind == "NEWLINE")
             {
                 _i++;
             }
@@ -129,24 +145,20 @@ function SCRIPT(_text = "") constructor
             {
                 if (_token.value == "PRINT")
                 {
-                    if (_i + 1 < _len)
+                    var _postfix = to_postfix(self.tokens, _i + 1);
+                
+                    if (array_length(_postfix) == 0)
                     {
-                        var _var = get_variable(self.tokens[_i + 1].value);
-                        if(_var != undefined)
-                        {
-                            output += string(_var);
-                        }
-                        else 
-                        {
-                            output += string(self.tokens[_i + 1].value);
-                        }
-                        
-                        
-                        _i += 2;
+                        notify("PRINT: EXPECTED A VALUE");
+                        _running = false;
                     }
                     else
                     {
-                        _running = false; 
+                        output += string(evaluate_postfix(_postfix));
+                
+                        var _e = _i + 1;
+                        while (_e < _len && self.tokens[_e].kind != "NEWLINE") _e++;
+                        _i = _e;
                     }
                 }
                 else if (_token.value == "GOTO")
@@ -184,8 +196,33 @@ function SCRIPT(_text = "") constructor
                     output = "";
                     _i++;
                 }
+                else if (_token.value == "VSTNC")
+                {
+                    _yield = true;
+                    _i++;
+                }
                 else if (_token.value == "INPUT")
                 {
+                    
+                    var _mode = self.tokens[_i + 1].value;
+                    if(_mode == "KEY")
+                    {
+                        if (_i + 2 < _len && self.tokens[_i + 2].kind == "WORD")
+                        {
+                            self.input_var = self.tokens[_i + 2].value;
+                            self.input_mode = "KEY";
+                            self.waiting_for_input = true;
+                            
+                            _i += 3;
+                            _running = false;
+                        }
+                        else
+                        {
+                            notify("INPUT KEY: EXPECTED A VARIABLE NAME");
+                            _running = false;
+                        }
+                    }
+                    else
                     if (_i + 1 < _len && self.tokens[_i + 1].kind == "WORD")
                     {
                         self.input_var = self.tokens[_i + 1].value;
@@ -204,30 +241,35 @@ function SCRIPT(_text = "") constructor
                 }
                 else if (_token.value == "LET")
                 {
-                    var _equals = _i + 2;
-                    var _end = _equals + 1;
                     var _name = self.tokens[_i + 1].value;
-                    var _expression_start = _equals + 1;
+                    var _equals = _i + 2;
+                    var _index_pf = undefined;
                 
-                    while (_end < _len && self.tokens[_end].kind != "NEWLINE")
+                    if (_i + 2 < _len && self.tokens[_i + 2].kind == "SYMBOL" && self.tokens[_i + 2].value == "(")
                     {
-                        _end++;
+                        var _close = find_close_paren(self.tokens, _i + 2);
+                        if (_close != -1)
+                        {
+                            var _inner = [];
+                            for (var _k = _i + 3; _k < _close; _k++) array_push(_inner, self.tokens[_k]);
+                            array_push(_inner, new TOKEN("NEWLINE", "\n"));
+                            _index_pf = to_postfix(_inner, 0);
+                            _equals = _close + 1;
+                        }
                     }
-                    
-                    if (_end == _expression_start + 1
-                    && self.tokens[_expression_start].kind == "STRING")
-                    {
-                        self.variables[$ _name] = self.tokens[_expression_start].value;
-                        _i = _end;
-                    }
-                    else if (_i + 1 >= _len || _equals >= _len || self.tokens[_equals].value != "=" || _end == _equals + 1)
+                
+                    var _end = _equals + 1;
+                    while (_end < _len && self.tokens[_end].kind != "NEWLINE") _end++;
+                
+                    if (_i + 1 >= _len || _equals >= _len || self.tokens[_equals].value != "="
+                        || _end == _equals + 1
+                        || (!is_undefined(_index_pf) && array_length(_index_pf) == 0))
                     {
                         notify("LET: EXPECTED A DESTINATION AND EXPRESSION");
                         _running = false;
                     }
                     else
                     {
-                        //var _name = self.tokens[_i + 1].value;
                         var _postfix = to_postfix(self.tokens, _equals + 1);
                 
                         if (array_length(_postfix) == 0)
@@ -238,7 +280,31 @@ function SCRIPT(_text = "") constructor
                         else
                         {
                             var _result = evaluate_postfix(_postfix);
-                            self.variables[$ _name] = _result;
+                
+                            if (is_undefined(_index_pf))
+                            {
+                                self.variables[$ _name] = _result;
+                            }
+                            else
+                            {
+                                var _arr = get_variable(_name);
+                                var _idx = floor(evaluate_postfix(_index_pf));
+                
+                                if (!is_array(_arr))
+                                {
+                                    notify("NOT AN ARRAY: " + _name);
+                                    _running = false;
+                                }
+                                else if (_idx < 0 || _idx >= array_length(_arr))
+                                {
+                                    notify("INDEX OUT OF RANGE: " + _name + "(" + string(_idx) + ")");
+                                    _running = false;
+                                }
+                                else
+                                {
+                                    _arr[_idx] = _result;
+                                }
+                            }
                             _i = _end;
                         }
                     }
@@ -462,6 +528,28 @@ function SCRIPT(_text = "") constructor
                         _i += 6;
                     }
                 }
+                else if (_token.value == "DIM")
+                {
+                    var _valid = (_i + 4 < _len)
+                        && self.tokens[_i + 1].kind == "WORD"
+                        && self.tokens[_i + 2].value == "("
+                        && self.tokens[_i + 4].value == ")";
+                
+                    var _size = undefined;
+                    if (_valid) _size = line_value(self.tokens[_i + 3]);
+                    if (_valid && is_undefined(_size)) _valid = false;
+                
+                    if (!_valid || _size < 0 || _size > 10000)
+                    {
+                        notify("DIM: EXPECTED NAME(SIZE)");
+                        _running = false;
+                    }
+                    else
+                    {
+                        self.variables[$ self.tokens[_i + 1].value] = array_create(floor(_size) + 1, 0);
+                        _i += 5;
+                    }
+                }
                 else if (_token.value == "SETDRAWCOLOR")
                 {
                     var _valid = (_i + 1 < _len);
@@ -602,6 +690,15 @@ function SCRIPT(_text = "") constructor
                 _i++;
             }
             steps --;
+            _check++;
+            if (_check >= 32) 
+            { 
+                _check = 0; 
+                if (get_timer() - _start >= _steps) 
+                {
+                    _out_of_time = true; 
+                }
+            }
         }
         
         self.pc = _i;
@@ -850,8 +947,41 @@ function to_postfix(_tokens, _start)
     {
         var _token = _tokens[_i];
         var _value = _token.value;
-
-        if (_token.kind == "NUMBER" || _token.kind == "WORD" || _token.kind == "STRING")
+        
+        if(_token.kind == "WORD" && _i +1 < _len && _tokens[_i + 1].kind == "SYMBOL" && _tokens[_i + 1].value == "(")
+        {
+            var _close = find_close_paren(_tokens, _i + 1);
+            if(_close == -1)
+            {
+                notify("LET EXPRESSION: UNMATCHED OPENING PARENTHESIS");
+                return [];
+            }
+            
+            var _inner = [];
+            for(var _j = _i + 2; _j < _close; _j++)
+            {
+                array_push(_inner, _tokens[_j]);
+            }
+            array_push(_inner, new TOKEN("NEWLINE", "\n"));
+            
+            var _index_pf = to_postfix(_inner, 0);
+            if(array_length(_index_pf) == 0)
+            {
+                notify("ARRAY INDEX: EXPECTED AN EXPRESSION");
+                return [];
+            }
+            
+            if (string_upper(_value) == "SQRT")
+            {
+                array_push(_output, new TOKEN("FUNCTION", { name: "SQRT", argument: _index_pf }));
+            }
+            else
+            {
+                array_push(_output, new TOKEN("ARRAYREF", { name: _value, index: _index_pf }));
+            }
+            _i = _close;
+        }
+        else if (_token.kind == "NUMBER" || _token.kind == "WORD" || _token.kind == "STRING")
         {
             array_push(_output, _token);
         }
@@ -960,6 +1090,46 @@ function evaluate_postfix(_pf)
         
             array_push(_values, _value);
         }
+        else if(_token.kind == "ARRAYREF")
+        {
+            var _arr = get_variable(_token.value.name);
+            if(!is_array(_arr))
+            {
+                notify($"NOT AN ARRAY: {_token.value.name}");
+                return 0;
+            }
+            
+            var _idx = evaluate_postfix(_token.value.index);
+            if(!is_real(_idx))
+            {
+                notify("ARRAY INDEX MUST BE A NUMBER");
+                return 0;
+            }
+            
+            _idx = floor(_idx);
+            if(_idx < 0 || _idx >= array_length(_arr))
+            {
+                notify($"INDEX OUT OF RANGE: {_token.value.name}({_idx})");
+                return 0;
+            }
+            
+            array_push(_values, _arr[_idx])
+        }
+        else if (_token.kind == "FUNCTION")
+        {
+            var _argument = evaluate_postfix(_token.value.argument);
+        
+            if (_token.value.name == "SQRT")
+            {
+                if (_argument < 0)
+                {
+                    notify("SQRT: ARGUMENT MUST NOT BE NEGATIVE");
+                    return 0;
+                }
+        
+                array_push(_values, sqrt(_argument));
+            }
+        }
         else if (_token.kind == "SYMBOL" && is_expr_op(_token.value))
         {
             if (array_length(_values) < 2)
@@ -1066,4 +1236,44 @@ function notify(_text)
     instance_create_depth(10, 610, -1, objSystemNotification, {text:_text});
 }
 
+/// @returns {struct|undefined} the pixel top and height of a program line in the pane
+function program_line_bounds(_line_num, _width)
+{
+    var _lines = objSystem.program.lines;
+    var _count = array_length(_lines);
+    var _prefix = "";
 
+    for (var _i = 0; _i < _count; _i++)
+    {
+        _prefix += (_prefix == "" ? "" : "\r\n") + _lines[_i];
+
+        if (get_line_number(_lines[_i]) == _line_num)
+        {
+            var _line_h = string_height_ext(_lines[_i], 24, _width);
+            var _end_h  = string_height_ext(_prefix, 24, _width);
+            return { top: _end_h - _line_h, height: _line_h };
+        }
+    }
+
+    return undefined;
+}
+
+function find_close_paren(_tokens, _open)
+{
+    var _depth = 0;
+    var _len = array_length(_tokens);
+
+    for (var _i = _open; _i < _len; _i++)
+    {
+        var _t = _tokens[_i];
+        if (_t.kind == "NEWLINE") return -1;
+
+        if (_t.kind == "SYMBOL" && _t.value == "(") _depth++;
+        else if (_t.kind == "SYMBOL" && _t.value == ")")
+        {
+            _depth--;
+            if (_depth == 0) return _i;
+        }
+    }
+    return -1;
+}
