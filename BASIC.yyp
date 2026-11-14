@@ -13,7 +13,9 @@
   "ForcedPrefabProjectReferences":[
     {"link":"io.gamemaker.sdfshaders-1.0.0","name":"io.gamemaker.sdfshaders-1.0.0","path":"io.gamemaker.sdfshaders-1.0.0.yyp",},
   ],
-  "IncludedFiles":[],
+  "IncludedFiles":[
+    {"$GMIncludedFile":"","%Name":"LudusDemo.bas","CopyToMask":-1,"filePath":"datafiles","name":"LudusDemo.bas","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+  ],
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
@@ -25,9 +27,11 @@
     {"id":{"name":"objSystem","path":"objects/objSystem/objSystem.yy",},},
     {"id":{"name":"objSystemNotification","path":"objects/objSystemNotification/objSystemNotification.yy",},},
     {"id":{"name":"rmConsole","path":"rooms/rmConsole/rmConsole.yy",},},
+    {"id":{"name":"debug","path":"scripts/debug/debug.yy",},},
     {"id":{"name":"Manual","path":"scripts/Manual/Manual.yy",},},
+    {"id":{"name":"screen_saver","path":"scripts/screen_saver/screen_saver.yy",},},
+    {"id":{"name":"Script5","path":"scripts/Script5/Script5.yy",},},
     {"id":{"name":"SystemMacros","path":"scripts/SystemMacros/SystemMacros.yy",},},
-    {"id":{"name":"Sprite2","path":"sprites/Sprite2/Sprite2.yy",},},
     {"id":{"name":"sprPalette","path":"sprites/sprPalette/sprPalette.yy",},},
   ],
   "resourceType":"GMProject",

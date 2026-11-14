@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"screen_saver",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"screen_saver",
+  "parent":{
+    "name":"BASIC",
+    "path":"BASIC.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

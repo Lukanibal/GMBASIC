@@ -1,0 +1,1 @@
+program_scroll_y += 480;
