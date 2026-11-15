@@ -925,7 +925,7 @@ function is_math_op(_value)
 
 function is_expr_op(_value)
 {
-    return (is_math_op(_value) || _value == "=" || _value == "<>" || _value == "<" || _value == ">" || _value == "<=" || _value == ">=");
+    return (is_math_op(_value) || _value == "=" || _value == "<>" || _value == "<" || _value == ">" || _value == "<=" || _value == ">=" || _value == "MOD");
 }
 
 ///@param _tokens {ARRAY} an array of math tokens
@@ -951,29 +951,58 @@ function to_postfix(_tokens, _start)
                 return [];
             }
             
-            var _inner = [];
-            for(var _j = _i + 2; _j < _close; _j++)
-            {
-                array_push(_inner, _tokens[_j]);
-            }
-            array_push(_inner, new TOKEN("NEWLINE", "\n"));
-            
-            var _index_pf = to_postfix(_inner, 0);
-            if(array_length(_index_pf) == 0)
-            {
-                notify("ARRAY INDEX: EXPECTED AN EXPRESSION");
-                return [];
-            }
-            
             if(array_contains(global.function_names, string_upper(_value)))
             {
-                array_push(_output, new TOKEN("FUNCTION", { name: string_upper(_value), argument: _index_pf }));
+                var _split = split_arguments(_tokens, _i + 2, _close);
+                
+                if(!_split.ok)
+                {
+                    notify("FUNCTION: EMPTY OR INVALID ARGUMENT");
+                    return [];
+                }
+                
+                var _args_pf = [];
+                
+                for(var _j = 0; _j < array_length(_split.parts); _j++)
+                {
+                    var _arg_tokens = _split.parts[_j];
+                    array_push(_arg_tokens, new TOKEN("NEWLINE", "\n"))
+                    
+                    var _arg_pf = to_postfix(_arg_tokens, 0);
+                    
+                    if(array_length(_arg_pf) == 0)
+                    {
+                        notify("FUNCTION: EXPECTED ARGUMENT OR EXPRESSION");
+                        return [];
+                    }
+                    
+                    array_push(_args_pf, _arg_pf);
+                }
+                
+                array_push(_output, new TOKEN("FUNCTION", {name: string_upper(_value), arguments: _args_pf}));
             }
-            else
+            else 
             {
+                var _inner = [];
+                for(var _j = _i + 2; _j < _close; _j++)
+                {
+                    array_push(_inner, _tokens[_j]);
+                }
+                array_push(_inner, new TOKEN("NEWLINE", "\n"));
+                
+                var _index_pf = to_postfix(_inner, 0);
+                if(array_length(_index_pf) == 0)
+                {
+                    notify("ARRAY INDEX: EXPECTED AN EXPRESSION");
+                    return [];
+                }
+                
                 array_push(_output, new TOKEN("ARRAYREF", { name: _value, index: _index_pf }));
+                
             }
+            
             _i = _close;
+            
         }
         else if (_token.kind == "NUMBER" || _token.kind == "WORD" || _token.kind == "STRING")
         {
@@ -1111,9 +1140,22 @@ function evaluate_postfix(_pf)
         }
         else if (_token.kind == "FUNCTION")
         {
-            var _argument = evaluate_postfix(_token.value.argument);
             
-            if (_token.value.name == "SQRT")
+            
+            var _args = [];
+            var _arg_count = array_length(_token.value.arguments);
+            
+            //eval pfs
+            for(var _j = 0; _j < _arg_count; _j++)
+            {
+                array_push(_args, evaluate_postfix(_token.value.arguments[_j]));
+            }
+            
+            var _argument = _args[0];
+            
+            var _func = _token.value.name;
+            
+            if (_func == "SQRT")
             {
                 if (_argument < 0)
                 {
@@ -1123,45 +1165,159 @@ function evaluate_postfix(_pf)
                 
                 array_push(_values, sqrt(_argument));
             }
-            if (_token.value.name == "SQR")
+            if (_func == "SQR")
             {
                 array_push(_values, sqr(_argument));
             }
-            if (_token.value.name == "ABS")
+            if (_func == "ABS")
             {
                 array_push(_values, abs(_argument));
             }
-            if (_token.value.name == "SIGN")
+            if (_func == "SIGN")
             {
                 array_push(_values, sign(_argument));
             }
-            if (_token.value.name == "COS")
+            if (_func == "COS")
             {
                 array_push(_values, cos(_argument));
             }
-            if (_token.value.name == "SIN")
+            if (_func == "SIN")
             {
                 array_push(_values, sin(_argument));
             }
-            if (_token.value.name == "FLOOR")
+            if (_func == "FLOOR")
             {
                 array_push(_values, floor(_argument));
             }
-            if (_token.value.name == "CEIL")
+            if (_func == "CEIL")
             {
                 array_push(_values, ceil(_argument));
             }
-            if (_token.value.name == "ROUND")
+            if (_func == "ROUND")
             {
                 array_push(_values, round(_argument));
             }
-            if (_token.value.name == "ARCTAN")
+            if (_func == "ARCTAN")
             {
                 array_push(_values, arctan(_argument));
             }
-            if (_token.value.name == "RANDOM")
+            if (_func == "RANDOM")
             {
                 array_push(_values, random(_argument));
+            }
+            if (_func == "FRAC")
+            {
+                array_push(_values, frac(_argument));
+            }
+            if(_func == "POW")
+            {
+                if(_arg_count != 2)
+                {
+                    notify("FUNCTION: POW EXPECTS 2 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, power(_argument, _args[1]));
+            }
+            if(_func == "LOG")
+            {
+                if(_arg_count != 2)
+                {
+                    notify("FUNCTION: LOG EXPECTS 2 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, logn(_argument, _args[1]));
+            }
+            if(_func == "ARCTAN2")
+            {
+                if(_arg_count != 2)
+                {
+                    notify("FUNCTION: ARCTAN2 EXPECTS 2 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, arctan2(_argument, _args[1]));
+            }
+            if(_func == "MIN")
+            {
+                if(_arg_count != 2)
+                {
+                    notify("FUNCTION: MIN EXPECTS 2 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, min(_argument, _args[1]));
+            }
+            if(_func == "MAX")
+            {
+                if(_arg_count != 2)
+                {
+                    notify("FUNCTION: MAX EXPECTS 2 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, max(_argument, _args[1]));
+            }
+            if(_func == "CLAMP")
+            {
+                if(_arg_count != 3)
+                {
+                    notify("FUNCTION: CLAMP EXPECTS 3 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, clamp(_argument, _args[1], _args[2]));
+            }
+            if(_func == "MOD")
+            {
+                if(_arg_count != 2)
+                {
+                    notify("FUNCTION: MOD EXPECTS 2 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, _argument mod _args[1]);
+            }
+            if(_func == "LERP")
+            {
+                if(_arg_count != 3)
+                {
+                    notify("FUNCTION: LERP EXPECTS 3 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, lerp(_argument, _args[1], _args[2]));
+            }
+            if(_func == "LENGTHDIRX")
+            {
+                if(_arg_count != 2)
+                {
+                    notify("FUNCTION: LENGTHDIRX EXPECTS 2 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, lengthdir_x(_argument, _args[1]));
+            }
+            if(_func == "LENGTHDIRY")
+            {
+                if(_arg_count != 2)
+                {
+                    notify("FUNCTION: LENGTHDIRY EXPECTS 2 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, lengthdir_y(_argument, _args[1]));
+            }
+            if(_func == "POINTDIR")
+            {
+                if(_arg_count != 4)
+                {
+                    notify("FUNCTION: PONTDIR EXPECTS 4 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, point_direction(_argument, _args[1], _args[2], _args[3]));
             }
             
         }
@@ -1262,6 +1418,80 @@ function evaluate_postfix(_pf)
     }
     
     return _values[0];
+}
+
+function split_arguments(_tokens, _start, _end)
+{
+    if(_start == _end)
+    {
+        return 
+        {
+            ok: true,
+            parts: []
+        }
+    }
+    
+    var _parts = [];
+    var _current = [];
+    var _depth = 0;
+    
+    for(var _i = _start; _i < _end; _i++)
+    {
+        var _token = _tokens[_i];
+        
+        if(_token.kind == "SYMBOL" && _token.value == "(")
+        {
+            _depth ++;
+            array_push(_current, _token);
+        }
+        else if(_token.kind == "SYMBOL" && _token.value == ")")
+        {
+            _depth --;
+            if(_depth < 0)
+            {
+                return 
+                {
+                    ok: false,
+                    parts: []
+                }
+            }
+            array_push(_current, _token);
+        }
+        else if(_token.kind == "SYMBOL" && _token.value == "," && _depth == 0)
+        {
+            if(array_length(_current) == 0)
+            {
+                return 
+                {
+                    ok: false,
+                    parts: []
+                }
+            }
+            
+            array_push(_parts, _current);
+            _current = [];
+        }
+        else 
+        {
+            array_push(_current, _token);
+        }
+    }
+    
+    if(array_length(_current) == 0)
+    {
+        return 
+        {
+            ok: false,
+            parts: []
+        }
+    }
+    
+    array_push(_parts, _current);
+    return 
+    {
+        ok: true,
+        parts: _parts
+    }
 }
 
 
