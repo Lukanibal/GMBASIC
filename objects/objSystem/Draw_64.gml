@@ -10,7 +10,6 @@ if (!surface_exists(back_buffer))
 surface_set_target(back_buffer);
 draw_clear_alpha(c_black, 1);
 
-
 var _graphics = objSystem.program.graphics;
 var _len = array_length(_graphics);
 
@@ -18,10 +17,21 @@ for (var _i = 0; _i < _len; _i++)
 {
     var _item = _graphics[_i];
     
+    if (_item.kind == "MATRIXSETWORLD")
+    {
+        matrix_set(matrix_world, _item.matrix);
+    }
+    if (_item.kind == "MATRIXSETPROJ")
+    {
+        matrix_set(matrix_projection, _item.matrix);
+    }
+    if (_item.kind == "MATRIXSETVIEW")
+    {
+        matrix_set(matrix_view, _item.matrix);
+    }
     if (_item.kind == "LINE")
     {
-        draw_line_color(_item.x1, _item.y1, _item.x2, _item.y2,
-            graphics_color, graphics_color);
+        draw_line_color(_item.x1, _item.y1, _item.x2, _item.y2, graphics_color, graphics_color);
     }
     else if (_item.kind == "TRI")
     {
@@ -71,6 +81,7 @@ for (var _i = 0; _i < _len; _i++)
 }
 
 surface_reset_target();
+
 draw_surface(back_buffer, 10, 10);
 
 

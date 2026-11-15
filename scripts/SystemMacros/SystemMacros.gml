@@ -46,6 +46,20 @@ function SCRIPT(_text = "") constructor
         running = true;
     };
     
+    to_text = function()
+    {
+        var _len = array_length(self.lines);
+        var _i = 0;
+        var _str = "";
+        while( _i != _len)
+        {
+            _str += self.lines[_i] + "\n";
+            _i ++;
+        }
+        
+        return _str;
+    }
+    
     tokens_to_string = function()
     {
         var _str = [];
@@ -305,6 +319,27 @@ function SCRIPT(_text = "") constructor
                             }
                             _i = _end;
                         }
+                    }
+                }
+                else if (_token.value == "MATRIXSETWORLD" || _token.value == "MATRIXSETVIEW" || _token.value == "MATRIXSETPROJ")
+                {
+                    var _postfix = to_postfix(self.tokens, _i);
+                
+                    if (array_length(_postfix) == 0)
+                    {
+                        notify(_token.value + ": INVALID ARGUMENT");
+                        _running = false;
+                    }
+                    else
+                    {
+                        evaluate_postfix(_postfix);
+                
+                        var _end = _i;
+                        while (_end < _len && self.tokens[_end].kind != "NEWLINE")
+                        {
+                            _end++;
+                        }
+                        _i = _end;
                     }
                 }
                 else if (_token.value == "LINE")
@@ -1151,7 +1186,12 @@ function evaluate_postfix(_pf)
                 array_push(_args, evaluate_postfix(_token.value.arguments[_j]));
             }
             
-            var _argument = _args[0];
+            var _argument = undefined;
+            if (_arg_count > 0)
+            {
+                _argument = _args[0];
+            }
+
             
             var _func = _token.value.name;
             
@@ -1279,6 +1319,16 @@ function evaluate_postfix(_pf)
                 
                 array_push(_values, _argument mod _args[1]);
             }
+            if(_func == "DIV")
+            {
+                if(_arg_count != 2)
+                {
+                    notify("FUNCTION: DIV EXPECTS 2 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, _argument div _args[1]);
+            }
             if(_func == "LERP")
             {
                 if(_arg_count != 3)
@@ -1319,6 +1369,102 @@ function evaluate_postfix(_pf)
                 
                 array_push(_values, point_direction(_argument, _args[1], _args[2], _args[3]));
             }
+            if(_func == "MATRIXSETWORLD")
+            {
+                if(_arg_count != 1)
+                {
+                    notify("FUNCTION: MATRIXSETWORLD EXPECTS 1 ARGUMENT");
+                    return 0;
+                }
+                show_debug_message("MATRIX SET WORLD!")
+                array_push(objSystem.program.graphics_build, {kind: "MATRIXSETWORLD", matrix: _argument });
+                array_push(_values, 0);
+                //matrix_set(matrix_world, _argument);
+            }
+            if(_func == "MATRIXSETVIEW")
+            {
+                if(_arg_count != 1)
+                {
+                    notify("FUNCTION: MATRIXSETVIEW EXPECTS 1 ARGUMENT");
+                    return 0;
+                }
+                array_push(objSystem.program.graphics_build, {kind: "MATRIXSETVIEW", matrix: _argument });
+                array_push(_values, 0);
+                //matrix_set(matrix_view, _argument);
+            }
+            if(_func == "MATRIXSETPROJ")
+            {
+                if(_arg_count != 1)
+                {
+                    notify("FUNCTION: MATRIXSETPROJ EXPECTS 1 ARGUMENT");
+                    return 0;
+                }
+                array_push(objSystem.program.graphics_build, {kind: "MATRIXSETPROJ", matrix: _argument });
+                array_push(_values, 0);
+                
+                //matrix_set(matrix_projection, _argument);
+            }
+            if(_func == "MATRIXBUILD")
+            {
+                if(_arg_count != 9)
+                {
+                    notify("FUNCTION: MATRIXBUILD EXPECTS 9 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, matrix_build(_argument, _args[1], _args[2], _args[3], _args[4], _args[5], _args[6], _args[7], _args[8]));
+            }
+            if(_func == "MATRIXBUILDID")
+            {
+                if(_arg_count != 0)
+                {
+                    notify("FUNCTION: MATRIXBUILDID EXPECTS NO ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, matrix_build_identity());
+            }
+            if(_func == "MATRIXBUILDLOOKAT")
+            {
+                if(_arg_count != 9)
+                {
+                    notify("FUNCTION: MATRIXBUILDLOOKAT EXPECTS 9 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, matrix_build_lookat(_argument, _args[1], _args[2], _args[3], _args[4], _args[5], _args[6], _args[7], _args[8]));
+            }
+            if(_func == "MATRIXBUILDPROJPERS")
+            {
+                if(_arg_count != 4)
+                {
+                    notify("FUNCTION: MATRIXBUILDPROJPERS EXPECTS 4 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, matrix_build_projection_perspective(_argument, _args[1], _args[2], _args[3]));
+            }
+            if(_func == "MATRIXBUILDPROJORTHO")
+            {
+                if(_arg_count != 4)
+                {
+                    notify("FUNCTION: MATRIXBUILDPROJORTHO EXPECTS 4 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, matrix_build_projection_ortho(_argument, _args[1], _args[2], _args[3]));
+            }
+            if(_func == "MATRIXBUILDPROJPERSFOV")
+            {
+                if(_arg_count != 4)
+                {
+                    notify("FUNCTION: MATRIXBUILDPROJPERS EXPECTS 4 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, matrix_build_projection_perspective_fov(_argument, _args[1], _args[2], _args[3]));
+            }
+            
             
         }
         else if (_token.kind == "SYMBOL" && is_expr_op(_token.value))

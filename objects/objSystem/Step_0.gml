@@ -157,6 +157,14 @@ else
                 _handled = true;
             }
             else
+            if(typed_text == "COPY")
+            {
+                typed_text = "";
+                position = 1; 
+                clipboard_set_text(program.to_text());
+                _handled = true;
+            }
+           else
            if(typed_text == "PASTE")
            {
                 typed_text = "";

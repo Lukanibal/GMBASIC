@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"Script5",
+  "%Name":"basic_loaders",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Script5",
+  "name":"basic_loaders",
   "parent":{
     "name":"BASIC",
     "path":"BASIC.yyp",
