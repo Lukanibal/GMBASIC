@@ -1,0 +1,193 @@
+{
+  "repo_notes": [
+    {
+      "content": "Please document the language GMBASIC that I am building in Gamemaker and not the Gamemaker project itself"
+    }
+  ],
+  "pages": [
+    {
+      "title": "Overview",
+      "purpose": "What GMBASIC is: a BASIC dialect interpreter and retro terminal built in GameMaker. It is being made as a hobby project to make my own version of BASIC that has some GML features!",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "The BASIC Language and Interpreter",
+      "purpose": "Overview of the SCRIPT interpreter pipeline: lines -> tokens -> execution; links to tokenizer, expressions, and command reference pages.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Tokenizer and Expression Evaluation",
+      "purpose": "TOKEN kinds, tokenize(), shunting-yard to_postfix(), evaluate_postfix(), operator precedence, variable lookup via get_variable.",
+      "parent": "The BASIC Language and Interpreter",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Command Reference",
+      "purpose": "BASIC statements supported: PRINT, LET, IF/THEN/ELSE, GOTO, INPUT, END, CLS and graphics commands (LINE, RECT, FRECT, TRI, FTRI, CIRC, FCIRC, SETDRAWCOLOR, ).",
+      "parent": "The BASIC Language and Interpreter",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Graphics Command Buffer",
+      "purpose": "How graphics_build is accumulated and swapped on CLS, and how the draw event consumes the graphics array to render primitives.",
+      "parent": "The BASIC Language and Interpreter",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "The Terminal System (objSystem)",
+      "purpose": "Overview of the objSystem controller: its events, state variables and role as the REPL/editor shell; links to child pages.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Initialization and State",
+      "purpose": "Create event: state flags (running, viewing, on), buffers, surfaces, cursor blink call_later, prefs.ini loading, row_length metrics.",
+      "parent": "The Terminal System (objSystem)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Input Handling and Immediate Commands",
+      "purpose": "Step event: keyboard polling, line editing, INPUT waiting state, and immediate commands DEL/RUN/RESTART/CLS/NEW/UPLOAD/PASTE/SAVE/LOAD/COLOR/BACKGROUND.",
+      "parent": "The Terminal System (objSystem)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Rendering Pipeline",
+      "purpose": "Draw GUI event: back_buffer surface, graphics interpretation, 80-column output wrapping, prompt + cursor, scissor-clipped code pane, variable inspector.",
+      "parent": "The Terminal System (objSystem)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Function Keys and Built-in Demo Programs",
+      "purpose": "F1 Manual, F2 screen_saver, F3 debug, F4 LudusDemo load, F5 run, TAB view toggle, PgUp/PgDn scrolling, and back_task save/restore of the user program.",
+      "parent": "The Terminal System (objSystem)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Notifications (objSystemNotification)",
+      "purpose": "notify() helper and the transient on-screen notification object: create/step timer/draw lifecycle.",
+      "parent": "The Terminal System (objSystem)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Program I/O and Persistence",
+      "purpose": "Overview of how BASIC programs and settings enter and leave the system; links to loaders and settings pages.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Loading and Uploading BASIC Source",
+      "purpose": "upload_basic, load_basic, load_basic_from_string, load_basic_from_clipboard in Script5; SAVE/LOAD JSON buffer serialization of PROGRAM.bas.",
+      "parent": "Program I/O and Persistence",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Bundled Demo Program (LudusDemo.bas)",
+      "purpose": "Walkthrough of datafiles/LudusDemo.bas as a worked example of INPUT, LET, graphics, and GOTO-based animation loops.",
+      "parent": "Program I/O and Persistence",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Settings and Theming (prefs.ini)",
+      "purpose": "COLOR/BACKGROUND commands, supported color tokens, persistence to prefs.ini SETTINGS section and reload at startup.",
+      "parent": "Program I/O and Persistence",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Assets and Build Configuration",
+      "purpose": "Overview of non-code resources and per-platform export options; links to child pages.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Fonts and Sprites",
+      "purpose": "fntDejaVuSansMono monospaced font (incl. .old variants) used for terminal text metrics, and sprPalette color palette sprite.",
+      "parent": "Assets and Build Configuration",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Room and Platform Export Options",
+      "purpose": "rmConsole room setup and the options/ directory: windows, html5, linux, mac, ios, android, tvos, operagx, reddit, main.",
+      "parent": "Assets and Build Configuration",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Glossary",
+      "purpose": "Definitions of GMBASIC and GameMaker-specific terms with code pointers: SCRIPT, TOKEN, tokenize, to_postfix, evaluate_postfix, objSystem, objSystemNotification, typed_text, program_text, back_task, graphics_build, back_buffer, game_surface, row_length, viewing/running/on, prefs.ini, immediate command, line number, rmConsole, .yy/.yyp, draw GUI event, scissor pane, notify, SETDRAWCOLOR.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    }
+  ]
+}
