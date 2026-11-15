@@ -76,7 +76,7 @@ function SCRIPT(_text = "") constructor
         
         if(_new)
         {
-
+            
             array_push(lines, _line);
         }
         
@@ -103,7 +103,7 @@ function SCRIPT(_text = "") constructor
                 array_delete(lines, _i, 1);
             }
         }
-    
+        
         text = "";
         for (var _i = 0; _i < array_length(lines); _i++)
         {
@@ -126,12 +126,11 @@ function SCRIPT(_text = "") constructor
         {
             return;
         }
-
-    
+        
         while (_i < _len && _running && self.steps > 0 && !_yield)
         {
             var _token = self.tokens[_i];
-    
+            
             if (_token.kind == "NUMBER" && (_i == 0 || self.tokens[_i - 1].kind == "NEWLINE"))
             {
                 self.current_line = real(_token.value);
@@ -166,7 +165,7 @@ function SCRIPT(_text = "") constructor
                     if (_i + 1 < _len)
                     {
                         var _target = find_line_token(self.tokens[_i + 1].value);
-                
+                        
                         if (_target == -1)
                         {
                             _running = false;
@@ -230,7 +229,7 @@ function SCRIPT(_text = "") constructor
                         self.input_text = "";
                         keyboard_string = "";
                         self.waiting_for_input = true;
-                
+                        
                         _i += 2;
                         _running = false;
                     }
@@ -245,7 +244,7 @@ function SCRIPT(_text = "") constructor
                     var _name = self.tokens[_i + 1].value;
                     var _equals = _i + 2;
                     var _index_pf = undefined;
-                
+                    
                     if (_i + 2 < _len && self.tokens[_i + 2].kind == "SYMBOL" && self.tokens[_i + 2].value == "(")
                     {
                         var _close = find_close_paren(self.tokens, _i + 2);
@@ -258,13 +257,11 @@ function SCRIPT(_text = "") constructor
                             _equals = _close + 1;
                         }
                     }
-                
+                    
                     var _end = _equals + 1;
                     while (_end < _len && self.tokens[_end].kind != "NEWLINE") _end++;
-                
-                    if (_i + 1 >= _len || _equals >= _len || self.tokens[_equals].value != "="
-                        || _end == _equals + 1
-                        || (!is_undefined(_index_pf) && array_length(_index_pf) == 0))
+                        
+                    if (_i + 1 >= _len || _equals >= _len || self.tokens[_equals].value != "=" || _end == _equals + 1 || (!is_undefined(_index_pf) && array_length(_index_pf) == 0))
                     {
                         notify("LET: EXPECTED A DESTINATION AND EXPRESSION");
                         _running = false;
@@ -272,7 +269,7 @@ function SCRIPT(_text = "") constructor
                     else
                     {
                         var _postfix = to_postfix(self.tokens, _equals + 1);
-                
+                        
                         if (array_length(_postfix) == 0)
                         {
                             notify("LET: COULD NOT PARSE EXPRESSION");
@@ -281,7 +278,7 @@ function SCRIPT(_text = "") constructor
                         else
                         {
                             var _result = evaluate_postfix(_postfix);
-                
+                            
                             if (is_undefined(_index_pf))
                             {
                                 self.variables[$ _name] = _result;
@@ -290,7 +287,7 @@ function SCRIPT(_text = "") constructor
                             {
                                 var _arr = get_variable(_name);
                                 var _idx = floor(evaluate_postfix(_index_pf));
-                
+                                
                                 if (!is_array(_arr))
                                 {
                                     notify("NOT AN ARRAY: " + _name);
@@ -318,17 +315,17 @@ function SCRIPT(_text = "") constructor
                     {
                         _valid = (self.tokens[_i + 2].value == "," && self.tokens[_i + 4].value == "," && self.tokens[_i + 6].value == ","); 
                     }
-                
+                    
                     if (_valid)
                     {
                         var _x1 = line_value(self.tokens[_i + 1]);
                         var _y1 = line_value(self.tokens[_i + 3]);
                         var _x2 = line_value(self.tokens[_i + 5]);
                         var _y2 = line_value(self.tokens[_i + 7]);
-                
+                        
                         _valid = (!is_undefined(_x1) && !is_undefined(_y1) && !is_undefined(_x2) && !is_undefined(_y2));
                     }
-                
+                    
                     if (!_valid)
                     {
                         notify("LINE: EXPECTED FOUR NUMBER OR VARIABLE ARGUMENTS");
@@ -337,19 +334,19 @@ function SCRIPT(_text = "") constructor
                     else
                     {
                         array_push(self.graphics_build, { kind: "LINE", x1: _x1, y1: _y1, x2: _x2, y2: _y2 });
-                
+                        
                         _i += 8;
                     }
                 }
                 else if (_token.value == "TRI")
                 {
                     var _valid = (_i + 11 < _len);
-                
+                    
                     if (_valid)
                     {
                         _valid = (self.tokens[_i + 2].value == "," && self.tokens[_i + 4].value == "," && self.tokens[_i + 6].value == ","); 
                     }
-                
+                    
                     if (_valid)
                     {
                         var _x1 = line_value(self.tokens[_i + 1]);
@@ -358,10 +355,10 @@ function SCRIPT(_text = "") constructor
                         var _y2 = line_value(self.tokens[_i + 7]);
                         var _x3 = line_value(self.tokens[_i + 9]);
                         var _y3 = line_value(self.tokens[_i + 11]);
-                
+                        
                         _valid = (!is_undefined(_x1) && !is_undefined(_y1) && !is_undefined(_x2) && !is_undefined(_y2));
                     }
-                
+                    
                     if (!_valid)
                     {
                         notify("TRI: EXPECTED SIX NUMBER OR VARIABLE ARGUMENTS");
@@ -370,19 +367,19 @@ function SCRIPT(_text = "") constructor
                     else
                     {
                         array_push(self.graphics_build, { kind: "TRI", x1: _x1, y1: _y1, x2: _x2, y2: _y2, x3: _x3, y3: _y3});
-                
+                        
                         _i += 12;
                     }
                 }
                 else if (_token.value == "FTRI")
                 {
                     var _valid = (_i + 11 < _len);
-                
+                    
                     if (_valid)
                     {
                         _valid = (self.tokens[_i + 2].value == "," && self.tokens[_i + 4].value == "," && self.tokens[_i + 6].value == ","); 
                     }
-                
+                    
                     if (_valid)
                     {
                         var _x1 = line_value(self.tokens[_i + 1]);
@@ -391,7 +388,7 @@ function SCRIPT(_text = "") constructor
                         var _y2 = line_value(self.tokens[_i + 7]);
                         var _x3 = line_value(self.tokens[_i + 9]);
                         var _y3 = line_value(self.tokens[_i + 11]);
-                
+                        
                         _valid = (!is_undefined(_x1) && !is_undefined(_y1) && !is_undefined(_x2) && !is_undefined(_y2));
                     }
                 
@@ -403,29 +400,29 @@ function SCRIPT(_text = "") constructor
                     else
                     {
                         array_push(self.graphics_build, { kind: "FTRI", x1: _x1, y1: _y1, x2: _x2, y2: _y2, x3: _x3, y3: _y3});
-                
+                        
                         _i += 12;
                     }
                 }
                 else if (_token.value == "RECT")
                 {
                     var _valid = (_i + 7 < _len);
-                
+                    
                     if (_valid)
                     {
                         _valid = (self.tokens[_i + 2].value == "," && self.tokens[_i + 4].value == "," && self.tokens[_i + 6].value == ","); 
                     }
-                
+                    
                     if (_valid)
                     {
                         var _x1 = line_value(self.tokens[_i + 1]);
                         var _y1 = line_value(self.tokens[_i + 3]);
                         var _x2 = line_value(self.tokens[_i + 5]);
                         var _y2 = line_value(self.tokens[_i + 7]);
-                
+                        
                         _valid = (!is_undefined(_x1) && !is_undefined(_y1) && !is_undefined(_x2) && !is_undefined(_y2));
                     }
-                
+                    
                     if (!_valid)
                     {
                         notify("RECT: EXPECTED FOUR NUMBER OR VARIABLE ARGUMENTS");
@@ -434,29 +431,29 @@ function SCRIPT(_text = "") constructor
                     else
                     {
                         array_push(self.graphics_build, { kind: "RECT", x1: _x1, y1: _y1, x2: _x2, y2: _y2 });
-                
+                        
                         _i += 8;
                     }
                 }
                 else if (_token.value == "FRECT")
                 {
                     var _valid = (_i + 7 < _len);
-                
+                    
                     if (_valid)
                     {
                         _valid = (self.tokens[_i + 2].value == "," && self.tokens[_i + 4].value == "," && self.tokens[_i + 6].value == ","); 
                     }
-                
+                    
                     if (_valid)
                     {
                         var _x1 = line_value(self.tokens[_i + 1]);
                         var _y1 = line_value(self.tokens[_i + 3]);
                         var _x2 = line_value(self.tokens[_i + 5]);
                         var _y2 = line_value(self.tokens[_i + 7]);
-                
+                        
                         _valid = (!is_undefined(_x1) && !is_undefined(_y1) && !is_undefined(_x2) && !is_undefined(_y2));
                     }
-                
+                    
                     if (!_valid)
                     {
                         notify("FRECT: EXPECTED FOUR NUMBER OR VARIABLE ARGUMENTS");
@@ -465,28 +462,28 @@ function SCRIPT(_text = "") constructor
                     else
                     {
                         array_push(self.graphics_build, { kind: "FRECT", x1: _x1, y1: _y1, x2: _x2, y2: _y2 });
-                
+                        
                         _i += 8;
                     }
                 }
                 else if (_token.value == "CIRC")
                 {
                     var _valid = (_i + 5 < _len);
-                
+                    
                     if (_valid)
                     {
                         _valid = (self.tokens[_i + 2].value == "," && self.tokens[_i + 4].value == ","); 
                     }
-                
+                    
                     if (_valid)
                     {
                         var _x1 = line_value(self.tokens[_i + 1]);
                         var _y1 = line_value(self.tokens[_i + 3]);
                         var _x2 = line_value(self.tokens[_i + 5]);
-                
+                        
                         _valid = (!is_undefined(_x1) && !is_undefined(_y1) && !is_undefined(_x2));
                     }
-                
+                    
                     if (!_valid)
                     {
                         notify("CIRC: EXPECTED THREE NUMBER OR VARIABLE ARGUMENTS");
@@ -495,28 +492,28 @@ function SCRIPT(_text = "") constructor
                     else
                     {
                         array_push(self.graphics_build, { kind: "CIRC", x1: _x1, y1: _y1, x2: _x2 });
-                
+                        
                         _i += 6;
                     }
                 }
                 else if (_token.value == "FCIRC")
                 {
                     var _valid = (_i + 5 < _len);
-                
+                    
                     if (_valid)
                     {
                         _valid = (self.tokens[_i + 2].value == "," && self.tokens[_i + 4].value == ","); 
                     }
-                
+                    
                     if (_valid)
                     {
                         var _x1 = line_value(self.tokens[_i + 1]);
                         var _y1 = line_value(self.tokens[_i + 3]);
                         var _x2 = line_value(self.tokens[_i + 5]);
-                
+                        
                         _valid = (!is_undefined(_x1) && !is_undefined(_y1) && !is_undefined(_x2));
                     }
-                
+                    
                     if (!_valid)
                     {
                         notify("FCIRC: EXPECTED THREE NUMBER OR VARIABLE ARGUMENTS");
@@ -525,7 +522,7 @@ function SCRIPT(_text = "") constructor
                     else
                     {
                         array_push(self.graphics_build, { kind: "FCIRC", x1: _x1, y1: _y1, x2: _x2 });
-                
+                        
                         _i += 6;
                     }
                 }
@@ -535,11 +532,11 @@ function SCRIPT(_text = "") constructor
                         && self.tokens[_i + 1].kind == "WORD"
                         && self.tokens[_i + 2].value == "("
                         && self.tokens[_i + 4].value == ")";
-                
+                    
                     var _size = undefined;
                     if (_valid) _size = line_value(self.tokens[_i + 3]);
                     if (_valid && is_undefined(_size)) _valid = false;
-                
+                        
                     if (!_valid || _size < 0 || _size > 10000)
                     {
                         notify("DIM: EXPECTED NAME(SIZE)");
@@ -554,32 +551,22 @@ function SCRIPT(_text = "") constructor
                 else if (_token.value == "SETDRAWCOLOR")
                 {
                     var _valid = (_i + 1 < _len);
-                
+                    
                     if (_valid)
                     {
                         _valid = (self.tokens[_i + 1].kind == "WORD");
                     }
-                
+                    
                     var _col = "";
-                
+                    
                     if (_valid)
                     {
                         _col = self.tokens[_i + 1].value;
-                
-                        _valid =
-                            _col == "RED" ||
-                            _col == "BLUE" ||
-                            _col == "GREEN" ||
-                            _col == "LIME" ||
-                            _col == "MAROON" ||
-                            _col == "AQUA" ||
-                            _col == "ORANGE" ||
-                            _col == "WHITE" ||
-                            _col == "BLACK" ||
-                            _col == "PURPLE"||
-                            _col == "YELLOW";
+                        
+                        _valid = (_col == "RED" || _col == "BLUE" || _col == "GREEN" || _col == "LIME" || _col == "MAROON" || _col == "AQUA" ||
+                            _col == "ORANGE" || _col == "WHITE" || _col == "BLACK" || _col == "PURPLE"|| _col == "YELLOW");
                     }
-                
+                    
                     if (!_valid)
                     {
                         notify("SETDRAWCOLOR: EXPECTED A VALID COLOR NAME");
@@ -596,11 +583,11 @@ function SCRIPT(_text = "") constructor
                     var _then = -1;
                     var _else = -1;
                     var _end = _i + 1;
-                
+                    
                     while (_end < _len && self.tokens[_end].kind != "NEWLINE")
                     {
                         var _current = self.tokens[_end];
-                
+                        
                         if (_current.kind == "WORD")
                         {
                             if (_current.value == "THEN" && _then == -1)
@@ -612,10 +599,10 @@ function SCRIPT(_text = "") constructor
                                 _else = _end;
                             }
                         }
-                
+                        
                         _end++;
                     }
-                
+                    
                     if (_then == -1)
                     {
                         notify("IF: EXPECTED THEN");
@@ -624,16 +611,15 @@ function SCRIPT(_text = "") constructor
                     else
                     {
                         var _condition_tokens = [];
-                
                         for (var _c = _i + 1; _c < _then; _c++)
                         {
                             array_push(_condition_tokens, self.tokens[_c]);
                         }
-                
+                        
                         array_push(_condition_tokens, new TOKEN("NEWLINE", "\n"));
-                
+                        
                         var _postfix = to_postfix(_condition_tokens, 0);
-                
+                        
                         if (array_length(_postfix) == 0)
                         {
                             _running = false;
@@ -641,9 +627,9 @@ function SCRIPT(_text = "") constructor
                         else
                         {
                             var _condition = evaluate_postfix(_postfix);
-                
+                            
                             var _branch_start = -1;
-                
+                            
                             if (_condition)
                             {
                                 _branch_start = _then + 1;
@@ -652,7 +638,7 @@ function SCRIPT(_text = "") constructor
                             {
                                 _branch_start = _else + 1;
                             }
-                
+                            
                             if (_branch_start == -1)
                             {
                                 _i = _end;
@@ -667,7 +653,7 @@ function SCRIPT(_text = "") constructor
                                 var _target = find_line_token(
                                     self.tokens[_branch_start + 1].value
                                 );
-                
+                                
                                 if (_target == -1)
                                 {
                                     notify("IF: TARGET LINE NOT FOUND");
@@ -730,11 +716,11 @@ function line_value(_token)
     {
         return real(_token.value);
     }
-
+    
     if (_token.kind == "WORD")
     {
         var _value = get_variable(_token.value);
-
+        
         if (!is_undefined(_value) && is_real(_value))
         {
             return _value;
@@ -763,11 +749,11 @@ function tokenize(_SCRIPT)
     var _i = 1;
     var _len = string_length(_SCRIPT.text);
     var _cmd = false;
-
+    
     while (_i <= _len)
     {
         var _ch = string_char_at(_SCRIPT.text, _i);
-
+        
         if (_ch == " " || _ch == "\t")
         {
             _i++;
@@ -782,31 +768,31 @@ function tokenize(_SCRIPT)
             {
                 _i++;
             }
-
+            
             array_push(_tokens, new TOKEN("NEWLINE", "\n"));
         }
         else if (is_digit(_ch))///NUMBERS
         {
             var _value = "";
-
+            
             while (_i <= _len && is_digit(string_char_at(_SCRIPT.text, _i)))
             {
                 _value += string_char_at(_SCRIPT.text, _i);
                 _i++;
             }
-
+            
             array_push(_tokens, new TOKEN("NUMBER", _value));
         }
         else if (is_letter(_ch))//WORDS
         {
             var _value = "";
-
+            
             while (_i <= _len && (is_letter(string_char_at(_SCRIPT.text, _i)) || is_digit(string_char_at(_SCRIPT.text, _i))))
             {
                 _value += string_char_at(_SCRIPT.text, _i);
                 _i++;
             }
-
+            
             array_push(_tokens, new TOKEN("WORD", _value));
             
         }
@@ -814,18 +800,18 @@ function tokenize(_SCRIPT)
         {
             _i++;
             var _value = "";
-
+            
             while (_i <= _len && string_char_at(_SCRIPT.text, _i) != "\"")
             {
                 _value += string_char_at(_SCRIPT.text, _i);
                 _i++;
             }
-
+    
             if (_i <= _len)
             {
                 _i++;
             }
-
+    
             array_push(_tokens, new TOKEN("STRING", _value));
         }
         else
@@ -835,7 +821,7 @@ function tokenize(_SCRIPT)
             {
                 _next = string_char_at(_SCRIPT.text, _i + 1);
             }
-        
+            
             if ((_ch == "<" && (_next == ">" || _next == "=")) ||  (_ch == ">" && _next == "="))
             {
                 array_push(_tokens, new TOKEN("SYMBOL", _ch + _next));
@@ -847,9 +833,7 @@ function tokenize(_SCRIPT)
                 _i++;
             }
         }
-
     }
-
     return _tokens;
 }
 
@@ -863,9 +847,19 @@ function update_variable(_var_name, _value)///LET
 ///VARIABLE HELPERS
 function get_variable(_var_name)
 {
-    if(variable_struct_exists(objSystem.program.variables, _var_name))
-    return objSystem.program.variables[$ _var_name];
-    else
+    var _reserved = objSystem.RESERVED
+    
+    if (variable_struct_exists(_reserved, _var_name))
+    {
+        return _reserved[$ _var_name];
+    }
+        
+    if (variable_struct_exists(objSystem.program.variables, _var_name))
+    {
+        return objSystem.program.variables[$ _var_name];
+    }
+        
+    
     return undefined;
 }
 
@@ -878,13 +872,12 @@ function find_line_token(_number)
     while (_i < array_length(_tokens))
     {
         var _token = _tokens[_i];
-
-        if (_line_start && _token.kind == "NUMBER"
-        && real(_token.value) == real(_number))
+        
+        if (_line_start && _token.kind == "NUMBER" && real(_token.value) == real(_number))
         {
             return _i;
         }
-
+        
         if (_token.kind == "NEWLINE")
         {
             _line_start = true;
@@ -893,10 +886,10 @@ function find_line_token(_number)
         {
             _line_start = false;
         }
-
+        
         _i++;
     }
-
+    
     return -1;
 }
 
@@ -972,9 +965,9 @@ function to_postfix(_tokens, _start)
                 return [];
             }
             
-            if (string_upper(_value) == "SQRT")
+            if(array_contains(global.function_names, string_upper(_value)))
             {
-                array_push(_output, new TOKEN("FUNCTION", { name: "SQRT", argument: _index_pf }));
+                array_push(_output, new TOKEN("FUNCTION", { name: string_upper(_value), argument: _index_pf }));
             }
             else
             {
@@ -993,20 +986,20 @@ function to_postfix(_tokens, _start)
         else if (_token.kind == "SYMBOL" && _value == ")")
         {
             var _found_open = false;
-
+            
             while (array_length(_ops) > 0)
             {
                 var _top = array_pop(_ops);
-
+                
                 if (_top.value == "(")
                 {
                     _found_open = true;
                     break;
                 }
-
+                
                 array_push(_output, _top);
             }
-
+            
             if (!_found_open)
             {
                 notify("LET EXPRESSION: UNMATCHED CLOSING PARENTHESIS");
@@ -1018,12 +1011,12 @@ function to_postfix(_tokens, _start)
             while (array_length(_ops) > 0)
             {
                 var _top = _ops[array_length(_ops) - 1];
-
+                
                 if (_top.value == "(")
                 {
                     break;
                 }
-
+                
                 if (operator_pecedence(_top.value) >= operator_pecedence(_value))
                 {
                     array_push(_output, array_pop(_ops));
@@ -1033,7 +1026,7 @@ function to_postfix(_tokens, _start)
                     break;
                 }
             }
-
+            
             array_push(_ops, _token);
         }
         else
@@ -1041,20 +1034,20 @@ function to_postfix(_tokens, _start)
             notify("LET EXPRESSION: UNEXPECTED TOKEN: " + string(_value));
             return [];
         }
-
+        
         _i++;
     }
-
+    
     while (array_length(_ops) > 0)
     {
         var _top = array_pop(_ops);
-
+        
         if (_top.value == "(")
         {
             notify("LET EXPRESSION: UNMATCHED OPENING PARENTHESIS");
             return [];
         }
-
+        
         array_push(_output, _top);
     }
 
@@ -1066,11 +1059,11 @@ function evaluate_postfix(_pf)
 {
     var _values = [];
     var _len = array_length(_pf);
-
+    
     for (var _i = 0; _i < _len; _i++)
     {
         var _token = _pf[_i];
-
+        
         if (_token.kind == "NUMBER")
         {
             array_push(_values, real(_token.value));
@@ -1082,13 +1075,13 @@ function evaluate_postfix(_pf)
         else if (_token.kind == "WORD")
         {
             var _value = get_variable(_token.value);
-        
+            
             if (is_undefined(_value))
             {
                 notify("LET EXPRESSION: UNDEFINED VARIABLE: " + _token.value);
                 return 0;
             }
-        
+            
             array_push(_values, _value);
         }
         else if(_token.kind == "ARRAYREF")
@@ -1119,7 +1112,7 @@ function evaluate_postfix(_pf)
         else if (_token.kind == "FUNCTION")
         {
             var _argument = evaluate_postfix(_token.value.argument);
-        
+            
             if (_token.value.name == "SQRT")
             {
                 if (_argument < 0)
@@ -1127,9 +1120,50 @@ function evaluate_postfix(_pf)
                     notify("SQRT: ARGUMENT MUST NOT BE NEGATIVE");
                     return 0;
                 }
-        
+                
                 array_push(_values, sqrt(_argument));
             }
+            if (_token.value.name == "SQR")
+            {
+                array_push(_values, sqr(_argument));
+            }
+            if (_token.value.name == "ABS")
+            {
+                array_push(_values, abs(_argument));
+            }
+            if (_token.value.name == "SIGN")
+            {
+                array_push(_values, sign(_argument));
+            }
+            if (_token.value.name == "COS")
+            {
+                array_push(_values, cos(_argument));
+            }
+            if (_token.value.name == "SIN")
+            {
+                array_push(_values, sin(_argument));
+            }
+            if (_token.value.name == "FLOOR")
+            {
+                array_push(_values, floor(_argument));
+            }
+            if (_token.value.name == "CEIL")
+            {
+                array_push(_values, ceil(_argument));
+            }
+            if (_token.value.name == "ROUND")
+            {
+                array_push(_values, round(_argument));
+            }
+            if (_token.value.name == "ARCTAN")
+            {
+                array_push(_values, arctan(_argument));
+            }
+            if (_token.value.name == "RANDOM")
+            {
+                array_push(_values, random(_argument));
+            }
+            
         }
         else if (_token.kind == "SYMBOL" && is_expr_op(_token.value))
         {
@@ -1138,11 +1172,11 @@ function evaluate_postfix(_pf)
                 notify("LET EXPRESSION: MISSING OPERAND");
                 return 0;
             }
-
+            
             var _right = array_pop(_values);
             var _left = array_pop(_values);
             var _result = 0;
-
+            
             switch (_token.value)
             {
                 case "+":
@@ -1157,21 +1191,21 @@ function evaluate_postfix(_pf)
                     }
                     break;
                 }
-
+                    
                 case "-":
                 {
                     _result = _left - _right;
                     break;
                 }
                     
-
+                    
                 case "*":
                 {
                     _result = _left * _right;
                     break;
                 }
                     
-
+                    
                 case "/":
                 {
                     if (_right == 0)
@@ -1214,19 +1248,19 @@ function evaluate_postfix(_pf)
                     break;
                 }
                     
-
+                    
             }
-
+            
             array_push(_values, _result);
         }
     }
-
+    
     if (array_length(_values) != 1)
     {
         notify("LET EXPRESSION: INVALID EXPRESSION");
         return 0;
     }
-
+    
     return _values[0];
 }
 
@@ -1243,11 +1277,11 @@ function program_line_bounds(_line_num, _width)
     var _lines = objSystem.program.lines;
     var _count = array_length(_lines);
     var _prefix = "";
-
+    
     for (var _i = 0; _i < _count; _i++)
     {
         _prefix += (_prefix == "" ? "" : "\r\n") + _lines[_i];
-
+        
         if (get_line_number(_lines[_i]) == _line_num)
         {
             var _line_h = string_height_ext(_lines[_i], 24, _width);
@@ -1263,12 +1297,12 @@ function find_close_paren(_tokens, _open)
 {
     var _depth = 0;
     var _len = array_length(_tokens);
-
+    
     for (var _i = _open; _i < _len; _i++)
     {
         var _t = _tokens[_i];
         if (_t.kind == "NEWLINE") return -1;
-
+            
         if (_t.kind == "SYMBOL" && _t.value == "(") _depth++;
         else if (_t.kind == "SYMBOL" && _t.value == ")")
         {

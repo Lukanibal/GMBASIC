@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"FUNCTION_TABLE",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"FUNCTION_TABLE",
+  "parent":{
+    "name":"BASIC",
+    "path":"BASIC.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -17,7 +17,7 @@ var _len = array_length(_graphics);
 for (var _i = 0; _i < _len; _i++)
 {
     var _item = _graphics[_i];
-
+    
     if (_item.kind == "LINE")
     {
         draw_line_color(_item.x1, _item.y1, _item.x2, _item.y2,
@@ -127,13 +127,13 @@ var _last_line = min(_line_count - 1, ceil((program_scroll_y + _pane_height) / _
 for (var _i = _first_line; _i <= _last_line; _i++)
 {
     var _y = _pane_top + (_i * _line_h) - program_scroll_y;
-
+    
     if (_i == program.current_line)
     {
         draw_set_color(c_ltgray);
         draw_rectangle( _pane_left, _y, _pane_left + _pane_width, _y + _line_h, false );
     }
-
+    
     draw_set_color(text_color);
     draw_text(_pane_left, _y, program.lines[_i]);
 }
@@ -173,10 +173,10 @@ draw_text(_pane_left, _pane_top, "VARIABLES:");
 for (var _i = _first; _i <= _last; _i++)
 {
     var _y = _pane_top + _line_h + (_i * _line_h) - variables_scroll_y;
-
+    
     var _name = _names[_i];
     var _value = variable_struct_get(program.variables, _name);
-
+    
     draw_text(_pane_left, _y, _name + ": " + string(_value));
 }
 

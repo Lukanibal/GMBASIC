@@ -16,6 +16,20 @@ variables_scroll_speed = 36;
 graphics_color = c_white;
 
 
+///RESERVED SYSTEM VARIABLES
+RESERVED = 
+{
+    "KLEFT" : keyboard_check(vk_left),
+    "KRIGHT" : keyboard_check(vk_right),
+    "KUP" : keyboard_check(vk_up),
+    "KDOWN" : keyboard_check(vk_down),
+    "KSPACE" : keyboard_check(vk_space),
+    "MX" : mouse_x - 10,
+    "MY" : mouse_y - 10,
+    "MLEFT" : mouse_check_button(mb_left),
+    "MRIGHT" : mouse_check_button(mb_right),
+}
+
 call_later(0.5, time_source_units_seconds, function()
 {
     on = !on;

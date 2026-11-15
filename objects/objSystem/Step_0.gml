@@ -11,13 +11,22 @@ if (program.waiting_for_input)
         else if (keyboard_check_pressed(vk_up))    _key = "UP";
         else if (keyboard_check_pressed(vk_down))  _key = "DOWN";
         else if (keyboard_check_pressed(vk_space))  _key = "SPACE";
-        else if (mouse_check_button_pressed(mb_left))  _key = "LEFT_CLICK";
-        else if (mouse_check_button_pressed(mb_right))  _key = "RIGHT_CLICK";
+        else if (mouse_check_button_pressed(mb_left))  _key = "LEFTCLICK";
+        else if (mouse_check_button_pressed(mb_right))  _key = "RIGHTCLICK";
 
         if (_key != "")
         {
-            program.variables[$ program.input_var] = _key;
-
+            
+            ///mouse clicks
+            if(_key == "LEFTCLICK" || _key == "RIGHTCLICK")
+            {
+                program.variables[$ program.input_var] = [mouse_x, mouse_y];
+            }
+            else 
+            {
+            	program.variables[$ program.input_var] = _key;
+            }
+            
             program.waiting_for_input = false;
             program.running = true;
             program.input_var = "";
@@ -180,7 +189,7 @@ else
            {
                 typed_text = "";
                 position = 1;
-             
+            
                 var _str = json_stringify(program);
                 var _buff = buffer_create(8, buffer_grow, 1);
                 buffer_write(_buff, buffer_string, _str);
@@ -380,13 +389,13 @@ else
                 if (is_digit(string_char_at(typed_text, 1)))
                 {
                     program.add_line(typed_text);
+                    typed_text = "";
                 }
                 else
                 {
                     notify("MISSING LINE NUMBER");
                 }
             
-                typed_text = "";
                 position = 1;
             }
            
@@ -422,6 +431,18 @@ else
 ///keep running!
 if(program.running && program.steps <= 0 && objSystem.running)
 {
+    RESERVED = 
+    {
+        "KLEFT" : keyboard_check(vk_left),
+        "KRIGHT" : keyboard_check(vk_right),
+        "KUP" : keyboard_check(vk_up),
+        "KDOWN" : keyboard_check(vk_down),
+        "KSPACE" : keyboard_check(vk_space),
+        "MX" : mouse_x - 10,
+        "MY" : mouse_y - 10,
+        "MLEFT" : mouse_check_button(mb_left),
+        "MRIGHT" : mouse_check_button(mb_right),
+    }
     program.run();
 }
 
@@ -479,10 +500,10 @@ if (program.running || program.waiting_for_input)
     if (program.current_line != last_highlight_line)
     {
         last_highlight_line = program.current_line;
-
+        
         _pane_width = room_width - (row_length + 20);
         var _b = program_line_bounds(program.current_line, _pane_width);
-
+        
         if (_b != undefined)
         {
             var _view_h = 600;

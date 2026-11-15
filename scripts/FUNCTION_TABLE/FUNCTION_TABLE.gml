@@ -1,0 +1,12 @@
+global.function_names = [];
+array_push(global.function_names, "SQRT");
+array_push(global.function_names, "ABS");
+array_push(global.function_names, "COS");
+array_push(global.function_names, "SIN");
+array_push(global.function_names, "FLOOR");
+array_push(global.function_names, "CEIL");
+array_push(global.function_names, "ROUND");
+array_push(global.function_names, "SIGN");
+array_push(global.function_names, "ARCTAN");
+array_push(global.function_names, "SQR");
+array_push(global.function_names, "RANDOM");
