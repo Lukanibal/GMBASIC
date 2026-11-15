@@ -7,6 +7,10 @@ if (!surface_exists(back_buffer))
     back_buffer = surface_create(800, 600);
 }
 
+var _old_world = matrix_get(matrix_world);
+var _old_view = matrix_get(matrix_view);
+var _old_proj = matrix_get(matrix_projection);
+
 surface_set_target(back_buffer);
 draw_clear_alpha(c_black, 1);
 
@@ -81,6 +85,10 @@ for (var _i = 0; _i < _len; _i++)
 }
 
 surface_reset_target();
+
+matrix_set(matrix_world, _old_world);
+matrix_set(matrix_view, _old_view);
+matrix_set(matrix_projection, _old_proj);
 
 draw_surface(back_buffer, 10, 10);
 
