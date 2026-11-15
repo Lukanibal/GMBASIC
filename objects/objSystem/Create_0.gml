@@ -9,6 +9,9 @@ on = true;
 program_scroll_y = 0;
 program_scroll_speed = 36;
 
+variables_scroll_y = 0;
+variables_scroll_speed = 36;
+
 ///graphics api
 graphics_color = c_white;
 

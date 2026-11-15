@@ -196,9 +196,10 @@ function SCRIPT(_text = "") constructor
                     output = "";
                     _i++;
                 }
-                else if (_token.value == "VSTNC")
+                else if (_token.value == "VSYNC")
                 {
                     _yield = true;
+                    self.steps = 0;
                     _i++;
                 }
                 else if (_token.value == "INPUT")
@@ -711,7 +712,7 @@ function SCRIPT(_text = "") constructor
     }
 
 }
-
+///BASIC HELPERS
 function is_digit(_char)
 {
     return (ord(_char) >= ord("0") && ord(_char) <= ord("9"))
@@ -899,7 +900,7 @@ function find_line_token(_number)
     return -1;
 }
 
-///MATH...Based on Shunting Yard Algo
+///MATH LIBRARY HELPERS
 function operator_pecedence(_op)
 {
     switch(_op)

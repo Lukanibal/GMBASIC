@@ -10,6 +10,7 @@ if (program.waiting_for_input)
         else if (keyboard_check_pressed(vk_right)) _key = "RIGHT";
         else if (keyboard_check_pressed(vk_up))    _key = "UP";
         else if (keyboard_check_pressed(vk_down))  _key = "DOWN";
+        else if (keyboard_check_pressed(vk_space))  _key = "SPACE";
         else if (mouse_check_button_pressed(mb_left))  _key = "LEFT_CLICK";
         else if (mouse_check_button_pressed(mb_right))  _key = "RIGHT_CLICK";
 
@@ -42,7 +43,6 @@ if (program.waiting_for_input)
         }
     }
 }
-
 else
 {
     if(keyboard_check_pressed(vk_anykey))
@@ -201,7 +201,7 @@ else
                  program = new SCRIPT();
                  program.lines := _data.lines;
                  program.tokens = _data.tokens;
-                 program.text = _data.text;
+                 //program.text = _data.text;
                  
                  buffer_delete(_buff);
                 _handled = true;
@@ -425,10 +425,12 @@ if(program.running && program.steps <= 0 && objSystem.running)
     program.run();
 }
 
+///scroll program
 var _pane_left = row_length + 20;
 var _pane_top = 10;
 var _pane_width = room_width - _pane_left;
-var _pane_height = 600; // pane runs from y=10 to y=610
+var _pane_height = 600; 
+
 
 if (mouse_x >= _pane_left && mouse_x <= room_width && mouse_y >= _pane_top && mouse_y <= _pane_top + _pane_height)
 {
@@ -441,11 +443,36 @@ if (mouse_x >= _pane_left && mouse_x <= room_width && mouse_y >= _pane_top && mo
         program_scroll_y += program_scroll_speed;
     }
 }
-
-var _content_height = string_height_ext( program.text, 24,  _pane_width);
-
+///clamp so this doesn't scroll off the dang screen
+var _content_height = 24 * array_length(program.lines);
 var _max_scroll = max(0, _content_height - _pane_height);
 program_scroll_y = clamp(program_scroll_y, 0, _max_scroll);
+
+/// Scroll variables
+_pane_left = row_length + 20;
+_pane_top = 615;
+_pane_width = window_get_width() - _pane_left;
+_pane_height = window_get_height() - _pane_top;
+var _line_h = 24;
+
+if (mouse_x >= _pane_left &&  mouse_x <= _pane_left + _pane_width &&  mouse_y >= _pane_top &&  mouse_y <= _pane_top + _pane_height)
+{
+    if (mouse_wheel_up())
+    {
+        variables_scroll_y -= variables_scroll_speed;
+    }
+    else if (mouse_wheel_down())
+    {
+        variables_scroll_y += variables_scroll_speed;
+    }
+}
+///clamp so this doesn't scroll off the dang screen too
+var _variable_count = array_length(variable_struct_get_names(program.variables));
+var _visible_height = max(0, _pane_height - _line_h);
+_content_height = _variable_count * _line_h;
+_max_scroll = max(0, _content_height - _visible_height);
+variables_scroll_y = clamp(variables_scroll_y, 0, _max_scroll);
+
 
 if (program.running || program.waiting_for_input)
 {
