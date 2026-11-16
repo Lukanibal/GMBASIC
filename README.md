@@ -55,11 +55,23 @@ Is the only accepted syntax
 ## Matrix
 | Function | Description |
 |---|---|
-| `MATRIXSETWORLD(MATRIX)`|Sets the current world transformation matrix to `MATRIX`.|
-| `MATRIXSETVIEW(MATRIX)` |Sets the current view transformation matrix to `MATRIX`.|
-| `MATRIXSETPROJ(MATRIX)` |Sets the current projection transformation matrix to `MATRIX`.|
-| `MATRIXBUILD(X, Y, Z, ROTX, ROTY, ROTZ, SCALEX, SCALEY, SCALEZ)` |Builds a transformation matrix with translation `(X, Y, Z)`, rotation `(ROTX, ROTY, ROTZ)` in degrees, and scaling `(SCALEX, SCALEY, SCALEZ)`.|
-| `MATRIXBUILDID()` |Returns an identity matrix.|
-| `MATRIXBUILDLOOKAT(XFROM, YFROM, ZFROM, XTO, YTO, ZTO, XUP, YUP, ZUP)`|Builds a look-at matrix for a camera positioned at `(XFROM, YFROM, ZFROM)`, looking at `(XTO, YTO, ZTO)`, with an up vector of `(XUP, YUP, ZUP)`.|
-| `MATRIXBUILDORTHO(WIDTH, HEIGHT, ZNEAR, ZFAR)` |Builds an orthographic projection matrix with the specified width, height, near plane, and far plane.|
+| `MATRIXSETWORLD(MATRIX)`| Sets the current world transformation matrix to `MATRIX`.|
+| `MATRIXSETVIEW(MATRIX)` | Sets the current view transformation matrix to `MATRIX`.|
+| `MATRIXSETPROJ(MATRIX)` | Sets the current projection transformation matrix to `MATRIX`.|
+| `MATRIXBUILD(X, Y, Z, ROTX, ROTY, ROTZ, SCALEX, SCALEY, SCALEZ)` | Builds a transformation matrix with translation `(X, Y, Z)`, rotation `(ROTX, ROTY, ROTZ)` in degrees, and scaling `(SCALEX, SCALEY, SCALEZ)`.|
+| `MATRIXBUILDID()` | Returns an identity matrix.|
+| `MATRIXBUILDLOOKAT(XFROM, YFROM, ZFROM, XTO, YTO, ZTO, XUP, YUP, ZUP)`| Builds a look-at matrix for a camera positioned at `(XFROM, YFROM, ZFROM)`, looking at `(XTO, YTO, ZTO)`, with an up vector of `(XUP, YUP, ZUP)`.|
+| `MATRIXBUILDORTHO(WIDTH, HEIGHT, ZNEAR, ZFAR)` | Builds an orthographic projection matrix with the specified width, height, near plane, and far plane.|
 | `MATRIXBUILDPROJ(FOVY, ASPECT, ZNEAR, ZFAR)` | Builds a perspective projection matrix with the specified field of view (in degrees), aspect ratio, near plane, and far plane.|
+
+## Graphics
+The graphics calls do not currently use PARENTHESIS as they are from an earlier version of the FUNCTION handler, they will be updated eventually, but until then please leave them without PARENTHESIS or the runner will crash :( 
+| Function | Description |
+|---|---|
+| `LINE X1, Y1, X2, Y2`| Draws a line from point X1, Y1 to point X2, Y2|
+| `RECT X1, Y1, X2, Y2`| Draws a rectangle outline from  top left point X1, Y1 to bottom right point X2, Y2|
+| `FRECT X1, Y1, X2, Y2`| Draws a filled rectangle from  top left point X1, Y1 to bottom right point X2, Y2|
+| `CIRC X, Y, R`| Draws a circle outline at X, Y with a radius of R|
+| `FCIRC X, Y, R`| Draws a filled circle at X, Y with a radius of R|
+| `TRI X1, Y1, X2, Y2, X3, Y3`| Draws a triangle outline with the points at X1, Y1 X2, Y2, and X3, Y3 respectively|
+| `FTRI X1, Y1, X2, Y2, X3, Y3`| Draws a filled triangle with the points at X1, Y1 X2, Y2, and X3, Y3 respectively|
