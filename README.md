@@ -10,7 +10,8 @@ Assigns the value `5` to the variable `X`.
 ```basic
 PRINT "HELLO WORLD"
 ```
-Prints `HELLO WORLD` to the console. `PRINT` also accepts variables and arrays.
+Prints `HELLO WORLD` to the console. `PRINT` also accepts variables and arrays.  
+This will NOT print a NEWLINE at the end.
 
 `CLS` clears the console and frame buffer, then publishes a new frame.
 
@@ -36,6 +37,21 @@ All FUNCTION names are also reserved.
 
 `EUL` is usually expressed as `E` in settings like these, but stealing a letter of the alphabet from use as a variable name felt rude.
 
+## Types
+|Type | Description |
+|---|---|
+|`STRING`|"THIS IS A STRING"|
+|`WORD`| ALL OF THESE ARE WORDS|
+|`ARRAY`| `A(9)` accesses the 10th position in the array assigned to `A`|
+
+## Arrays
+The following is basic array syntax
+```basic
+LET X = 5
+DIM A(9)
+LET A(0) = X
+```
+ARRAYS can be nested with great difficulty, so I'd advise against it for now until it is fully supported <3
 
 ## Math
 Simple expressions can be done via the `LET` command, for example
@@ -71,8 +87,8 @@ Mixed with the math comands below, you can perform more complex calculations.
 | `LENGTHDIRX(L, D)` | Returns the X component of a vector with length `L` and direction `D` (in degrees). |
 | `LENGTHDIRY(L, D)` | Returns the Y component of a vector with length `L` and direction `D` (in degrees). |
 | `LENGTHDIRZ(L, P)` | Returns the Z component of a vector with length `L` and pitch `P` (in degrees).|
-|`DEGTORAD`| Turns degrees to radians|
-|`RADTODEG`| Turns degrees to radians|
+|`DEG`| Turns degrees to radians|
+|`RAD`| Turns degrees to radians|
 
 ## Matrix
 | Function | Description |
