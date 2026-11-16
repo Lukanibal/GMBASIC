@@ -123,7 +123,6 @@ These older functions also only allow variables or numbers as arguments! So you 
 
 ## Colors
 There are a finite set of colors allowed in GMBASIC currently  
-These are their HEX codes, but Markdown doesn't let me display the actual colors nicely :(
 |Constant | Value | Color |
 |---|---|---|
 |`BLACK`|#000000|![](https://placehold.co/16x16/000000/000000.png)|
