@@ -42,7 +42,9 @@ All FUNCTION names are also reserved.
 |---|---|
 |`STRING`|"THIS IS A STRING"|
 |`WORD`| ALL OF THESE ARE WORDS|
+|`NUMBER`| 420 is a number, it cannot conaint decimals at current|
 |`ARRAY`| `A(9)` accesses the 10th position in the array assigned to `A`|
+
 
 ## Arrays
 The following is basic array syntax
