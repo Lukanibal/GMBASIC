@@ -119,7 +119,7 @@ For a negative simply subtract the value you want from `0` like so `LET X = 0 - 
 | `POINTDIST3D(X1, Y1, Z1, X2, Y2, Z2)` | Returns the distance from point `(X1, Y1, Z1)` to point `(X2, Y2, Z2)` in pixels. |
 | `LENGTHDIRX(L, D)` | Returns the X component of a vector with length `L` and direction `D` (in degrees). |
 | `LENGTHDIRY(L, D)` | Returns the Y component of a vector with length `L` and direction `D` (in degrees). |
-| `LENGTHDIRZ(L, P)` | Returns the Z (vertical) component of a vector with length L and pitch P, in degrees. A pitch of 0 is level (returns 0), 90 is straight up (returns L), and -90 is straight down (returns -L). |
+| `LENGTHDIRZ(L, P)` | Returns the Z (vertical) component of a vector with length `L` and pitch `P`, in degrees. A pitch of 0 is level (returns 0), 90 is straight up (returns L), and -90 is straight down (returns -L). |
 | `DEG(X)`| Turns degrees to radians. |
 | `RAD(X)`| Turns radians to degrees. |
 
@@ -135,21 +135,43 @@ For a negative simply subtract the value you want from `0` like so `LET X = 0 - 
 | `MATRIXBUILDORTHO(WIDTH, HEIGHT, ZNEAR, ZFAR)` | Builds an orthographic projection matrix with the specified width, height, near plane, and far plane. |
 | `MATRIXBUILDPROJ(FOVY, ASPECT, ZNEAR, ZFAR)` | Builds a perspective projection matrix with the specified field of view (in degrees), aspect ratio, near plane, and far plane. |
 
+Shows a spinning triangle and 3D logic:  
+```basic
+10 LET ASPECT = 4 / 3
+20 LET P = MATRIXBUILDPROJPERSFOV(60, ASPECT, 1, 1000)
+30 LET CAMZ = 0 - 200
+40 LET V = MATRIXBUILDLOOKAT(0, 0, CAMZ, 0, 0, 0, 0, 1, 0)
+50 LET L = 0 - 50
+60 LET B = 0 - 40
+70 LET ANGLE = 0
+80 CLS
+90 MATRIXSETPROJ(P)
+100 MATRIXSETVIEW(V)
+110 LET W = MATRIXBUILD(0, 0, 0, 0, ANGLE, 0, 1, 1, 1)
+120 MATRIXSETWORLD(W)
+130 SETDRAWCOLOR(ORANGE)
+140 FTRI L, B, 50, B, 0, 40
+150 LET ANGLE = MOD(ANGLE + 2, 360)
+160 VSYNC
+170 GOTO 80
+```
+> [!NOTE]
+> In 3D mode with this camera setup, +Y is up and the camera looks toward +Z. This is the reverse of the 2D screen, where Y increases downward.
+
 ## Graphics
-The graphics calls do not currently use parentesis as they are from an earlier version of the FUNCTION handler, they will be updated eventually, but until then please leave them without PARENTHESIS or the runner will crash :( 
-These older functions also only allow variables or numbers as arguments! So you cannot put expressions in or they crash the runner :((  
-The CANVAS is 800 X 600 pixels, the ORIGIN is the TOP LEFT corner which is `0 ,0`
+Graphics calls accept VARIABLES, ARRAYED VARIABLES `X(3)`, and EXPRESSIONS as arguments.  
+The CANVAS is `800 X 600` pixels, the ORIGIN is the TOP LEFT corner which is `0 ,0`
 The Y Vector INCREASES down the screen.
 | Function | Description |
 |---|---|
-| `SETDRAWCOLOR COLOR`| Sets the color for all subsequent graphics functions to `COLOR`, must be a `COLOR` constant, not a variable|
-| `LINE X1, Y1, X2, Y2`| Draws a line from point `X1, Y1` to point `X2, Y2`|
-| `RECT X1, Y1, X2, Y2`| Draws a rectangle outline from  top left point `X1, Y1` to bottom right point `X2, Y2`|
-| `FRECT X1, Y1, X2, Y2`| Draws a filled rectangle from  top left point `X1, Y1` to bottom right point `X2, Y2`|
-| `CIRC X, Y, R`| Draws a circle outline at `X, Y` with a radius of `R`|
-| `FCIRC X, Y, R`| Draws a filled circle at `X, Y` with a radius of `R`|
-| `TRI X1, Y1, X2, Y2, X3, Y3`| Draws a triangle outline with the points at `X1, Y1`, `X2, Y2`, and `X3, Y3` respectively|
-| `FTRI X1, Y1, X2, Y2, X3, Y3`| Draws a filled triangle with the points at `X1, Y1`, `X2, Y2,`, and `X3, Y3` respectively|
+| `SETDRAWCOLOR(COLOR)`| Sets the color for all subsequent graphics functions to `COLOR`, must be a `COLOR` constant, not a variable|
+| `LINE(X1, Y1, X2, Y2)`| Draws a line from point `(X1, Y1)` to point `(X2, Y2)`|
+| `RECT(X1, Y1, X2, Y2)`| Draws a rectangle outline from  top left point `(X1, Y1)` to bottom right point `(X2, Y2)`|
+| `FRECT(X1, Y1, X2, Y2)`| Draws a filled rectangle from  top left point `(X1, Y1)` to bottom right point `(X2, Y2)`|
+| `CIRC(X, Y, R)`| Draws a circle outline at `(X, Y)` with a radius of `R`|
+| `FCIRC(X, Y, R)`| Draws a filled circle at `(X, Y)` with a radius of `R`|
+| `TRI(X1, Y1, X2, Y2, X3, Y3)`| Draws a triangle outline with the points at `(X1, Y1)`, `(X2, Y2)`, and `(X3, Y3)` respectively|
+| `FTRI(X1, Y1, X2, Y2, X3, Y3)`| Draws a filled triangle with the points at `(X1, Y1)`, `(X2, Y2)`, and `(X3, Y3)` respectively|
 
 ## Colors
 There are a finite set of colors allowed in **GMBASIC** currently
@@ -195,7 +217,7 @@ An example of a simple way to check keys without using IF branches:
 10 LET X = 100
 20 CLS
 30 LET X = X + KRIGHT * 2 - KLEFT * 2
-40 FCIRC X, 100, 10
+40 FCIRC(X, 100, 10)
 50 VSYNC
 60 GOTO 20
 ```
@@ -208,8 +230,8 @@ Animates a red circle across the canvas:
 ```basic
 10 LET X = 0
 20 CLS
-30 SETDRAWCOLOR RED
-40 FCIRC X, 100, 20
+30 SETDRAWCOLOR(RED)
+40 FCIRC(X, 100, 20)
 50 LET X = X + 2
 60 IF X > 800 THEN GOTO 10
 70 VSYNC
