@@ -23,10 +23,27 @@ All functions that return a value must be assigned with `LET`. For example, `LET
 IF X = 1 THEN GOTO 100 ELSE GOTO 200
 ```
 Is the only accepted syntax
-
 `GOTO <LINE NUMBER>` is also supported for _BASIC_ loops 
 
+RESERVED WORDS
+The following words cannot be used as variable names as they are reserved by the system, it will not stop you from trying to set them, but the reserved system value will always be returned.  
+All FUNCTION names are also reserved.
+|Constant | Description |
+|---|---|
+|`PI`| 3.14|
+|`TAU`| PI * 2(6.18)|
+|`EUL`| 2.718281828459045| 
+
+`EUL` is usually expressed as `E` in settings like these, but stealing a letter of the alphabet from use as a variable name felt rude.
+
+
 ## Math
+Simple expressions can be done via the `LET` command, for example
+```basic
+10 LET X = 10 + 2
+```
+Will make `X = 12` and so forth.  
+Mixed with the math comands below, you can perform more complex calculations.
 
 | Function | Description |
 |---|---|
@@ -65,7 +82,7 @@ Is the only accepted syntax
 | `MATRIXBUILDPROJ(FOVY, ASPECT, ZNEAR, ZFAR)` | Builds a perspective projection matrix with the specified field of view (in degrees), aspect ratio, near plane, and far plane.|
 
 ## Graphics
-The graphics calls do not currently use PARENTHESIS as they are from an earlier version of the FUNCTION handler, they will be updated eventually, but until then please leave them without PARENTHESIS or the runner will crash :( 
+The graphics calls do not currently use parentesis as they are from an earlier version of the FUNCTION handler, they will be updated eventually, but until then please leave them without PARENTHESIS or the runner will crash :( 
 | Function | Description |
 |---|---|
 | `LINE X1, Y1, X2, Y2`| Draws a line from point X1, Y1 to point X2, Y2|
@@ -75,3 +92,24 @@ The graphics calls do not currently use PARENTHESIS as they are from an earlier 
 | `FCIRC X, Y, R`| Draws a filled circle at X, Y with a radius of R|
 | `TRI X1, Y1, X2, Y2, X3, Y3`| Draws a triangle outline with the points at X1, Y1 X2, Y2, and X3, Y3 respectively|
 | `FTRI X1, Y1, X2, Y2, X3, Y3`| Draws a filled triangle with the points at X1, Y1 X2, Y2, and X3, Y3 respectively|
+
+## Input
+You may collect basic input from the user in 2 ways:
+```basic
+20 INPUT NAME
+```  
+This will halt the program's execution and prompt the user to input text and only resume running when ENTER is pressed.  
+When ENTER is pressed, the input value will be stored in NAME(or whatever variable name you choose).
+
+The other method is more useful for games, but only checks certain keys.  
+Simply check one of the following CONSTANTS to get instant input feedback!
+| Constant| Description |
+|---|---|
+|`KLEFT`| The left arrow key's state, where 0 is not pressed and 1 is pressed|
+|`KRIGHT`| The right arrow key's state, where 0 is not pressed and 1 is pressed|
+|`KUP`| The up arrow key's state, where 0 is not pressed and 1 is pressed|
+|`KDOWN`| The down arrow key's state, where 0 is not pressed and 1 is pressed|
+|`MLEFT`| The left mouse button's state, where 0 is not pressed and 1 is pressed|
+|`MRIGHT`| The right mouse button's state, where 0 is not pressed and 1 is pressed|
+|`MX`|The mouse's current X value|
+|`MY`|The mouse's current X value|
