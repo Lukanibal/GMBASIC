@@ -66,6 +66,8 @@ Mixed with the math comands below, you can perform more complex calculations.
 | `MOD(X, Y)` | Returns the remainder of `X` divided by `Y`. |
 | `DIV(X, Y)` | Returns the integer division of `X` by `Y`. |
 | `POINTDIR(X1, Y1, X2, Y2)` | Returns the direction from point `(X1, Y1)` to point `(X2, Y2)` in degrees. |
+| `POINTDIST(X1, Y1, X2, Y2)` | Returns the distance from point `(X1, Y1)` to point `(X2, Y2)` in pixels. |
+| `POINTDIST3D(X1, Y1, Z1, X2, Y2, Z2)` | Returns the distance from point `(X1, Y1, Z1)` to point `(X2, Y2, Z2)` in pixels. |
 | `LENGTHDIRX(L, D)` | Returns the X component of a vector with length `L` and direction `D` (in degrees). |
 | `LENGTHDIRY(L, D)` | Returns the Y component of a vector with length `L` and direction `D` (in degrees). |
 | `LENGTHDIRZ(L, P)` | Returns the Z component of a vector with length `L` and pitch `P` (in degrees).|
