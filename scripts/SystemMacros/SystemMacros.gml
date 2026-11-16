@@ -1250,6 +1250,16 @@ function evaluate_postfix(_pf)
             {
                 array_push(_values, arctan(_argument));
             }
+            if(_func == "ARCTAN2")
+            {
+                if(_arg_count != 2)
+                {
+                    notify("FUNCTION: ARCTAN2 EXPECTS 2 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, arctan2(_argument, _args[1]));
+            }
             if (_func == "RANDOM")
             {
                 array_push(_values, random(_argument));
@@ -1277,16 +1287,6 @@ function evaluate_postfix(_pf)
                 }
                 
                 array_push(_values, logn(_argument, _args[1]));
-            }
-            if(_func == "ARCTAN2")
-            {
-                if(_arg_count != 2)
-                {
-                    notify("FUNCTION: ARCTAN2 EXPECTS 2 ARGUMENTS");
-                    return 0;
-                }
-                
-                array_push(_values, arctan2(_argument, _args[1]));
             }
             if(_func == "MIN")
             {
@@ -1348,21 +1348,21 @@ function evaluate_postfix(_pf)
                 
                 array_push(_values, lerp(_argument, _args[1], _args[2]));
             }
-            if(_func == "DEGTORAD")
+            if(_func == "DEG")
             {
                 if(_arg_count != 1)
                 {
-                    notify("FUNCTION: DEGTORAD EXPECTS 1 ARGUMENT");
+                    notify("FUNCTION: DEG EXPECTS 1 ARGUMENT");
                     return 0;
                 }
                 
                 array_push(_values, degtorad(_argument));
             }
-            if(_func == "RADTODEG")
+            if(_func == "RAD")
             {
                 if(_arg_count != 1)
                 {
-                    notify("FUNCTION: RADTODEG EXPECTS 1 ARGUMENT");
+                    notify("FUNCTION: RAD EXPECTS 1 ARGUMENT");
                     return 0;
                 }
                 
@@ -1728,6 +1728,29 @@ function program_line_bounds(_line_num, _width)
     return undefined;
 }
 
+
+
+function find_close_bracket(_tokens, _open)
+{
+    var _depth = 0;
+    var _len = array_length(_tokens);
+    
+    for (var _i = _open; _i < _len; _i++)
+    {
+        var _t = _tokens[_i];
+        if (_t.kind == "NEWLINE") return -1;
+            
+        if (_t.kind == "SYMBOL" && _t.value == "[") _depth++;
+        else if (_t.kind == "SYMBOL" && _t.value == "]")
+        {
+            _depth--;
+            if (_depth == 0) return _i;
+        }
+        
+    }
+    return -1;
+}
+
 function find_close_paren(_tokens, _open)
 {
     var _depth = 0;
@@ -1744,6 +1767,7 @@ function find_close_paren(_tokens, _open)
             _depth--;
             if (_depth == 0) return _i;
         }
+        
     }
     return -1;
 }
