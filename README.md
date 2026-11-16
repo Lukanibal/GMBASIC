@@ -32,7 +32,7 @@ All FUNCTION names are also reserved.
 |Constant | Description |
 |---|---|
 |`PI`| 3.14|
-|`TAU`| PI * 2(6.18)|
+|`TAU`| PI * 2(6.28)|
 |`EUL`| 2.718281828459045| 
 
 `EUL` is usually expressed as `E` in settings like these, but stealing a letter of the alphabet from use as a variable name felt rude.
@@ -63,6 +63,9 @@ Simple expressions can be done via the `LET` command, for example
 Will make `X = 12` and so forth.  
 Mixed with the math comands below, you can perform more complex calculations.
 
+> [HEADSUP!]
+> `SIN`, `COS` and `TAN` use radians, but `LENGTHDIR*` and `POINTDIR` use degrees.
+
 | Function | Description |
 |---|---|
 | `SQR(X)` | Returns the square root of `X`. |
@@ -88,9 +91,9 @@ Mixed with the math comands below, you can perform more complex calculations.
 | `POINTDIST3D(X1, Y1, Z1, X2, Y2, Z2)` | Returns the distance from point `(X1, Y1, Z1)` to point `(X2, Y2, Z2)` in pixels. |
 | `LENGTHDIRX(L, D)` | Returns the X component of a vector with length `L` and direction `D` (in degrees). |
 | `LENGTHDIRY(L, D)` | Returns the Y component of a vector with length `L` and direction `D` (in degrees). |
-| `LENGTHDIRZ(L, P)` | Returns the Z component of a vector with length `L` and pitch `P` (in degrees).|
+| `LENGTHDIRZ(L, P)` | Returns the Z (vertical) component of a vector with length L and pitch P, in degrees. A pitch of 0 is level (returns 0), 90 is straight up (returns L), and -90 is straight down (returns -L).|
 |`DEG`| Turns degrees to radians|
-|`RAD`| Turns degrees to radians|
+|`RAD`| Turns radians to degrees|
 
 ## Matrix
 | Function | Description |
@@ -155,4 +158,4 @@ Simply check one of the following CONSTANTS to get instant input feedback!
 |`MLEFT`| The left mouse button's state, where 0 is not pressed and 1 is pressed|
 |`MRIGHT`| The right mouse button's state, where 0 is not pressed and 1 is pressed|
 |`MX`|The mouse's current X value|
-|`MY`|The mouse's current X value|
+|`MY`|The mouse's current Y value|
