@@ -85,6 +85,7 @@ Mixed with the math comands below, you can perform more complex calculations.
 The graphics calls do not currently use parentesis as they are from an earlier version of the FUNCTION handler, they will be updated eventually, but until then please leave them without PARENTHESIS or the runner will crash :( 
 | Function | Description |
 |---|---|
+|`SETDRAWCOLOR COLOR`| Sets the color for all subsequent graphics functions to COLOR, must be a COLOR constant.|
 | `LINE X1, Y1, X2, Y2`| Draws a line from point X1, Y1 to point X2, Y2|
 | `RECT X1, Y1, X2, Y2`| Draws a rectangle outline from  top left point X1, Y1 to bottom right point X2, Y2|
 | `FRECT X1, Y1, X2, Y2`| Draws a filled rectangle from  top left point X1, Y1 to bottom right point X2, Y2|
@@ -92,6 +93,24 @@ The graphics calls do not currently use parentesis as they are from an earlier v
 | `FCIRC X, Y, R`| Draws a filled circle at X, Y with a radius of R|
 | `TRI X1, Y1, X2, Y2, X3, Y3`| Draws a triangle outline with the points at X1, Y1 X2, Y2, and X3, Y3 respectively|
 | `FTRI X1, Y1, X2, Y2, X3, Y3`| Draws a filled triangle with the points at X1, Y1 X2, Y2, and X3, Y3 respectively|
+
+## Colors
+There are a finite set of colors allowed in GMBASIC currently  
+These are their HEX codes, but Markdown doesn't let me display the actual colors nicely :(
+| Constant | Value |
+|---|---|
+|`BLACK`|#000000|
+|`WHITE`|#FFFFFF|
+|`MAROON`|#800000|
+|`RED`|#FF0000|
+|`GREEN`|#008000|
+|`LIME`|#00FF00|
+|`BLUE`|#0000FF|
+|`AQUA`|#00FFFF|
+|`ORANGE`|#FFA040|
+|`YELLOW`|#FFFF00|
+|`PURPLE`|#800080|
+|`FUCHSIA`|#FF00FF|
 
 ## Input
 You may collect basic input from the user in 2 ways:
