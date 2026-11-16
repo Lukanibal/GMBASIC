@@ -83,6 +83,7 @@ Mixed with the math comands below, you can perform more complex calculations.
 
 ## Graphics
 The graphics calls do not currently use parentesis as they are from an earlier version of the FUNCTION handler, they will be updated eventually, but until then please leave them without PARENTHESIS or the runner will crash :( 
+These older functions also only allow variables or numbers as arguments! So you cannot put expressions in or they crash the runner :((
 | Function | Description |
 |---|---|
 |`SETDRAWCOLOR COLOR`| Sets the color for all subsequent graphics functions to COLOR, must be a COLOR constant.|
