@@ -124,20 +124,20 @@ These older functions also only allow variables or numbers as arguments! So you 
 ## Colors
 There are a finite set of colors allowed in GMBASIC currently  
 These are their HEX codes, but Markdown doesn't let me display the actual colors nicely :(
-| Constant | Value |
-|---|---|
-|`BLACK`|#000000|
-|`WHITE`|#FFFFFF|
-|`MAROON`|#800000|
-|`RED`|#FF0000|
-|`GREEN`|#008000|
-|`LIME`|#00FF00|
-|`BLUE`|#0000FF|
-|`AQUA`|#00FFFF|
-|`ORANGE`|#FFA040|
-|`YELLOW`|#FFFF00|
-|`PURPLE`|#800080|
-|`FUCHSIA`|#FF00FF|
+|Constant | Value | Color |
+|---|---|---|
+|`BLACK`|#000000|![](https://placehold.co/16x16/000000/000000.png)|
+|`WHITE`|#FFFFFF|![](https://placehold.co/16x16/FFFFFF/FFFFFF.png)|
+|`MAROON`|#800000|![](https://placehold.co/16x16/800000/800000.png)|
+|`RED`|#FF0000|![](https://placehold.co/16x16/FF0000/FF0000.png)|
+|`GREEN`|#008000|![](https://placehold.co/16x16/008000/008000.png)|
+|`LIME`|#00FF00|![](https://placehold.co/16x16/00FF00/00FF00.png)|
+|`BLUE`|#0000FF|![](https://placehold.co/16x16/0000FF/0000FF.png)|
+|`AQUA`|#00FFFF|![](https://placehold.co/16x16/00FFFF/00FFFF.png)|
+|`ORANGE`|#FFA040|![](https://placehold.co/16x16/FFA040/FFA040.png)|
+|`YELLOW`|#FFFF00|![](https://placehold.co/16x16/FFFF00/FFFF00.png)|
+|`PURPLE`|#800080|![](https://placehold.co/16x16/800080/800080.png)|
+|`FUCHSIA`|#FF00FF|![](https://placehold.co/16x16/FF00FF/FF00FF.png)|
 
 ## Input
 You may collect basic input from the user in 2 ways:
