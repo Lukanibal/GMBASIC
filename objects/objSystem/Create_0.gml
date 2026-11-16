@@ -28,6 +28,9 @@ RESERVED =
     "MY" : mouse_y - 10,
     "MLEFT" : mouse_check_button(mb_left),
     "MRIGHT" : mouse_check_button(mb_right),
+    "PI" : pi,
+    "TAU" : pi * 2,
+    "EUL" : 2.718281828459045
 }
 
 call_later(0.5, time_source_units_seconds, function()

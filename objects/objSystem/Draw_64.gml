@@ -80,6 +80,7 @@ for (var _i = 0; _i < _len; _i++)
             case "BLACK":  graphics_color = c_black; break;
             case "PURPLE": graphics_color = c_purple; break;
             case "YELLOW": graphics_color = c_yellow; break;
+            case "FUCHSIA": graphics_color = c_fuchsia; break;
         }
     }
 }

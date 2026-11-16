@@ -599,7 +599,7 @@ function SCRIPT(_text = "") constructor
                         _col = self.tokens[_i + 1].value;
                         
                         _valid = (_col == "RED" || _col == "BLUE" || _col == "GREEN" || _col == "LIME" || _col == "MAROON" || _col == "AQUA" ||
-                            _col == "ORANGE" || _col == "WHITE" || _col == "BLACK" || _col == "PURPLE"|| _col == "YELLOW");
+                            _col == "ORANGE" || _col == "WHITE" || _col == "BLACK" || _col == "PURPLE"|| _col == "YELLOW" || _col == "FUCHSIA");
                     }
                     
                     if (!_valid)
@@ -961,6 +961,11 @@ function is_math_op(_value)
 function is_expr_op(_value)
 {
     return (is_math_op(_value) || _value == "=" || _value == "<>" || _value == "<" || _value == ">" || _value == "<=" || _value == ">=" || _value == "MOD");
+}
+
+function lengthdir_z(_len, _pitch) 
+{
+    return _len * dsin(_pitch);
 }
 
 ///@param _tokens {ARRAY} an array of math tokens
@@ -1343,6 +1348,26 @@ function evaluate_postfix(_pf)
                 
                 array_push(_values, lerp(_argument, _args[1], _args[2]));
             }
+            if(_func == "DEGTORAD")
+            {
+                if(_arg_count != 1)
+                {
+                    notify("FUNCTION: DEGTORAD EXPECTS 1 ARGUMENT");
+                    return 0;
+                }
+                
+                array_push(_values, degtorad(_argument));
+            }
+            if(_func == "RADTODEG")
+            {
+                if(_arg_count != 1)
+                {
+                    notify("FUNCTION: RADTODEG EXPECTS 1 ARGUMENT");
+                    return 0;
+                }
+                
+                array_push(_values, radtodeg(_argument));
+            }
             if(_func == "LENGTHDIRX")
             {
                 if(_arg_count != 2)
@@ -1362,6 +1387,16 @@ function evaluate_postfix(_pf)
                 }
                 
                 array_push(_values, lengthdir_y(_argument, _args[1]));
+            }
+            if(_func == "LENGTHDIRZ")
+            {
+                if(_arg_count != 2)
+                {
+                    notify("FUNCTION: LENGTHDIRZ EXPECTS 2 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, lengthdir_z(_argument, _args[1]));
             }
             if(_func == "POINTDIR")
             {
