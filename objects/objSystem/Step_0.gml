@@ -67,7 +67,13 @@ else
             keyboard_string = "";
             keyboard_lastkey = vk_nokey;
        }
-   
+        
+        if (keyboard_lastkey == vk_delete)
+       {
+            typed_text = "";
+            keyboard_string = "";
+            keyboard_lastkey = vk_nokey;
+       }
        
        if(keyboard_lastkey == vk_escape && running)
        {
@@ -162,6 +168,27 @@ else
                 typed_text = "";
                 position = 1; 
                 clipboard_set_text(program.to_text());
+                _handled = true;
+            }
+            else
+            if(string_count("COPY ", typed_text))
+            {
+                var _num = string_replace(typed_text, "COPY ", "")
+                var _len = array_length(program.lines);
+                
+                for(var _j = 0; _j < _len; _j++)
+                {
+                    if(get_line_number(program.lines[_j]) == _num)
+                    {
+                        typed_text = program.lines[_j];
+                        clipboard_set_text(typed_text);
+                        position = string_length(typed_text) + 1;
+                        _handled = true;
+                        break;
+                    }
+                }
+                if(!_handled)
+                notify("NOT FOUND OR INVALID LINE NUMBER TO COPY");
                 _handled = true;
             }
            else

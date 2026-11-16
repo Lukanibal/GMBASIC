@@ -5,6 +5,7 @@ array_push(global.function_names, "SQRT");
 array_push(global.function_names, "ABS");
 array_push(global.function_names, "COS");
 array_push(global.function_names, "SIN");
+array_push(global.function_names, "TAN");
 array_push(global.function_names, "FLOOR");
 array_push(global.function_names, "CEIL");
 array_push(global.function_names, "ROUND");

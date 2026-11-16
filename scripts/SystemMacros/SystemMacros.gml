@@ -1221,6 +1221,10 @@ function evaluate_postfix(_pf)
             {
                 array_push(_values, cos(_argument));
             }
+            if (_func == "TAN")
+            {
+                array_push(_values, tan(_argument));
+            }
             if (_func == "SIN")
             {
                 array_push(_values, sin(_argument));
