@@ -68,6 +68,9 @@ Mixed with the math comands below, you can perform more complex calculations.
 | `POINTDIR(X1, Y1, X2, Y2)` | Returns the direction from point `(X1, Y1)` to point `(X2, Y2)` in degrees. |
 | `LENGTHDIRX(L, D)` | Returns the X component of a vector with length `L` and direction `D` (in degrees). |
 | `LENGTHDIRY(L, D)` | Returns the Y component of a vector with length `L` and direction `D` (in degrees). |
+| `LENGTHDIRZ(L, P)` | Returns the Z component of a vector with length `L` and pitch `P` (in degrees).|
+|`DEGTORAD`| Turns degrees to radians|
+|`RADTODEG`| Turns degrees to radians|
 
 ## Matrix
 | Function | Description |
