@@ -7,28 +7,45 @@ LET X = 5
 ```
 Assigns the value `5` to the variable `X`.
 
+### Variable Name Rules  
+Variable names must start with a letter and contain ONLY LETTER AND DIGITS!  
+Currently even underscores aren't allowed, but a later update will add these to make it easier to read your own variables if you need long names.
+
 ```basic
 PRINT "HELLO WORLD"
 ```
 Prints `HELLO WORLD` to the console. `PRINT` also accepts variables and arrays.  
 This will NOT print a NEWLINE at the end.
 
-`CLS` clears the console and frame buffer, then publishes a new frame.
+`CLS` publishes the frame built since the previous CLS and starts a new one. Anything drawn before the first CLS is discarded.
 
-`VSYNC` yields the current frame time to the runner.
-
-All functions that return a value must be assigned with `LET`. For example, `LET X = SQR(16)` assigns `4` to `X`.
+`VSYNC` ends the program’s slice for this frame and resumes next frame. Without it, the program still continues next frame
 
 `IF` `THEN` `ELSE` are supported, but only accept `GOTO` for `THEN` and `ELSE`, so
 ```basic
 IF X = 1 THEN GOTO 100 ELSE GOTO 200
 ```
-Is the only accepted syntax
-`GOTO <LINE NUMBER>` is also supported for _BASIC_ loops 
+ELSE is optional. With no ELSE, a false condition falls through to the next line.
+
+`GOTO <LINE NUMBER>` is also supported for _BASIC_ loops, `<LINE NUMBER>` MUST be a literal number and not a variable!
+
+`END` Ends the program
+
+The Editor itself has some useful commads that cannot be used in a BASIC program.
+|COMMAND | Description |
+|---|---|
+|`SAVE`| Quicksaves the current program for later LOADing, only one may be saved at a time and they will overwrite|
+|`LOAD`| Load the quicksaved file if it's there|
+|`COPY`| Copy the entire program into the clipboard|
+|`COPY <LINE NUMBER>`| Copy the line at `<LINE NUMBER>` to the typing field and the clipboard|
+|`PASTE`| Paste a full program from your clipboard into the program register|
+|`FSAVE`| Opens the Windows File Dialog to save the program to a .BAS file|
+|`FLOAD`| Opens Window File Dialog to load a .BAS or .TXT file, will crash if not properly formatted with line numbers!|
 
 RESERVED WORDS
 The following words cannot be used as variable names as they are reserved by the system, it will not stop you from trying to set them, but the reserved system value will always be returned.  
 All FUNCTION names are also reserved.
+
 |Constant | Description |
 |---|---|
 |`PI`| 3.14|
@@ -41,7 +58,6 @@ All FUNCTION names are also reserved.
 |Type | Description |
 |---|---|
 |`STRING`|"THIS IS A STRING"|
-|`WORD`| ALL OF THESE ARE WORDS|
 |`NUMBER`| 420 is a number, it cannot conaint decimals at current|
 |`ARRAY`| `A(9)` accesses the 10th position in the array assigned to `A`|
 
@@ -66,9 +82,16 @@ Mixed with the math comands below, you can perform more complex calculations.
 > [HEADSUP!]
 > `SIN`, `COS` and `TAN` use radians, but `LENGTHDIR*` and `POINTDIR` use degrees.
 
+>[ALSO]
+>Functions will work anywhere an expression does, such as `PRINT SQRT(16)`
+
+There are currently no NEGATIVE or DECIMALs picked up by my tokenizer, so you can work around that by:
+For a decimal something like `LET P = 314/100` WILL assign the value as a decimal, YOU just cannot type it in.  
+For a negative simply subtract the value you want from `0` like so `LET X = 0 - 69` will yeild `X = -69` to the engine underneath GMBASIC. I just need to work these into the tokenizer at some point, sorry!
+
 | Function | Description |
 |---|---|
-| `SQR(X)` | Returns the square root of `X`. |
+| `SQR(X)` | Returns the square of `X`. |
 | `SQRT(X)` | Returns the square root of `X`. |
 | `ABS(X)` | Returns the absolute value of `X`. |
 | `SIN(X)` | Returns the sine of `X` (in radians). |
@@ -81,19 +104,23 @@ Mixed with the math comands below, you can perform more complex calculations.
 | `ARCTAN(X)` | Returns the arctangent of `X` (in radians). |
 | `ARCTAN2(Y, X)` | Returns the arctangent of `Y/X` (in radians). |
 | `POW(X, Y)` | Returns `X` raised to the power of `Y`. |
-| `LOG(X, Y)` | Returns the logarithm of `X` with base `Y`. |
+| `LOG(X, Y)` | Returns the logarithm of `Y` with base `X`. |
 | `CLAMP(X, MIN, MAX)` | Clamps a value between a minimum and maximum range. |
 | `LERP(A, B, T)` | Linearly interpolates between `A` and `B` by `T`. |
 | `MOD(X, Y)` | Returns the remainder of `X` divided by `Y`. |
 | `DIV(X, Y)` | Returns the integer division of `X` by `Y`. |
+|`MIN(X, Y)`|Returns the minimum of X and Y. |
+|`MAX(X, Y)`|Returns the maximum of X and Y. |
+|`FRAC(X)`| Returns the fractional part of X. |
+|`RANDOM(X)`| Returns a random number from 0 to X|
 | `POINTDIR(X1, Y1, X2, Y2)` | Returns the direction from point `(X1, Y1)` to point `(X2, Y2)` in degrees. |
 | `POINTDIST(X1, Y1, X2, Y2)` | Returns the distance from point `(X1, Y1)` to point `(X2, Y2)` in pixels. |
 | `POINTDIST3D(X1, Y1, Z1, X2, Y2, Z2)` | Returns the distance from point `(X1, Y1, Z1)` to point `(X2, Y2, Z2)` in pixels. |
 | `LENGTHDIRX(L, D)` | Returns the X component of a vector with length `L` and direction `D` (in degrees). |
 | `LENGTHDIRY(L, D)` | Returns the Y component of a vector with length `L` and direction `D` (in degrees). |
 | `LENGTHDIRZ(L, P)` | Returns the Z (vertical) component of a vector with length L and pitch P, in degrees. A pitch of 0 is level (returns 0), 90 is straight up (returns L), and -90 is straight down (returns -L).|
-|`DEG`| Turns degrees to radians|
-|`RAD`| Turns radians to degrees|
+|`DEG(X)`| Turns degrees to radians|
+|`RAD(X)`| Turns radians to degrees|
 
 ## Matrix
 | Function | Description |
@@ -109,20 +136,22 @@ Mixed with the math comands below, you can perform more complex calculations.
 
 ## Graphics
 The graphics calls do not currently use parentesis as they are from an earlier version of the FUNCTION handler, they will be updated eventually, but until then please leave them without PARENTHESIS or the runner will crash :( 
-These older functions also only allow variables or numbers as arguments! So you cannot put expressions in or they crash the runner :((
+These older functions also only allow variables or numbers as arguments! So you cannot put expressions in or they crash the runner :((  
+The CANVAS is 800 X 600 pixels, the ORIGIN is the TOP LEFT corner which is `0 ,0`
+The Y Vector INCREASES down the screen.
 | Function | Description |
 |---|---|
-|`SETDRAWCOLOR COLOR`| Sets the color for all subsequent graphics functions to COLOR, must be a COLOR constant.|
-| `LINE X1, Y1, X2, Y2`| Draws a line from point X1, Y1 to point X2, Y2|
-| `RECT X1, Y1, X2, Y2`| Draws a rectangle outline from  top left point X1, Y1 to bottom right point X2, Y2|
-| `FRECT X1, Y1, X2, Y2`| Draws a filled rectangle from  top left point X1, Y1 to bottom right point X2, Y2|
-| `CIRC X, Y, R`| Draws a circle outline at X, Y with a radius of R|
-| `FCIRC X, Y, R`| Draws a filled circle at X, Y with a radius of R|
-| `TRI X1, Y1, X2, Y2, X3, Y3`| Draws a triangle outline with the points at X1, Y1 X2, Y2, and X3, Y3 respectively|
-| `FTRI X1, Y1, X2, Y2, X3, Y3`| Draws a filled triangle with the points at X1, Y1 X2, Y2, and X3, Y3 respectively|
+|`SETDRAWCOLOR COLOR`| Sets the color for all subsequent graphics functions to `COLOR`, must be a `COLOR` constant, not a variable|
+| `LINE X1, Y1, X2, Y2`| Draws a line from point `X1, Y1` to point `X2, Y2`|
+| `RECT X1, Y1, X2, Y2`| Draws a rectangle outline from  top left point `X1, Y1` to bottom right point `X2, Y2`|
+| `FRECT X1, Y1, X2, Y2`| Draws a filled rectangle from  top left point `X1, Y1` to bottom right point `X2, Y2`|
+| `CIRC X, Y, R`| Draws a circle outline at `X, Y` with a radius of `R`|
+| `FCIRC X, Y, R`| Draws a filled circle at `X, Y` with a radius of `R`|
+| `TRI X1, Y1, X2, Y2, X3, Y3`| Draws a triangle outline with the points at `X1, Y1`, `X2, Y2`, and `X3, Y3` respectively|
+| `FTRI X1, Y1, X2, Y2, X3, Y3`| Draws a filled triangle with the points at `X1, Y1`, `X2, Y2,`, and `X3, Y3` respectively|
 
 ## Colors
-There are a finite set of colors allowed in GMBASIC currently  
+There are a finite set of colors allowed in GMBASIC currently
 |Constant | Value | Color |
 |---|---|---|
 |`BLACK`|#000000|![](https://placehold.co/16x16/000000/000000.png)|
@@ -144,7 +173,7 @@ You may collect basic input from the user in 2 ways:
 20 INPUT NAME
 ```  
 This will halt the program's execution and prompt the user to input text and only resume running when ENTER is pressed.  
-When ENTER is pressed, the input value will be stored in NAME(or whatever variable name you choose).
+When ENTER is pressed, the input value will be stored in NAME(or whatever variable name you choose) and continue execution.
 
 The other method is more useful for games, but only checks certain keys.  
 Simply check one of the following CONSTANTS to get instant input feedback!
@@ -158,3 +187,40 @@ Simply check one of the following CONSTANTS to get instant input feedback!
 |`MRIGHT`| The right mouse button's state, where 0 is not pressed and 1 is pressed|
 |`MX`|The mouse's current X value|
 |`MY`|The mouse's current Y value|
+
+An example of a simple way to check keys without using IF branches
+```basic
+10 LET X = 100
+20 CLS
+30 LET X = X + KRIGHT * 2 - KLEFT * 2
+40 FCIRC X, 100, 10
+50 VSYNC
+60 GOTO 20
+```
+
+## Some Examples
+I struggle writing BASIC, which I know is funny, but here are some examples of the things I struggle to retain the most, array usage and loops.
+
+A basic loop and draw call structure.
+Animates a red circle across the canvas.
+```basic
+10 LET X = 0
+20 CLS
+30 SETDRAWCOLOR RED
+40 FCIRC X, 100, 20
+50 LET X = X + 2
+60 IF X > 800 THEN GOTO 10
+70 VSYNC
+80 GOTO 20
+```
+Note that GOTO can jump to LATER in the program as well, it is NOT just a jump BACK.
+
+A basic Array assignment.
+```basic
+10 DIM A(4)
+20 LET I = 0
+30 LET A(I) = I * I
+40 LET I = I + 1
+50 IF I <= 4 THEN GOTO 30
+60 PRINT A(3)
+```
