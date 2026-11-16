@@ -1408,6 +1408,26 @@ function evaluate_postfix(_pf)
                 
                 array_push(_values, point_direction(_argument, _args[1], _args[2], _args[3]));
             }
+            if(_func == "POINTDIST")
+            {
+                if(_arg_count != 4)
+                {
+                    notify("FUNCTION: PONTDIST EXPECTS 4 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, point_distance(_argument, _args[1], _args[2], _args[3]));
+            }
+            if(_func == "POINTDIST3D")
+            {
+                if(_arg_count != 6)
+                {
+                    notify("FUNCTION: PONTDIST3D EXPECTS 6 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(_values, point_distance_3d(_argument, _args[1], _args[2], _args[3], _args[4], _args[5]));
+            }
             if(_func == "MATRIXSETWORLD")
             {
                 if(_arg_count != 1)
