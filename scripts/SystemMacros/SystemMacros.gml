@@ -11,7 +11,7 @@ function SCRIPT(_text = "") constructor
     text = _text;
     lines = [];
     tokens = [];
-    output = "";
+    output = $"GMBASIC v26.11.16.0";
     variables =  {};
     pc = 0;
     running = false;
@@ -19,6 +19,8 @@ function SCRIPT(_text = "") constructor
     _out_of_time = false;
     
     current_line = -1;
+    
+    errors = [];
     
     //input handling
     waiting_for_input = false;
@@ -30,6 +32,8 @@ function SCRIPT(_text = "") constructor
     graphics = [];
     graphics_build = [];
     has_built_frame = false;
+    //also graphics but kinda seperate
+    sprites = {};
     
     start = function()
     {
@@ -43,6 +47,7 @@ function SCRIPT(_text = "") constructor
         graphics_build = [];
         has_built_frame = false;
         current_line = -1;
+        errors = [];
         running = true;
     };
     
@@ -156,6 +161,7 @@ function SCRIPT(_text = "") constructor
             }
             else if (_token.kind == "WORD")
             {
+                
                 if (_token.value == "PRINT")
                 {
                     var _postfix = to_postfix(self.tokens, _i + 1);
@@ -342,225 +348,6 @@ function SCRIPT(_text = "") constructor
                         _i = _end;
                     }
                 }
-                else if (_token.value == "LINE")
-                {
-                    var _valid = (_i + 7 < _len);
-                
-                    if (_valid)
-                    {
-                        _valid = (self.tokens[_i + 2].value == "," && self.tokens[_i + 4].value == "," && self.tokens[_i + 6].value == ","); 
-                    }
-                    
-                    if (_valid)
-                    {
-                        var _x1 = line_value(self.tokens[_i + 1]);
-                        var _y1 = line_value(self.tokens[_i + 3]);
-                        var _x2 = line_value(self.tokens[_i + 5]);
-                        var _y2 = line_value(self.tokens[_i + 7]);
-                        
-                        _valid = (!is_undefined(_x1) && !is_undefined(_y1) && !is_undefined(_x2) && !is_undefined(_y2));
-                    }
-                    
-                    if (!_valid)
-                    {
-                        notify("LINE: EXPECTED FOUR NUMBER OR VARIABLE ARGUMENTS");
-                        _running = false;
-                    }
-                    else
-                    {
-                        array_push(self.graphics_build, { kind: "LINE", x1: _x1, y1: _y1, x2: _x2, y2: _y2 });
-                        
-                        _i += 8;
-                    }
-                }
-                else if (_token.value == "TRI")
-                {
-                    var _valid = (_i + 11 < _len);
-                    
-                    if (_valid)
-                    {
-                        _valid = (self.tokens[_i + 2].value == "," && self.tokens[_i + 4].value == "," && self.tokens[_i + 6].value == ","); 
-                    }
-                    
-                    if (_valid)
-                    {
-                        var _x1 = line_value(self.tokens[_i + 1]);
-                        var _y1 = line_value(self.tokens[_i + 3]);
-                        var _x2 = line_value(self.tokens[_i + 5]);
-                        var _y2 = line_value(self.tokens[_i + 7]);
-                        var _x3 = line_value(self.tokens[_i + 9]);
-                        var _y3 = line_value(self.tokens[_i + 11]);
-                        
-                        _valid = (!is_undefined(_x1) && !is_undefined(_y1) && !is_undefined(_x2) && !is_undefined(_y2));
-                    }
-                    
-                    if (!_valid)
-                    {
-                        notify("TRI: EXPECTED SIX NUMBER OR VARIABLE ARGUMENTS");
-                        _running = false;
-                    }
-                    else
-                    {
-                        array_push(self.graphics_build, { kind: "TRI", x1: _x1, y1: _y1, x2: _x2, y2: _y2, x3: _x3, y3: _y3});
-                        
-                        _i += 12;
-                    }
-                }
-                else if (_token.value == "FTRI")
-                {
-                    var _valid = (_i + 11 < _len);
-                    
-                    if (_valid)
-                    {
-                        _valid = (self.tokens[_i + 2].value == "," && self.tokens[_i + 4].value == "," && self.tokens[_i + 6].value == ","); 
-                    }
-                    
-                    if (_valid)
-                    {
-                        var _x1 = line_value(self.tokens[_i + 1]);
-                        var _y1 = line_value(self.tokens[_i + 3]);
-                        var _x2 = line_value(self.tokens[_i + 5]);
-                        var _y2 = line_value(self.tokens[_i + 7]);
-                        var _x3 = line_value(self.tokens[_i + 9]);
-                        var _y3 = line_value(self.tokens[_i + 11]);
-                        
-                        _valid = (!is_undefined(_x1) && !is_undefined(_y1) && !is_undefined(_x2) && !is_undefined(_y2));
-                    }
-                
-                    if (!_valid)
-                    {
-                        notify("FTRI: EXPECTED SIX NUMBER OR VARIABLE ARGUMENTS");
-                        _running = false;
-                    }
-                    else
-                    {
-                        array_push(self.graphics_build, { kind: "FTRI", x1: _x1, y1: _y1, x2: _x2, y2: _y2, x3: _x3, y3: _y3});
-                        
-                        _i += 12;
-                    }
-                }
-                else if (_token.value == "RECT")
-                {
-                    var _valid = (_i + 7 < _len);
-                    
-                    if (_valid)
-                    {
-                        _valid = (self.tokens[_i + 2].value == "," && self.tokens[_i + 4].value == "," && self.tokens[_i + 6].value == ","); 
-                    }
-                    
-                    if (_valid)
-                    {
-                        var _x1 = line_value(self.tokens[_i + 1]);
-                        var _y1 = line_value(self.tokens[_i + 3]);
-                        var _x2 = line_value(self.tokens[_i + 5]);
-                        var _y2 = line_value(self.tokens[_i + 7]);
-                        
-                        _valid = (!is_undefined(_x1) && !is_undefined(_y1) && !is_undefined(_x2) && !is_undefined(_y2));
-                    }
-                    
-                    if (!_valid)
-                    {
-                        notify("RECT: EXPECTED FOUR NUMBER OR VARIABLE ARGUMENTS");
-                        _running = false;
-                    }
-                    else
-                    {
-                        array_push(self.graphics_build, { kind: "RECT", x1: _x1, y1: _y1, x2: _x2, y2: _y2 });
-                        
-                        _i += 8;
-                    }
-                }
-                else if (_token.value == "FRECT")
-                {
-                    var _valid = (_i + 7 < _len);
-                    
-                    if (_valid)
-                    {
-                        _valid = (self.tokens[_i + 2].value == "," && self.tokens[_i + 4].value == "," && self.tokens[_i + 6].value == ","); 
-                    }
-                    
-                    if (_valid)
-                    {
-                        var _x1 = line_value(self.tokens[_i + 1]);
-                        var _y1 = line_value(self.tokens[_i + 3]);
-                        var _x2 = line_value(self.tokens[_i + 5]);
-                        var _y2 = line_value(self.tokens[_i + 7]);
-                        
-                        _valid = (!is_undefined(_x1) && !is_undefined(_y1) && !is_undefined(_x2) && !is_undefined(_y2));
-                    }
-                    
-                    if (!_valid)
-                    {
-                        notify("FRECT: EXPECTED FOUR NUMBER OR VARIABLE ARGUMENTS");
-                        _running = false;
-                    }
-                    else
-                    {
-                        array_push(self.graphics_build, { kind: "FRECT", x1: _x1, y1: _y1, x2: _x2, y2: _y2 });
-                        
-                        _i += 8;
-                    }
-                }
-                else if (_token.value == "CIRC")
-                {
-                    var _valid = (_i + 5 < _len);
-                    
-                    if (_valid)
-                    {
-                        _valid = (self.tokens[_i + 2].value == "," && self.tokens[_i + 4].value == ","); 
-                    }
-                    
-                    if (_valid)
-                    {
-                        var _x1 = line_value(self.tokens[_i + 1]);
-                        var _y1 = line_value(self.tokens[_i + 3]);
-                        var _x2 = line_value(self.tokens[_i + 5]);
-                        
-                        _valid = (!is_undefined(_x1) && !is_undefined(_y1) && !is_undefined(_x2));
-                    }
-                    
-                    if (!_valid)
-                    {
-                        notify("CIRC: EXPECTED THREE NUMBER OR VARIABLE ARGUMENTS");
-                        _running = false;
-                    }
-                    else
-                    {
-                        array_push(self.graphics_build, { kind: "CIRC", x1: _x1, y1: _y1, x2: _x2 });
-                        
-                        _i += 6;
-                    }
-                }
-                else if (_token.value == "FCIRC")
-                {
-                    var _valid = (_i + 5 < _len);
-                    
-                    if (_valid)
-                    {
-                        _valid = (self.tokens[_i + 2].value == "," && self.tokens[_i + 4].value == ","); 
-                    }
-                    
-                    if (_valid)
-                    {
-                        var _x1 = line_value(self.tokens[_i + 1]);
-                        var _y1 = line_value(self.tokens[_i + 3]);
-                        var _x2 = line_value(self.tokens[_i + 5]);
-                        
-                        _valid = (!is_undefined(_x1) && !is_undefined(_y1) && !is_undefined(_x2));
-                    }
-                    
-                    if (!_valid)
-                    {
-                        notify("FCIRC: EXPECTED THREE NUMBER OR VARIABLE ARGUMENTS");
-                        _running = false;
-                    }
-                    else
-                    {
-                        array_push(self.graphics_build, { kind: "FCIRC", x1: _x1, y1: _y1, x2: _x2 });
-                        
-                        _i += 6;
-                    }
-                }
                 else if (_token.value == "DIM")
                 {
                     var _valid = (_i + 4 < _len)
@@ -581,36 +368,6 @@ function SCRIPT(_text = "") constructor
                     {
                         self.variables[$ self.tokens[_i + 1].value] = array_create(floor(_size) + 1, 0);
                         _i += 5;
-                    }
-                }
-                else if (_token.value == "SETDRAWCOLOR")
-                {
-                    var _valid = (_i + 1 < _len);
-                    
-                    if (_valid)
-                    {
-                        _valid = (self.tokens[_i + 1].kind == "WORD");
-                    }
-                    
-                    var _col = "";
-                    
-                    if (_valid)
-                    {
-                        _col = self.tokens[_i + 1].value;
-                        
-                        _valid = (_col == "RED" || _col == "BLUE" || _col == "GREEN" || _col == "LIME" || _col == "MAROON" || _col == "AQUA" ||
-                            _col == "ORANGE" || _col == "WHITE" || _col == "BLACK" || _col == "PURPLE"|| _col == "YELLOW" || _col == "FUCHSIA");
-                    }
-                    
-                    if (!_valid)
-                    {
-                        notify("SETDRAWCOLOR: EXPECTED A VALID COLOR NAME");
-                        _running = false;
-                    }
-                    else
-                    {
-                        array_push(self.graphics_build, { kind: "SETDRAWCOLOR",col: _col });
-                        _i += 2;
                     }
                 }
                 else if (_token.value == "IF")
@@ -702,6 +459,27 @@ function SCRIPT(_text = "") constructor
                         }
                     }
                 }
+                else if (array_contains(global.function_names, _token.value))
+                {
+                    var _postfix = to_postfix(self.tokens, _i);
+                
+                    if (array_length(_postfix) == 0)
+                    {
+                        notify(_token.value + ": INVALID ARGUMENT");
+                        _running = false;
+                    }
+                    else
+                    {
+                        evaluate_postfix(_postfix);
+                
+                        var _end = _i;
+                        while (_end < _len && self.tokens[_end].kind != "NEWLINE")
+                        {
+                            _end++;
+                        }
+                        _i = _end;
+                    }
+                }
                 else
                 {
                     _i++;
@@ -728,7 +506,8 @@ function SCRIPT(_text = "") constructor
         
         if(string_length(self.output) > 2000)
         {
-            self.output = string_delete(self.output, 1, 80);
+            var _output_over = string_length(output) - 2000;
+            output = string_delete(output, 1, _output_over);
         }
     }
 
@@ -838,15 +617,26 @@ function tokenize(_SCRIPT)
             
             while (_i <= _len && string_char_at(_SCRIPT.text, _i) != "\"")
             {
-                _value += string_char_at(_SCRIPT.text, _i);
-                _i++;
+                var _c = string_char_at(_SCRIPT.text, _i);
+                var _n = string_char_at(_SCRIPT.text, _i + 1);
+                
+                if (_c == "\\" && (_n == "n" || _n == "N"))
+                {
+                    _value += "\n";
+                    _i += 2;
+                }
+                else
+                {
+                    _value += _c;
+                    _i++;
+                }
             }
-    
+            
             if (_i <= _len)
             {
                 _i++;
             }
-    
+            
             array_push(_tokens, new TOKEN("STRING", _value));
         }
         else
@@ -882,18 +672,23 @@ function update_variable(_var_name, _value)///LET
 ///VARIABLE HELPERS
 function get_variable(_var_name)
 {
-    var _reserved = objSystem.RESERVED
+    var _reserved = objSystem.RESERVED.WORDS;
+    
+    if (array_contains(global.function_names, string_upper(_var_name)))
+    {
+        notify("VARIABLE NAME CANNOT BE FUNCTION NAME");
+        return undefined;
+    }
     
     if (variable_struct_exists(_reserved, _var_name))
     {
         return _reserved[$ _var_name];
     }
-        
+    
     if (variable_struct_exists(objSystem.program.variables, _var_name))
     {
         return objSystem.program.variables[$ _var_name];
     }
-        
     
     return undefined;
 }
@@ -1523,6 +1318,95 @@ function evaluate_postfix(_pf)
                 
                 array_push(_values, matrix_build_projection_perspective_fov(_argument, _args[1], _args[2], _args[3]));
             }
+            ///GRAPHICS
+            if(_func == "LINE")
+            {
+                if(_arg_count != 4)
+                {
+                    notify("FUNCTION: LINE EXPECTS 4 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(objSystem.program.graphics_build, {kind: "LINE", x1:_args[0], y1:_args[1], x2:_args[2], y2:_args[3]});
+                array_push(_values, 0);
+            }
+            if(_func == "TRI")
+            {
+                if(_arg_count != 6)
+                {
+                    notify("FUNCTION: TRI EXPECTS 6 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(objSystem.program.graphics_build, {kind: "TRI", x1:_args[0], y1:_args[1], x2:_args[2], y2:_args[3], x3:_args[4], y3:_args[5]});
+                array_push(_values, 0);
+            }
+            if(_func == "FTRI")
+            {
+                if(_arg_count != 6)
+                {
+                    notify("FUNCTION: FTRI EXPECTS 6 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(objSystem.program.graphics_build, {kind: "FTRI", x1:_args[0], y1:_args[1], x2:_args[2], y2:_args[3], x3:_args[4], y3:_args[5]});
+                array_push(_values, 0);
+            }
+            if(_func == "RECT")
+            {
+                if(_arg_count != 4)
+                {
+                    notify("FUNCTION: RECT EXPECTS 4 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(objSystem.program.graphics_build, {kind: "RECT", x1:_args[0], y1:_args[1], x2:_args[2], y2:_args[3]});
+                array_push(_values, 0);
+            }
+            if(_func == "FRECT")
+            {
+                if(_arg_count != 4)
+                {
+                    notify("FUNCTION: RECT EXPECTS 4 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(objSystem.program.graphics_build, {kind: "FRECT", x1:_args[0], y1:_args[1], x2:_args[2], y2:_args[3]});
+                array_push(_values, 0);
+            }
+            if(_func == "CIRC")
+            {
+                if(_arg_count != 3)
+                {
+                    notify("FUNCTION: RECT EXPECTS 3 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(objSystem.program.graphics_build, {kind: "CIRC", x1:_args[0], y1:_args[1], x2:_args[2]});
+                array_push(_values, 0);
+            }
+            if(_func == "FCIRC")
+            {
+                if(_arg_count != 3)
+                {
+                    notify("FUNCTION: RECT EXPECTS 3 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(objSystem.program.graphics_build, {kind: "FCIRC", x1:_args[0], y1:_args[1], x2:_args[2]});
+                array_push(_values, 0);
+            }
+            if(_func == "SETDRAWCOLOR")
+            {
+                if(_arg_count != 1)
+                {
+                    notify("FUNCTION: SETDRAWCOLOR EXPECTS 1 COLOR ARGUMENT");
+                    return 0;
+                }
+                
+                array_push(objSystem.program.graphics_build, {kind: "SETDRAWCOLOR", col:_args[0]});
+                array_push(_values, 0);
+            }
             
             
         }
@@ -1703,7 +1587,11 @@ function split_arguments(_tokens, _start, _end)
 ///SYSTEM CALLS
 function notify(_text)
 {
-    instance_create_depth(10, 610, -1, objSystemNotification, {text:_text});
+    //instance_create_depth(10, 610, -1, objSystemNotification, {text:_text});
+    array_push(objSystem.program.errors, $"{_text}");
+    var _content_height = 24 * array_length(objSystem.program.errors);
+    var _max_scroll = max(0, _content_height - (window_get_height() - 615));
+    objSystem.errors_scroll_y = clamp(objSystem.errors_scroll_y, 0, _max_scroll);
 }
 
 /// @returns {struct|undefined} the pixel top and height of a program line in the pane

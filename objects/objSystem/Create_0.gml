@@ -12,26 +12,46 @@ program_scroll_speed = 36;
 variables_scroll_y = 0;
 variables_scroll_speed = 36;
 
+errors_scroll_y = 0;
+errors_scroll_speed = 36;
 ///graphics api
 graphics_color = c_white;
 
-
+global.COLORS = [c_black, c_white, c_maroon, c_red, c_green, c_lime, c_blue, c_aqua, c_orange, c_yellow, c_purple, c_fuchsia];
 ///RESERVED SYSTEM VARIABLES
-RESERVED = 
+/// 
+function SPECIAL() constructor 
 {
-    "KLEFT" : keyboard_check(vk_left),
-    "KRIGHT" : keyboard_check(vk_right),
-    "KUP" : keyboard_check(vk_up),
-    "KDOWN" : keyboard_check(vk_down),
-    "KSPACE" : keyboard_check(vk_space),
-    "MX" : mouse_x - 10,
-    "MY" : mouse_y - 10,
-    "MLEFT" : mouse_check_button(mb_left),
-    "MRIGHT" : mouse_check_button(mb_right),
-    "PI" : pi,
-    "TAU" : pi * 2,
-    "EUL" : 2.718281828459045
+    WORDS = 
+    {
+        "KLEFT" : keyboard_check(vk_left),
+        "KRIGHT" : keyboard_check(vk_right),
+        "KUP" : keyboard_check(vk_up),
+        "KDOWN" : keyboard_check(vk_down),
+        "KSPACE" : keyboard_check(vk_space),
+        "MX" : mouse_x - 10,
+        "MY" : mouse_y - 10,
+        "MLEFT" : mouse_check_button(mb_left),
+        "MRIGHT" : mouse_check_button(mb_right),
+        "PI" : pi,
+        "TAU" : pi * 2,
+        "EUL" : 2.718281828459045,
+        "BLACK": c_black,
+        "WHITE": c_white,
+        "MAROON": c_maroon,
+        "RED": c_red,
+        "GREEN": c_green,
+        "LIME": c_lime,
+        "BLUE": c_blue,
+        "AQUA": c_aqua,
+        "ORANGE": c_orange,
+        "YELLOW": c_yellow,
+        "PURPLE": c_purple,
+        "FUCHSIA": c_fuchsia,
+    }
 }
+
+RESERVED = new SPECIAL();
 
 call_later(0.5, time_source_units_seconds, function()
 {

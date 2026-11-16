@@ -67,21 +67,7 @@ for (var _i = 0; _i < _len; _i++)
     }
     else if (_item.kind == "SETDRAWCOLOR")
     {
-        switch (_item.col)
-        {
-            case "RED":    graphics_color = c_red; break;
-            case "BLUE":   graphics_color = c_blue; break;
-            case "GREEN":  graphics_color = c_green; break;
-            case "LIME":   graphics_color = c_lime; break;
-            case "MAROON": graphics_color = c_maroon; break;
-            case "AQUA":   graphics_color = c_aqua; break;
-            case "ORANGE": graphics_color = c_orange; break;
-            case "WHITE":  graphics_color = c_white; break;
-            case "BLACK":  graphics_color = c_black; break;
-            case "PURPLE": graphics_color = c_purple; break;
-            case "YELLOW": graphics_color = c_yellow; break;
-            case "FUCHSIA": graphics_color = c_fuchsia; break;
-        }
+        graphics_color = _item.col;
     }
 }
 
@@ -121,6 +107,7 @@ if(on)
 
 draw_text(10, room_height - 36, ">"+_display_text);
 
+///PROGRAM PANE
 var _pane_left = row_length + 20;
 var _pane_top = 10;
 var _pane_width = window_get_width() - _pane_left;
@@ -138,7 +125,7 @@ if (_b != undefined)
     draw_rectangle(_pane_left, _hy, _pane_left + _pane_width, _hy + _b.height, false);
     draw_set_color(text_color);
 }
-//draw_text_ext(_pane_left, _pane_top - program_scroll_y, program.text, 24, _pane_width);
+
 var _line_count = array_length(program.lines);
 var _line_h = 24;
 var _first_line = max(0, floor(program_scroll_y / _line_h));
@@ -164,24 +151,16 @@ gpu_set_scissor(_scissor);
 draw_line_width_colour(row_length+15, 0, row_length+15, window_get_height(), 4, text_color, text_color);
 draw_line_width_colour(0, 610, window_get_width(), 610, 4, text_color, text_color);
 
-/*
+///VARIABLES PANE
 _pane_left = row_length + 20;
 _pane_top = 615;
 _pane_width = window_get_width() - _pane_left;
-_pane_height = window_get_height(); 
-
-
-draw_text_ext(_pane_left, _pane_top, $"VARIABLES:{program.variables}", 24, _pane_width);
-*/
-_pane_left = row_length + 20;
-_pane_top = 615;
-_pane_width = window_get_width() - _pane_left;
-_pane_height = window_get_height(); 
+_pane_height = window_get_height() - _pane_top;  
 
 var _names = variable_struct_get_names(program.variables);
 var _count = array_length(_names);
 
-// program.variables_scroll_y is the pane's scroll position in pixels.
+
 var _first = max(0, floor(variables_scroll_y / _line_h));
 var _last = min(_count - 1, ceil((variables_scroll_y + _pane_height) / _line_h));
 
@@ -202,5 +181,32 @@ for (var _i = _first; _i <= _last; _i++)
 
 gpu_set_scissor(_scissor);
 
+draw_line_width_colour(row_length+15, 0, row_length+15, window_get_height(), 4, text_color, text_color);
+draw_line_width_colour(0, 610, window_get_width(), 610, 4, text_color, text_color);
 
+///ERRORS PANE
+_pane_left = 10;
+_pane_top = 615;
+_pane_width = window_get_width() - _pane_left;
+_pane_height = window_get_height() - _pane_top - 36; 
+
+_count = array_length(program.errors);
+
+
+_first = max(0, floor(errors_scroll_y / _line_h));
+_last = min(_count - 1, ceil((errors_scroll_y + _pane_height) / _line_h));
+
+_scissor = gpu_get_scissor();
+gpu_set_scissor(_pane_left, _pane_top, _pane_width, _pane_height);
+
+draw_text(_pane_left, _pane_top, "ERRORS:");
+
+for (var _i = _first; _i <= _last; _i++)
+{
+    var _y = _pane_top + _line_h + (_i * _line_h) - errors_scroll_y;
+    
+    draw_text(_pane_left, _y, program.errors[_i]);
+}
+
+gpu_set_scissor(_scissor);
 

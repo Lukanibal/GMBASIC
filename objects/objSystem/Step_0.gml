@@ -120,7 +120,6 @@ else
                 position = 1;
                 _handled = true;
             }
-           
            if(typed_text == "RUN")
            {
                 typed_text = "";
@@ -130,6 +129,24 @@ else
                 program.run(10);
                 _handled = true;
            }
+            if(string_count("SPRITE ", typed_text))
+            {
+                var _spr = get_save_filename("PNG Images|*.png", "");
+                var _frames = string_digits(_spr);
+                var _name = string_replace(typed_text, "SPRITE ", "");
+                if(_frames != "")
+                {
+                    _frames = real(_frames);
+                }
+                else
+                {
+                	_frames = 1;
+                }
+                
+                
+                program.variables[$ _name] = sprite_add(_spr, _frames, false, false, 0, 0)
+                notify($"SPRITE {_name} ADDED");
+            }
            else
            if(typed_text == "RESTART")
            {
@@ -466,18 +483,7 @@ else
 ///keep running!
 if(program.running && program.steps <= 0 && objSystem.running)
 {
-    RESERVED = 
-    {
-        "KLEFT" : keyboard_check(vk_left),
-        "KRIGHT" : keyboard_check(vk_right),
-        "KUP" : keyboard_check(vk_up),
-        "KDOWN" : keyboard_check(vk_down),
-        "KSPACE" : keyboard_check(vk_space),
-        "MX" : mouse_x - 10,
-        "MY" : mouse_y - 10,
-        "MLEFT" : mouse_check_button(mb_left),
-        "MRIGHT" : mouse_check_button(mb_right),
-    }
+    RESERVED = new SPECIAL();
     program.run();
 }
 
@@ -529,6 +535,22 @@ _content_height = _variable_count * _line_h;
 _max_scroll = max(0, _content_height - _visible_height);
 variables_scroll_y = clamp(variables_scroll_y, 0, _max_scroll);
 
+/// //SCROLL ERRORS
+if (mouse_x >= _pane_left && mouse_x <= room_width && mouse_y >= _pane_top && mouse_y <= _pane_top + _pane_height)
+{
+    if (mouse_wheel_up())
+    {
+        errors_scroll_y -= errors_scroll_speed;
+    }
+    else if (mouse_wheel_down())
+    {
+        errors_scroll_y += errors_scroll_speed;
+    }
+}
+///clamp so this doesn't scroll off the dang screen
+_content_height = 24 * array_length(program.errors);
+_max_scroll = max(0, _content_height - _pane_height);
+errors_scroll_y = clamp(errors_scroll_y, 0, _max_scroll);
 
 if (program.running || program.waiting_for_input)
 {

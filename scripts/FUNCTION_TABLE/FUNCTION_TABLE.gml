@@ -35,3 +35,14 @@ array_push(global.function_names, "MATRIXBUILDLOOKAT");
 array_push(global.function_names, "MATRIXBUILDPROJORTHO");
 array_push(global.function_names, "MATRIXBUILDPROJPERS");
 array_push(global.function_names, "MATRIXBUILDPROJPERSFOV");
+
+///GRAPHICS LIBRARY (finally porting to new language paradigm)
+array_push(global.function_names, "LINE");
+array_push(global.function_names, "TRI");
+array_push(global.function_names, "RECT");
+array_push(global.function_names, "CIRC");
+array_push(global.function_names, "FTRI");
+array_push(global.function_names, "FRECT");
+array_push(global.function_names, "FCIRC");
+array_push(global.function_names, "DRAWSPRITE");
+array_push(global.function_names, "SETDRAWCOLOR");
