@@ -1434,6 +1434,16 @@ function evaluate_postfix(_pf)
                 array_push(objSystem.program.graphics_build, {kind: "DRAWSPRITE", sprite:_args[0], frame:_args[1], x:_args[2], y:_args[3]});
                 array_push(_values, 0);
             }
+            if(_func == "MAKECOLORRGB")
+            {
+                if(_arg_count != 3)
+                {
+                    notify("FUNCTION: MAKECOLORRGB EXPECTS 3 ARGUMENTS", true);
+                    return 0;
+                }
+                
+                array_push(_values, make_colour_rgb(_args[0], _args[1], _args[2]));
+            }
             
             
         }

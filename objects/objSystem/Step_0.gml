@@ -295,9 +295,9 @@ else
                 _handled = true;
                
            }
-           if(string_count("COLOR",typed_text) && !string_count("SETDRAWCOLOR",typed_text))
+           if(string_count("TEXTCOLOR",typed_text) && !string_count("SETDRAWCOLOR",typed_text))
            {
-                var _color = string_upper(string_replace(typed_text, "COLOR ", ""));
+                var _color = string_upper(string_replace(typed_text, "TEXTCOLOR ", ""));
                 var _cols = struct_get_names(objSystem.RESERVED.WORDS)
                 if(array_contains(_cols, _color))
                 {

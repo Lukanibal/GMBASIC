@@ -53,3 +53,4 @@ array_push(global.function_names, "FRECT");
 array_push(global.function_names, "FCIRC");
 array_push(global.function_names, "DRAWSPRITE");
 array_push(global.function_names, "SETDRAWCOLOR");
+array_push(global.function_names, "MAKECOLORRGB");
