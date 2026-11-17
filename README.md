@@ -1,5 +1,7 @@
 # GMBASIC Language Reference
 
+A LIVE DEMO OF GMBASIC CAN BE FOUND ON ITCH.IO, YOU CAN ALSO DOWNLOAD A WINDOWS BUILD OF IT [HERE!](https://lukanspellweaver.itch.io/gmbasic)
+
 ## GMBASIC Syntax
 
 ```basic
@@ -19,7 +21,8 @@ This will NOT print a NEWLINE at the end.
 
 `CLS` publishes the frame built since the previous CLS and starts a new one. Anything drawn before the first CLS is discarded.  
 
-`VSYNC` ends the program’s slice for this frame and resumes next frame. Without it, the program still continues next frame  
+`VSYNC` Ends the program’s slice for this frame and resumes next frame.  
+Without it, the program runs up to the per-frame step limit and carries on next frame, so its timing isn’t controlled.
 
 `IF` `THEN` `ELSE` are supported, but only accept `GOTO` for `THEN` and `ELSE`, so  
 ```basic
@@ -35,6 +38,7 @@ ELSE is optional. With no ELSE, a false condition falls through to the next line
 The Editor itself has some useful commads that cannot be used in a BASIC program.  
 |COMMAND | Description |
 |---|---|
+|`RUN`| Runs the program to it's natural end, til an `END` statement is reached, or ad infinitum via a goto loop|
 |`SAVE`| Quicksaves the current program for later LOADing, only one may be saved at a time and they will overwrite|
 |`LOAD`| Load the quicksaved file if it's there|
 |`COPY`| Copy the entire program into the clipboard|
@@ -42,6 +46,10 @@ The Editor itself has some useful commads that cannot be used in a BASIC program
 |`PASTE`| Paste a full program from your clipboard into the program register|
 |`FSAVE`| Opens the Windows File Dialog to save the program to a .BAS file|
 |`FLOAD`| Opens Window File Dialog to load a .BAS or .TXT file, will crash if not properly formatted with line numbers!|
+|`SPRITE <NAME>`| Opens the Windows File Dialog to load a .PNG file into the program as a `SPRITE`. The `SPRITE` can be referenced in drawing functions by `<NAME>`|  
+
+The `F5` key is a nifty `RUN` shortcut!   
+`ESCAPE` will halt the runner, and `F5` or `RUN` will continue it.
 
 ## CONSTANTS and RESERVED WORDS  
 The following words cannot be used as variable names as they are reserved by the system, it will not stop you from trying to set them, but the reserved system value will always be returned.  
@@ -61,7 +69,9 @@ All FUNCTION names are also reserved.
 |`STRING`|"THIS IS A STRING"|
 |`NUMBER`| 420 is a number, it cannot conaint decimals at current|
 |`ARRAY`| `A(9)` accesses the 10th position in the array assigned to `A`|
+|`SPRITE`| Loading images via the `SPRITE` command creates a `SPRITE`|
 
+Strings can have a NEWLINE character inserted via `\N`, you may also add numbers to strings, they will convert to a string automagically and be appended to the string accordingly.
 
 ## Arrays
 The following is basic array syntax
@@ -70,7 +80,7 @@ LET X = 5
 DIM A(9)
 LET A(0) = X
 ```
-ARRAYS can be nested with great difficulty, so I'd advise against it for now until it is fully supported <3
+Arrays have a limit of `4000000000` entries currently.
 
 ## Math
 Simple expressions can be done via the `LET` command, for example
@@ -79,6 +89,23 @@ Simple expressions can be done via the `LET` command, for example
 ```
 Will make `X = 12` and so forth.  
 Mixed with the math comands below, you can perform more complex calculations.
+
+## OPERATORS  
+| OPERATOR | Description |
+|---|---|
+|`=`|Used as comparison and assignment operator for `STRINGS` and expressions.|
+|`<>`|Not equal to. Gives `1` if the two values are different, otherwise `0`.|
+|`<`|Less than. Gives `1` if the left value is smaller than the right, otherwise `0`.|
+|`>`|Greater than. Gives `1` if the left value is larger than the right, otherwise `0`.|
+|`<=`|Less than or equal to. Gives `1` if the left value is smaller than or equal to the right, otherwise `0`.|
+|`>=`|Greater than or equal to. Gives `1` if the left value is larger than or equal to the right, otherwise `0`.|
+|`+`|Adds `NUMBERS`. If either side is a `STRING`, joins the two sides together as text instead.|
+|`-`|Subtract `NUMBERS`|
+|`*`|Multiply `NUMBERS`|
+|`/`|Divide `NUMBERS`. Dividing by `0` shows an error.|
+
+Operators are evaluated in this order, from first to last: `*` and `/`, then `+` and `-`, then the comparisons. Use parentheses to change the order.  
+There is no `AND`, `OR` or `NOT` yet, so to test two conditions at once, use two `IF` lines.
 
 > [HEADSUP!]
 > `SIN`, `COS` and `TAN` use radians, but `LENGTHDIR*` and `POINTDIR` use degrees.
@@ -132,8 +159,11 @@ For a negative simply subtract the value you want from `0` like so `LET X = 0 - 
 | `MATRIXBUILD(X, Y, Z, ROTX, ROTY, ROTZ, SCALEX, SCALEY, SCALEZ)` | Builds a transformation matrix with translation `(X, Y, Z)`, rotation `(ROTX, ROTY, ROTZ)` in degrees, and scaling `(SCALEX, SCALEY, SCALEZ)`.|
 | `MATRIXBUILDID()` | Returns an identity matrix.|
 | `MATRIXBUILDLOOKAT(XFROM, YFROM, ZFROM, XTO, YTO, ZTO, XUP, YUP, ZUP)`| Builds a look-at matrix for a camera positioned at `(XFROM, YFROM, ZFROM)`, looking at `(XTO, YTO, ZTO)`, with an up vector of `(XUP, YUP, ZUP)`.|
-| `MATRIXBUILDORTHO(WIDTH, HEIGHT, ZNEAR, ZFAR)` | Builds an orthographic projection matrix with the specified width, height, near plane, and far plane. |
-| `MATRIXBUILDPROJ(FOVY, ASPECT, ZNEAR, ZFAR)` | Builds a perspective projection matrix with the specified field of view (in degrees), aspect ratio, near plane, and far plane. |
+| `MATRIXBUILDPROJORTHO(WIDTH, HEIGHT, ZNEAR, ZFAR)` | Builds an orthographic projection matrix with the specified width, height, near plane, and far plane. |
+| `MATRIXBUILDPROJPERS(WIDTH, HEIGHT, ZNEAR, ZFAR)` | Builds a perspective projection matrix with the specified view width, view height, near plane, and far plane. |
+| `MATRIXBUILDPROJPERSFOV(FOVY, ASPECT, ZNEAR, ZFAR)` | Builds a perspective projection matrix with the specified field of view (in degrees), aspect ratio, near plane, and far plane. |
+
+>[TIP] Matrix setters apply to everything drawn after them in the same frame, so call them after `CLS`.
 
 Shows a spinning triangle and 3D logic:  
 ```basic
@@ -150,7 +180,7 @@ Shows a spinning triangle and 3D logic:
 110 LET W = MATRIXBUILD(0, 0, 0, 0, ANGLE, 0, 1, 1, 1)
 120 MATRIXSETWORLD(W)
 130 SETDRAWCOLOR(ORANGE)
-140 FTRI L, B, 50, B, 0, 40
+140 FTRI(L, B, 50, B, 0, 40)
 150 LET ANGLE = MOD(ANGLE + 2, 360)
 160 VSYNC
 170 GOTO 80
@@ -160,7 +190,8 @@ Shows a spinning triangle and 3D logic:
 
 ## Graphics
 Graphics calls accept VARIABLES, ARRAYED VARIABLES `X(3)`, and EXPRESSIONS as arguments.  
-The CANVAS is `800 X 600` pixels, the ORIGIN is the TOP LEFT corner which is `0 ,0`
+The default draw color is `WHITE`, and the set draw color persists across `CLS` calls. 
+The CANVAS is `800 X 600` pixels, the ORIGIN is the TOP LEFT corner which is `0, 0`
 The Y Vector INCREASES down the screen.
 | Function | Description |
 |---|---|
@@ -174,21 +205,26 @@ The Y Vector INCREASES down the screen.
 | `FTRI(X1, Y1, X2, Y2, X3, Y3)`| Draws a filled triangle with the points at `(X1, Y1)`, `(X2, Y2)`, and `(X3, Y3)` respectively|
 
 ## Colors
-There are a finite set of colors allowed in **GMBASIC** currently
+There is 16 colors that come packaged with **GMBASIC**
 |Constant | Value | Color |
 |---|---|---|
 | `BLACK` |#000000|![](https://placehold.co/16x16/000000/000000.png)|
+| `SILVER` |#C0C0C0|![](https://placehold.co/16x16/C0C0C0/C0C0C0.png)|
+| `GRAY` |#808080|![](https://placehold.co/16x16/808080/808080.png)|
 | `WHITE` |#FFFFFF|![](https://placehold.co/16x16/FFFFFF/FFFFFF.png)|
 | `MAROON` |#800000|![](https://placehold.co/16x16/800000/800000.png)|
 | `RED` |#FF0000|![](https://placehold.co/16x16/FF0000/FF0000.png)|
 | `GREEN` |#008000|![](https://placehold.co/16x16/008000/008000.png)|
 | `LIME` |#00FF00|![](https://placehold.co/16x16/00FF00/00FF00.png)|
+| `TEAL` |#008080|![](https://placehold.co/16x16/008080/008080.png)|
 | `BLUE` |#0000FF|![](https://placehold.co/16x16/0000FF/0000FF.png)|
 | `AQUA` |#00FFFF|![](https://placehold.co/16x16/00FFFF/00FFFF.png)|
+| `NAVY` |#000080|![](https://placehold.co/16x16/000080/000080.png)|
 | `ORANGE` |#FFA040|![](https://placehold.co/16x16/FFA040/FFA040.png)|
 | `YELLOW` |#FFFF00|![](https://placehold.co/16x16/FFFF00/FFFF00.png)|
 | `PURPLE` |#800080|![](https://placehold.co/16x16/800080/800080.png)|
 | `FUCHSIA` |#FF00FF|![](https://placehold.co/16x16/FF00FF/FF00FF.png)|
+
 
 ## Input
 You may collect basic input from the user in 2 ways:  
