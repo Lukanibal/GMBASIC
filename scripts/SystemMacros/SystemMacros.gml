@@ -11,7 +11,7 @@ function SCRIPT(_text = "") constructor
     text = _text;
     lines = [];
     tokens = [];
-    output = $"GMBASIC v26.11.16.0";
+    output = $"GMBASIC v26.11.17.0";
     variables =  {};
     pc = 0;
     running = false;
@@ -21,6 +21,8 @@ function SCRIPT(_text = "") constructor
     current_line = -1;
     
     errors = [];
+    
+    loaded = true;
     
     //input handling
     waiting_for_input = false;
@@ -78,7 +80,7 @@ function SCRIPT(_text = "") constructor
         return _str;
     }
     
-    add_line = function(_line)
+    add_line = function(_line, _tokenize = true)
     {  
         var _line_num = get_line_number(_line);
         
@@ -112,7 +114,12 @@ function SCRIPT(_text = "") constructor
                 if(is_string(lines[_i]))
                 text += lines[_i]+"\r\n";
             }
-        self.tokens = tokenize(self);
+        
+        if(_tokenize)
+        {
+            self.tokens = tokenize(self);
+        }
+        
     }
     
     remove_line = function(_num)
@@ -170,7 +177,7 @@ function SCRIPT(_text = "") constructor
                 
                     if (array_length(_postfix) == 0)
                     {
-                        notify("PRINT: EXPECTED A VALUE");
+                        notify($"{current_line}: PRINT: EXPECTED A VALUE");
                         _running = false;
                     }
                     else
@@ -240,7 +247,7 @@ function SCRIPT(_text = "") constructor
                         }
                         else
                         {
-                            notify("INPUT KEY: EXPECTED A VARIABLE NAME");
+                            notify($"{current_line}: INPUT KEY: EXPECTED A VARIABLE NAME");
                             _running = false;
                         }
                     }
@@ -257,7 +264,7 @@ function SCRIPT(_text = "") constructor
                     }
                     else
                     {
-                        notify("INPUT: EXPECTED A VARIABLE NAME");
+                        notify($"{current_line}: INPUT: EXPECTED A VARIABLE NAME");
                         _running = false;
                     }
                 }
@@ -285,7 +292,7 @@ function SCRIPT(_text = "") constructor
                         
                     if (_i + 1 >= _len || _equals >= _len || self.tokens[_equals].value != "=" || _end == _equals + 1 || (!is_undefined(_index_pf) && array_length(_index_pf) == 0))
                     {
-                        notify("LET: EXPECTED A DESTINATION AND EXPRESSION");
+                        notify($"{current_line}: LET: EXPECTED A DESTINATION AND EXPRESSION");
                         _running = false;
                     }
                     else
@@ -294,7 +301,7 @@ function SCRIPT(_text = "") constructor
                         
                         if (array_length(_postfix) == 0)
                         {
-                            notify("LET: COULD NOT PARSE EXPRESSION");
+                            notify($"{current_line}: LET: COULD NOT PARSE EXPRESSION");
                             _running = false;
                         }
                         else
@@ -312,12 +319,12 @@ function SCRIPT(_text = "") constructor
                                 
                                 if (!is_array(_arr))
                                 {
-                                    notify("NOT AN ARRAY: " + _name);
+                                    notify($"{current_line}: NOT AN ARRAY: " + _name);
                                     _running = false;
                                 }
                                 else if (_idx < 0 || _idx >= array_length(_arr))
                                 {
-                                    notify("INDEX OUT OF RANGE: " + _name + "(" + string(_idx) + ")");
+                                    notify($"{current_line}: INDEX OUT OF RANGE: " + _name + "(" + string(_idx) + ")");
                                     _running = false;
                                 }
                                 else
@@ -335,7 +342,7 @@ function SCRIPT(_text = "") constructor
                 
                     if (array_length(_postfix) == 0)
                     {
-                        notify(_token.value + ": INVALID ARGUMENT");
+                        notify($"{current_line}:" + _token.value + ": INVALID ARGUMENT");
                         _running = false;
                     }
                     else
@@ -363,7 +370,7 @@ function SCRIPT(_text = "") constructor
                         
                     if (!_valid || _size < 0 || _size > 4000000000)
                     {
-                        notify("DIM: EXPECTED NAME(SIZE)");
+                        notify($"{current_line}: DIM: EXPECTED NAME(SIZE)");
                         _running = false;
                     }
                     else
@@ -399,7 +406,7 @@ function SCRIPT(_text = "") constructor
                     
                     if (_then == -1)
                     {
-                        notify("IF: EXPECTED THEN");
+                        notify($"{current_line}: IF: EXPECTED THEN");
                         _running = false;
                     }
                     else
@@ -439,7 +446,7 @@ function SCRIPT(_text = "") constructor
                             }
                             else if (_branch_start + 1 >= _len || self.tokens[_branch_start].kind != "WORD" || self.tokens[_branch_start].value != "GOTO" || self.tokens[_branch_start + 1].kind != "NUMBER")
                             {
-                                notify("IF: EXPECTED GOTO AND A LINE NUMBER");
+                                notify($"{current_line}: IF: EXPECTED GOTO AND A LINE NUMBER");
                                 _running = false;
                             }
                             else
@@ -450,7 +457,7 @@ function SCRIPT(_text = "") constructor
                                 
                                 if (_target == -1)
                                 {
-                                    notify("IF: TARGET LINE NOT FOUND");
+                                    notify($"{current_line}: IF: TARGET LINE NOT FOUND");
                                     _running = false;
                                 }
                                 else
@@ -467,7 +474,7 @@ function SCRIPT(_text = "") constructor
                 
                     if (array_length(_postfix) == 0)
                     {
-                        notify(_token.value + ": INVALID ARGUMENT");
+                        notify($"{current_line}:" + _token.value + ": INVALID ARGUMENT");
                         _running = false;
                     }
                     else
@@ -788,6 +795,7 @@ function to_postfix(_tokens, _start)
         if(_token.kind == "WORD" && _i +1 < _len && _tokens[_i + 1].kind == "SYMBOL" && _tokens[_i + 1].value == "(")
         {
             var _close = find_close_paren(_tokens, _i + 1);
+            
             if(_close == -1)
             {
                 notify("LET EXPRESSION: UNMATCHED OPENING PARENTHESIS");
@@ -950,7 +958,7 @@ function evaluate_postfix(_pf)
             
             if (is_undefined(_value))
             {
-                notify("LET EXPRESSION: UNDEFINED VARIABLE: " + _token.value);
+                notify("LET EXPRESSION: UNDEFINED VARIABLE: " + _token.value, true);
                 return 0;
             }
             
@@ -961,21 +969,21 @@ function evaluate_postfix(_pf)
             var _arr = get_variable(_token.value.name);
             if(!is_array(_arr))
             {
-                notify($"NOT AN ARRAY: {_token.value.name}");
+                notify($"NOT AN ARRAY: {_token.value.name}", true);
                 return 0;
             }
             
             var _idx = evaluate_postfix(_token.value.index);
             if(!is_real(_idx))
             {
-                notify("ARRAY INDEX MUST BE A NUMBER");
+                notify("ARRAY INDEX MUST BE A NUMBER", true);
                 return 0;
             }
             
             _idx = floor(_idx);
             if(_idx < 0 || _idx >= array_length(_arr))
             {
-                notify($"INDEX OUT OF RANGE: {_token.value.name}({_idx})");
+                notify($"INDEX OUT OF RANGE: {_token.value.name}({_idx})", true);
                 return 0;
             }
             
@@ -1007,7 +1015,7 @@ function evaluate_postfix(_pf)
             {
                 if (_argument < 0)
                 {
-                    notify("SQRT: ARGUMENT MUST NOT BE NEGATIVE");
+                    notify("SQRT: ARGUMENT MUST NOT BE NEGATIVE", true);
                     return 0;
                 }
                 
@@ -1057,7 +1065,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 2)
                 {
-                    notify("FUNCTION: ARCTAN2 EXPECTS 2 ARGUMENTS");
+                    notify("FUNCTION: ARCTAN2 EXPECTS 2 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1075,7 +1083,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 2)
                 {
-                    notify("FUNCTION: POW EXPECTS 2 ARGUMENTS");
+                    notify("FUNCTION: POW EXPECTS 2 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1085,7 +1093,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 2)
                 {
-                    notify("FUNCTION: LOG EXPECTS 2 ARGUMENTS");
+                    notify("FUNCTION: LOG EXPECTS 2 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1095,7 +1103,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 2)
                 {
-                    notify("FUNCTION: MIN EXPECTS 2 ARGUMENTS");
+                    notify("FUNCTION: MIN EXPECTS 2 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1105,7 +1113,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 2)
                 {
-                    notify("FUNCTION: MAX EXPECTS 2 ARGUMENTS");
+                    notify("FUNCTION: MAX EXPECTS 2 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1115,7 +1123,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 3)
                 {
-                    notify("FUNCTION: CLAMP EXPECTS 3 ARGUMENTS");
+                    notify("FUNCTION: CLAMP EXPECTS 3 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1125,7 +1133,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 2)
                 {
-                    notify("FUNCTION: MOD EXPECTS 2 ARGUMENTS");
+                    notify("FUNCTION: MOD EXPECTS 2 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1135,7 +1143,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 2)
                 {
-                    notify("FUNCTION: DIV EXPECTS 2 ARGUMENTS");
+                    notify("FUNCTION: DIV EXPECTS 2 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1145,7 +1153,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 3)
                 {
-                    notify("FUNCTION: LERP EXPECTS 3 ARGUMENTS");
+                    notify("FUNCTION: LERP EXPECTS 3 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1155,7 +1163,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 1)
                 {
-                    notify("FUNCTION: RAD EXPECTS 1 ARGUMENT");
+                    notify("FUNCTION: RAD EXPECTS 1 ARGUMENT", true);
                     return 0;
                 }
                 
@@ -1165,7 +1173,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 1)
                 {
-                    notify("FUNCTION: DEG EXPECTS 1 ARGUMENT");
+                    notify("FUNCTION: DEG EXPECTS 1 ARGUMENT", true);
                     return 0;
                 }
                 
@@ -1175,7 +1183,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 2)
                 {
-                    notify("FUNCTION: LENGTHDIRX EXPECTS 2 ARGUMENTS");
+                    notify("FUNCTION: LENGTHDIRX EXPECTS 2 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1185,7 +1193,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 2)
                 {
-                    notify("FUNCTION: LENGTHDIRY EXPECTS 2 ARGUMENTS");
+                    notify("FUNCTION: LENGTHDIRY EXPECTS 2 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1195,7 +1203,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 2)
                 {
-                    notify("FUNCTION: LENGTHDIRZ EXPECTS 2 ARGUMENTS");
+                    notify("FUNCTION: LENGTHDIRZ EXPECTS 2 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1205,7 +1213,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 4)
                 {
-                    notify("FUNCTION: PONTDIR EXPECTS 4 ARGUMENTS");
+                    notify("FUNCTION: PONTDIR EXPECTS 4 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1215,7 +1223,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 4)
                 {
-                    notify("FUNCTION: PONTDIST EXPECTS 4 ARGUMENTS");
+                    notify("FUNCTION: PONTDIST EXPECTS 4 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1225,7 +1233,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 6)
                 {
-                    notify("FUNCTION: PONTDIST3D EXPECTS 6 ARGUMENTS");
+                    notify("FUNCTION: PONTDIST3D EXPECTS 6 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1235,7 +1243,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 1)
                 {
-                    notify("FUNCTION: MATRIXSETWORLD EXPECTS 1 ARGUMENT");
+                    notify("FUNCTION: MATRIXSETWORLD EXPECTS 1 ARGUMENT", true);
                     return 0;
                 }
                 show_debug_message("MATRIX SET WORLD!")
@@ -1247,7 +1255,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 1)
                 {
-                    notify("FUNCTION: MATRIXSETVIEW EXPECTS 1 ARGUMENT");
+                    notify("FUNCTION: MATRIXSETVIEW EXPECTS 1 ARGUMENT", true);
                     return 0;
                 }
                 array_push(objSystem.program.graphics_build, {kind: "MATRIXSETVIEW", matrix: _argument });
@@ -1258,7 +1266,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 1)
                 {
-                    notify("FUNCTION: MATRIXSETPROJ EXPECTS 1 ARGUMENT");
+                    notify("FUNCTION: MATRIXSETPROJ EXPECTS 1 ARGUMENT", true);
                     return 0;
                 }
                 array_push(objSystem.program.graphics_build, {kind: "MATRIXSETPROJ", matrix: _argument });
@@ -1270,7 +1278,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 9)
                 {
-                    notify("FUNCTION: MATRIXBUILD EXPECTS 9 ARGUMENTS");
+                    notify("FUNCTION: MATRIXBUILD EXPECTS 9 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1280,7 +1288,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 0)
                 {
-                    notify("FUNCTION: MATRIXBUILDID EXPECTS NO ARGUMENTS");
+                    notify("FUNCTION: MATRIXBUILDID EXPECTS NO ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1290,7 +1298,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 9)
                 {
-                    notify("FUNCTION: MATRIXBUILDLOOKAT EXPECTS 9 ARGUMENTS");
+                    notify("FUNCTION: MATRIXBUILDLOOKAT EXPECTS 9 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1300,7 +1308,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 4)
                 {
-                    notify("FUNCTION: MATRIXBUILDPROJPERS EXPECTS 4 ARGUMENTS");
+                    notify("FUNCTION: MATRIXBUILDPROJPERS EXPECTS 4 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1310,7 +1318,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 4)
                 {
-                    notify("FUNCTION: MATRIXBUILDPROJORTHO EXPECTS 4 ARGUMENTS");
+                    notify("FUNCTION: MATRIXBUILDPROJORTHO EXPECTS 4 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1320,7 +1328,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 4)
                 {
-                    notify("FUNCTION: MATRIXBUILDPROJPERS EXPECTS 4 ARGUMENTS");
+                    notify("FUNCTION: MATRIXBUILDPROJPERS EXPECTS 4 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1331,7 +1339,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 4)
                 {
-                    notify("FUNCTION: LINE EXPECTS 4 ARGUMENTS");
+                    notify("FUNCTION: LINE EXPECTS 4 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1342,7 +1350,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 6)
                 {
-                    notify("FUNCTION: TRI EXPECTS 6 ARGUMENTS");
+                    notify("FUNCTION: TRI EXPECTS 6 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1353,7 +1361,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 6)
                 {
-                    notify("FUNCTION: FTRI EXPECTS 6 ARGUMENTS");
+                    notify("FUNCTION: FTRI EXPECTS 6 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1364,7 +1372,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 4)
                 {
-                    notify("FUNCTION: RECT EXPECTS 4 ARGUMENTS");
+                    notify("FUNCTION: RECT EXPECTS 4 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1375,7 +1383,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 4)
                 {
-                    notify("FUNCTION: RECT EXPECTS 4 ARGUMENTS");
+                    notify("FUNCTION: RECT EXPECTS 4 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1386,7 +1394,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 3)
                 {
-                    notify("FUNCTION: RECT EXPECTS 3 ARGUMENTS");
+                    notify("FUNCTION: RECT EXPECTS 3 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1397,7 +1405,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 3)
                 {
-                    notify("FUNCTION: RECT EXPECTS 3 ARGUMENTS");
+                    notify("FUNCTION: RECT EXPECTS 3 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1408,7 +1416,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 1)
                 {
-                    notify("FUNCTION: SETDRAWCOLOR EXPECTS 1 COLOR ARGUMENT");
+                    notify("FUNCTION: SETDRAWCOLOR EXPECTS 1 COLOR ARGUMENT", true);
                     return 0;
                 }
                 
@@ -1419,7 +1427,7 @@ function evaluate_postfix(_pf)
             {
                 if(_arg_count != 4)
                 {
-                    notify("FUNCTION: DRAWSPRITE EXPECTS 4 ARGUMENTS");
+                    notify("FUNCTION: DRAWSPRITE EXPECTS 4 ARGUMENTS", true);
                     return 0;
                 }
                 
@@ -1433,7 +1441,7 @@ function evaluate_postfix(_pf)
         {
             if (array_length(_values) < 2)
             {
-                notify("LET EXPRESSION: MISSING OPERAND");
+                notify("LET EXPRESSION: MISSING OPERAND", true);
                 return 0;
             }
             
@@ -1474,7 +1482,7 @@ function evaluate_postfix(_pf)
                 {
                     if (_right == 0)
                     {
-                        notify("LET EXPRESSION: DIVISION BY ZERO");
+                        notify("LET EXPRESSION: DIVISION BY ZERO", true);
                         return 0;
                     }
                     _result = _left / _right;
@@ -1521,7 +1529,7 @@ function evaluate_postfix(_pf)
     
     if (array_length(_values) != 1)
     {
-        notify("LET EXPRESSION: INVALID EXPRESSION");
+        notify("LET EXPRESSION: INVALID EXPRESSION", true);
         return 0;
     }
     
@@ -1604,13 +1612,17 @@ function split_arguments(_tokens, _start, _end)
 
 
 ///SYSTEM CALLS
-function notify(_text)
+function notify(_text, _halt = false)
 {
-    //instance_create_depth(10, 610, -1, objSystemNotification, {text:_text});
     array_push(objSystem.program.errors, $"{_text}");
     var _content_height = 24 * array_length(objSystem.program.errors);
     var _max_scroll = max(0, _content_height - (window_get_height() - 615));
     objSystem.errors_scroll_y = clamp(objSystem.errors_scroll_y, 0, _max_scroll);
+    if(_halt)
+    {
+        objSystem.running = false;
+        objSystem.program.running = false;
+    }
 }
 
 /// @returns {struct|undefined} the pixel top and height of a program line in the pane

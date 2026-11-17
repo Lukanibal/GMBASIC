@@ -115,6 +115,7 @@ var _pane_left = row_length + 20;
 var _pane_top = 10;
 var _pane_width = window_get_width() - _pane_left;
 var _pane_height = window_get_height() - 168; 
+var _line_h = 24;
 
 var _scissor = gpu_get_scissor();
 
@@ -129,25 +130,26 @@ if (_b != undefined)
     draw_set_color(text_color);
 }
 
-var _line_count = array_length(program.lines);
-var _line_h = 24;
-var _first_line = max(0, floor(program_scroll_y / _line_h));
-var _last_line = min(_line_count - 1, ceil((program_scroll_y + _pane_height) / _line_h));
-
-for (var _i = _first_line; _i <= _last_line; _i++)
+if(program.loaded)
 {
-    var _y = _pane_top + (_i * _line_h) - program_scroll_y;
+    var _line_count = array_length(program.lines);
+    var _first_line = max(0, floor(program_scroll_y / _line_h));
+    var _last_line = min(_line_count - 1, ceil((program_scroll_y + _pane_height) / _line_h));
     
-    if (_i == program.current_line)
+    for (var _i = _first_line; _i <= _last_line; _i++)
     {
-        draw_set_color(c_ltgray);
-        draw_rectangle( _pane_left, _y, _pane_left + _pane_width, _y + _line_h, false );
+        var _y = _pane_top + (_i * _line_h) - program_scroll_y;
+        
+        if (_i == program.current_line)
+        {
+            draw_set_color(c_ltgray);
+            draw_rectangle( _pane_left, _y, _pane_left + _pane_width, _y + _line_h, false );
+        }
+        
+        draw_set_color(text_color);
+        draw_text(_pane_left, _y, program.lines[_i]);
     }
-    
-    draw_set_color(text_color);
-    draw_text(_pane_left, _y, program.lines[_i]);
 }
-
 
 
 gpu_set_scissor(_scissor);
@@ -202,7 +204,7 @@ _last = min(_count - 1, ceil((errors_scroll_y + _pane_height) / _line_h));
 _scissor = gpu_get_scissor();
 gpu_set_scissor(_pane_left, _pane_top, _pane_width, _pane_height);
 
-draw_text(_pane_left, _pane_top, "ERRORS:");
+draw_text(_pane_left, _pane_top, "CONSOLE:");
 
 for (var _i = _first; _i <= _last; _i++)
 {
