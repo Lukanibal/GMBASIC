@@ -126,26 +126,53 @@ else
                 position = 1;
                 running = true;
                 program.tokens = tokenize(program);
-                program.run(10);
+                program.start();
                 _handled = true;
            }
-            if(string_count("SPRITE ", typed_text))
+            if (string_pos("SPRITE ", typed_text) == 1)
             {
-                var _spr = get_save_filename("PNG Images|*.png", "");
-                var _frames = string_digits(_spr);
-                var _name = string_replace(typed_text, "SPRITE ", "");
-                if(_frames != "")
+                var _rest = string_trim(string_delete(typed_text, 1, 7));
+                var _space = string_pos(" ", _rest);
+                var _name = _rest;
+                var _frames = 1;
+                
+                if (_space > 0)
                 {
-                    _frames = real(_frames);
+                    _name = string_copy(_rest, 1, _space - 1);
+                    var _digits = string_digits(string_delete(_rest, 1, _space));
+                    if (_digits != "")
+                    {
+                        _frames = max(1, real(_digits));
+                    }
+                }
+                
+                _name = string_upper(_name);
+                
+                var _path = get_open_filename("PNG Images|*.png", "");
+                
+                if (_path == "")
+                {
+                    notify("SPRITE: NO FILE CHOSEN");
                 }
                 else
                 {
-                	_frames = 1;
+                    var _spr = sprite_add(_path, _frames, false, false, 0, 0);
+                    
+                    if (_spr == -1)
+                    {
+                        notify("SPRITE: COULD NOT LOAD " + _path);
+                    }
+                    else
+                    {
+                        objSystem.sprites[$ _name] = _spr;
+                        notify($"SPRITE {_name} ADDED");
+                    }
                 }
                 
+                typed_text = "";
+                position = 1;
+                _handled = true;
                 
-                program.variables[$ _name] = sprite_add(_spr, _frames, false, false, 0, 0)
-                notify($"SPRITE {_name} ADDED");
             }
            else
            if(typed_text == "RESTART")

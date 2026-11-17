@@ -49,6 +49,8 @@ function SCRIPT(_text = "") constructor
         current_line = -1;
         errors = [];
         running = true;
+        
+        self.run();
     };
     
     to_text = function()
@@ -359,7 +361,7 @@ function SCRIPT(_text = "") constructor
                     if (_valid) _size = line_value(self.tokens[_i + 3]);
                     if (_valid && is_undefined(_size)) _valid = false;
                         
-                    if (!_valid || _size < 0 || _size > 10000)
+                    if (!_valid || _size < 0 || _size > 4000000000)
                     {
                         notify("DIM: EXPECTED NAME(SIZE)");
                         _running = false;
@@ -684,6 +686,12 @@ function get_variable(_var_name)
     {
         return _reserved[$ _var_name];
     }
+    
+    if (variable_struct_exists(objSystem.sprites, _var_name))
+    {
+        return objSystem.sprites[$ _var_name];
+    }
+    
     
     if (variable_struct_exists(objSystem.program.variables, _var_name))
     {
@@ -1057,7 +1065,7 @@ function evaluate_postfix(_pf)
             }
             if (_func == "RANDOM")
             {
-                array_push(_values, random(_argument));
+                array_push(_values, irandom(_argument));
             }
             if (_func == "FRAC")
             {
@@ -1143,21 +1151,21 @@ function evaluate_postfix(_pf)
                 
                 array_push(_values, lerp(_argument, _args[1], _args[2]));
             }
-            if(_func == "DEG")
-            {
-                if(_arg_count != 1)
-                {
-                    notify("FUNCTION: DEG EXPECTS 1 ARGUMENT");
-                    return 0;
-                }
-                
-                array_push(_values, degtorad(_argument));
-            }
             if(_func == "RAD")
             {
                 if(_arg_count != 1)
                 {
                     notify("FUNCTION: RAD EXPECTS 1 ARGUMENT");
+                    return 0;
+                }
+                
+                array_push(_values, degtorad(_argument));
+            }
+            if(_func == "DEG")
+            {
+                if(_arg_count != 1)
+                {
+                    notify("FUNCTION: DEG EXPECTS 1 ARGUMENT");
                     return 0;
                 }
                 
@@ -1405,6 +1413,17 @@ function evaluate_postfix(_pf)
                 }
                 
                 array_push(objSystem.program.graphics_build, {kind: "SETDRAWCOLOR", col:_args[0]});
+                array_push(_values, 0);
+            }
+            if(_func == "DRAWSPRITE")
+            {
+                if(_arg_count != 4)
+                {
+                    notify("FUNCTION: DRAWSPRITE EXPECTS 4 ARGUMENTS");
+                    return 0;
+                }
+                
+                array_push(objSystem.program.graphics_build, {kind: "DRAWSPRITE", sprite:_args[0], frame:_args[1], x:_args[2], y:_args[3]});
                 array_push(_values, 0);
             }
             

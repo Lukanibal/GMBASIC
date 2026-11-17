@@ -14,10 +14,13 @@ variables_scroll_speed = 36;
 
 errors_scroll_y = 0;
 errors_scroll_speed = 36;
+
 ///graphics api
 graphics_color = c_white;
 
-global.COLORS = [c_black, c_white, c_maroon, c_red, c_green, c_lime, c_blue, c_aqua, c_orange, c_yellow, c_purple, c_fuchsia];
+sprites = {};
+
+global.COLORS = [c_black, c_white, c_maroon, c_red, c_green, c_lime, c_blue, c_aqua, c_orange, c_yellow, c_purple, c_fuchsia, c_silver, c_gray, c_navy, c_teal];
 ///RESERVED SYSTEM VARIABLES
 /// 
 function SPECIAL() constructor 
@@ -48,6 +51,10 @@ function SPECIAL() constructor
         "YELLOW": c_yellow,
         "PURPLE": c_purple,
         "FUCHSIA": c_fuchsia,
+        "SILVER": c_silver,
+        "GRAY" : c_gray,
+        "NAVY" : c_navy,
+        "TEAL" : c_teal
     }
 }
 

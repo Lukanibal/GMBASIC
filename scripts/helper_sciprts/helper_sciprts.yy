@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"helper_sciprts",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"helper_sciprts",
+  "parent":{
+    "name":"BASIC",
+    "path":"BASIC.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -47,8 +47,7 @@ for (var _i = 0; _i < _len; _i++)
     }
     else if (_item.kind == "RECT")
     {
-        draw_rectangle_color(_item.x1, _item.y1, _item.x2, _item.y2,
-            graphics_color, graphics_color, graphics_color, graphics_color, true);
+        draw_rectangle_color(_item.x1, _item.y1, _item.x2, _item.y2, graphics_color, graphics_color, graphics_color, graphics_color, true);
     }
     else if (_item.kind == "CIRC")
     {
@@ -68,6 +67,10 @@ for (var _i = 0; _i < _len; _i++)
     else if (_item.kind == "SETDRAWCOLOR")
     {
         graphics_color = _item.col;
+    }
+    else if (_item.kind == "DRAWSPRITE")
+    {
+        draw_sprite_ext(_item.sprite, _item.frame, _item.x, _item.y, 1, 1, 0, graphics_color, 1.0);
     }
 }
 
