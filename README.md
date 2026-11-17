@@ -46,7 +46,9 @@ The Editor itself has some useful commands that cannot be used in a BASIC progra
 |`PASTE`| Paste a full program from your clipboard into the program register|
 |`FSAVE`| Opens the Windows File Dialog to save the program to a .BAS file|
 |`FLOAD`| Opens Windows File Dialog to load a .BAS or .TXT file, will crash if not properly formatted with line numbers!|
-|`SPRITE <NAME> [FRAMES]`| Opens the Windows File Dialog to load a .PNG file into the program as a `SPRITE`. The `SPRITE` can be referenced in drawing functions by `<NAME>` you can optionally tell the engine how many `FRAMES` there are and it will cut the image into that many horizontal slices with each slice being a `FRAME`|
+|`SPRITE <NAME> [FRAMES]`| Opens the Windows File Dialog to load a .PNG file into the program as a `SPRITE`. The `SPRITE` can be referenced in drawing functions by `<NAME>` you can optionally tell the engine how many `FRAMES` there are and it will cut the image into that many horizontal slices with each slice being a `FRAME`, the `SPRITE`'s origin for drawing is always (0, 0), or it's TOP LEFT corner|
+|`TEXTCOLOR <COLORNAME>`| Set the IDE TEXT COLOR|
+|`BACKGROUND <COLORNAME>`| Set the IDE BACKGROUND COLOR|
 
 The `F5` key is a nifty `RUN` shortcut!   
 `ESCAPE` will halt the runner, and `F5` or `RUN` will continue it.
@@ -204,6 +206,7 @@ The Y Vector INCREASES down the screen.
 | `TRI(X1, Y1, X2, Y2, X3, Y3)`| Draws a triangle outline with the points at `(X1, Y1)`, `(X2, Y2)`, and `(X3, Y3)` respectively|
 | `FTRI(X1, Y1, X2, Y2, X3, Y3)`| Draws a filled triangle with the points at `(X1, Y1)`, `(X2, Y2)`, and `(X3, Y3)` respectively|
 | `DRAWSPRITE(SPRITE, FRAME, X, Y)`| Draws frame `FRAME` of the `SPRITE` at `(X, Y)`. Frames start at `0`.|
+| `MAKECOLORRGB(R, G, B)`| Returns a color with the rbg values set to `RGB` respectivly.|
 
 ## Colors
 There are 16 colors that come packaged with **GMBASIC**
