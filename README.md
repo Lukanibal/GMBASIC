@@ -10,7 +10,7 @@ LET X = 5
 Assigns the value `5` to the variable `X`.
 
 ### Variable Name Rules  
-Variable names must start with a letter and contain ONLY LETTER AND DIGITS!  
+Variable names must start with a letter and contain ONLY LETTERS AND DIGITS!  
 Currently even underscores aren't allowed, but a later update will add these to make it easier to read your own variables if you need long names.  
 
 ```basic
@@ -35,18 +35,18 @@ ELSE is optional. With no ELSE, a false condition falls through to the next line
 `END` Ends the program  
 ## Editor Commands  
 
-The Editor itself has some useful commads that cannot be used in a BASIC program.  
+The Editor itself has some useful commands that cannot be used in a BASIC program.  
 |COMMAND | Description |
 |---|---|
-|`RUN`| Runs the program to it's natural end, til an `END` statement is reached, or ad infinitum via a goto loop|
+|`RUN`| Runs the program to its natural end, til an `END` statement is reached, or ad infinitum via a goto loop|
 |`SAVE`| Quicksaves the current program for later LOADing, only one may be saved at a time and they will overwrite|
 |`LOAD`| Load the quicksaved file if it's there|
 |`COPY`| Copy the entire program into the clipboard|
 |`COPY <LINENUMBER>`| Copy the line at `<LINENUMBER>` to the typing field and the clipboard|
 |`PASTE`| Paste a full program from your clipboard into the program register|
 |`FSAVE`| Opens the Windows File Dialog to save the program to a .BAS file|
-|`FLOAD`| Opens Window File Dialog to load a .BAS or .TXT file, will crash if not properly formatted with line numbers!|
-|`SPRITE <NAME>`| Opens the Windows File Dialog to load a .PNG file into the program as a `SPRITE`. The `SPRITE` can be referenced in drawing functions by `<NAME>`|  
+|`FLOAD`| Opens Windows File Dialog to load a .BAS or .TXT file, will crash if not properly formatted with line numbers!|
+|`SPRITE <NAME> [FRAMES]`| Opens the Windows File Dialog to load a .PNG file into the program as a `SPRITE`. The `SPRITE` can be referenced in drawing functions by `<NAME>` you can optionally tell the engine how many `FRAMES` there are and it will cut the image into that many horizontal slices with each slice being a `FRAME`|
 
 The `F5` key is a nifty `RUN` shortcut!   
 `ESCAPE` will halt the runner, and `F5` or `RUN` will continue it.
@@ -67,7 +67,7 @@ All FUNCTION names are also reserved.
 |Type | Description |
 |---|---|
 |`STRING`|"THIS IS A STRING"|
-|`NUMBER`| 420 is a number, it cannot conaint decimals at current|
+|`NUMBER`| `420` is a number, decimals cannot be typed in but they can be held within `NUMBERS`|
 |`ARRAY`| `A(9)` accesses the 10th position in the array assigned to `A`|
 |`SPRITE`| Loading images via the `SPRITE` command creates a `SPRITE`|
 
@@ -80,7 +80,7 @@ LET X = 5
 DIM A(9)
 LET A(0) = X
 ```
-Arrays have a limit of `4000000000` entries currently.
+Arrays have a limit of `1000000` or `ONE MILLION` entries currently.
 
 ## Math
 Simple expressions can be done via the `LET` command, for example
@@ -88,12 +88,12 @@ Simple expressions can be done via the `LET` command, for example
 10 LET X = 10 + 2
 ```
 Will make `X = 12` and so forth.  
-Mixed with the math comands below, you can perform more complex calculations.
+Mixed with the math commands below, you can perform more complex calculations.
 
 ## OPERATORS  
 | OPERATOR | Description |
 |---|---|
-|`=`|Used as comparison and assignment operator for `STRINGS` and expressions.|
+|`=`|Assigns in LET, compares everywhere else. Works on strings too!|
 |`<>`|Not equal to. Gives `1` if the two values are different, otherwise `0`.|
 |`<`|Less than. Gives `1` if the left value is smaller than the right, otherwise `0`.|
 |`>`|Greater than. Gives `1` if the left value is larger than the right, otherwise `0`.|
@@ -147,8 +147,8 @@ For a negative simply subtract the value you want from `0` like so `LET X = 0 - 
 | `LENGTHDIRX(L, D)` | Returns the X component of a vector with length `L` and direction `D` (in degrees). |
 | `LENGTHDIRY(L, D)` | Returns the Y component of a vector with length `L` and direction `D` (in degrees). |
 | `LENGTHDIRZ(L, P)` | Returns the Z (vertical) component of a vector with length `L` and pitch `P`, in degrees. A pitch of 0 is level (returns 0), 90 is straight up (returns L), and -90 is straight down (returns -L). |
-| `DEG(X)`| Turns degrees to radians. |
-| `RAD(X)`| Turns radians to degrees. |
+| `RAD(X)`| Turns degrees to radians. |
+| `DEG(X)`| Turns radians to degrees. |
 
 ## Matrix
 | Function | Description |
@@ -190,9 +190,9 @@ Shows a spinning triangle and 3D logic:
 
 ## Graphics
 Graphics calls accept VARIABLES, ARRAYED VARIABLES `X(3)`, and EXPRESSIONS as arguments.  
-The default draw color is `WHITE`, and the set draw color persists across `CLS` calls. 
-The CANVAS is `800 X 600` pixels, the ORIGIN is the TOP LEFT corner which is `0, 0`
-The Y Vector INCREASES down the screen.
+The default draw color is `WHITE`, and the set draw color persists across `CLS` calls.  
+The CANVAS is `800 X 600` pixels, the ORIGIN is the TOP LEFT corner which is `0, 0`  
+The Y Vector INCREASES down the screen.  
 | Function | Description |
 |---|---|
 | `SETDRAWCOLOR(COLOR)`| Sets the color for all subsequent graphics functions to `COLOR`, must be a `COLOR` constant, not a variable|
@@ -203,9 +203,10 @@ The Y Vector INCREASES down the screen.
 | `FCIRC(X, Y, R)`| Draws a filled circle at `(X, Y)` with a radius of `R`|
 | `TRI(X1, Y1, X2, Y2, X3, Y3)`| Draws a triangle outline with the points at `(X1, Y1)`, `(X2, Y2)`, and `(X3, Y3)` respectively|
 | `FTRI(X1, Y1, X2, Y2, X3, Y3)`| Draws a filled triangle with the points at `(X1, Y1)`, `(X2, Y2)`, and `(X3, Y3)` respectively|
+| `DRAWSPRITE(SPRITE, FRAME, X, Y)`| Draws frame `FRAME` of the `SPRITE` at `(X, Y)`. Frames start at `0`.|
 
 ## Colors
-There is 16 colors that come packaged with **GMBASIC**
+There are 16 colors that come packaged with **GMBASIC**
 |Constant | Value | Color |
 |---|---|---|
 | `BLACK` |#000000|![](https://placehold.co/16x16/000000/000000.png)|
