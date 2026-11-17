@@ -297,81 +297,17 @@ else
            }
            if(string_count("COLOR",typed_text) && !string_count("SETDRAWCOLOR",typed_text))
            {
-                var _color = string_replace(typed_text, "COLOR ", "");
-                switch(_color)
+                var _color = string_upper(string_replace(typed_text, "COLOR ", ""));
+                var _cols = struct_get_names(objSystem.RESERVED.WORDS)
+                if(array_contains(_cols, _color))
                 {
-                    case "WHITE":
-                    {
-                        text_color = c_white;
-                        break;
-                    }
-                        
-                    case "LIME":
-                    {
-                        text_color = c_lime;
-                        break;
-                    }
-                        
-                    case "GREEN":
-                    {
-                        text_color = c_green;
-                        break;
-                    }
-                     
-                    case "BLUE":
-                    {
-                        text_color = c_blue;
-                        break;
-                    }  
-                        
-                    case "AQUA":
-                    {
-                        text_color = c_aqua;
-                        break;
-                    }
-                     
-                    case "RED":
-                    {
-                        text_color = c_red;
-                        break;
-                    }
-                        
-                    case "MAROON":
-                    {
-                        text_color = c_maroon;
-                        break;
-                    }
-                     
-                    case "PURPLE":
-                    {
-                        text_color = c_purple;
-                        break;
-                    }
-                        
-                    case "YELLOW":
-                    {
-                        text_color = c_yellow;
-                        break;
-                    }
-                     
-                    case "ORANGE":
-                    {
-                        text_color = c_orange;
-                        break;
-                    }
-                        
-                    case "BLACK":
-                    {
-                        text_color = c_black;
-                        break;
-                    } 
-                            
-                    default:
-                    {
-                        notify("COLOR NOT RECOGNIZED!");
-                        break;
-                    }
+                    text_color = objSystem.RESERVED.WORDS[$ _color];
                 }
+                else 
+                {
+                	notify("EXPECTED A COLOR");
+                }
+            
                 typed_text = "";
                 position = 1;
                 ini_open("prefs.ini");
@@ -381,80 +317,15 @@ else
             }
             else if(string_count("BACKGROUND",typed_text))
             {
-                var _color = string_replace(typed_text, "BACKGROUND ", "");
-                switch(_color)
+                var _color = string_upper(string_replace(typed_text, "BACKGROUND ", ""));
+                var _cols = struct_get_names(objSystem.RESERVED.WORDS)
+                if(array_contains(_cols, _color))
                 {
-                    case "WHITE":
-                    {
-                        back_color = c_white;
-                        break;
-                    }
-                        
-                    case "LIME":
-                    {
-                        back_color = c_lime;
-                        break;
-                    }
-                        
-                    case "GREEN":
-                    {
-                        back_color = c_green;
-                        break;
-                    }
-                     
-                    case "BLUE":
-                    {
-                        back_color = c_blue;
-                        break;
-                    }  
-                        
-                    case "AQUA":
-                    {
-                        back_color = c_aqua;
-                        break;
-                    }
-                     
-                    case "RED":
-                    {
-                        back_color = c_red;
-                        break;
-                    }
-                        
-                    case "MAROON":
-                    {
-                        back_color = c_maroon;
-                        break;
-                    }
-                     
-                    case "PURPLE":
-                    {
-                        back_color = c_purple;
-                        break;
-                    }
-                        
-                    case "YELLOW":
-                    {
-                        back_color = c_yellow;
-                        break;
-                    }
-                     
-                    case "ORANGE":
-                    {
-                        back_color = c_orange;
-                        break;
-                    }
-                        
-                    case "BLACK":
-                    {
-                        back_color = c_black;
-                        break;
-                    }  
-                            
-                    default:
-                    {
-                        notify("COLOR NOT RECOGNIZED!");
-                        break;
-                    }
+                    back_color = objSystem.RESERVED.WORDS[$ _color];
+                }
+                else 
+                {
+                	notify("EXPECTED A COLOR");
                 }
                  typed_text = "";
                  ini_open("prefs.ini");
