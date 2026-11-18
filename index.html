@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manual</title>
+
+<style>
+:root{
+  --bg:#ffffff;--panel:#f6f8fa;--text:#1f2328;--muted:#656d76;--border:#d0d7de;
+  --link:#0969da;--code-bg:#eaeef2;--pre-bg:#f6f8fa;
+  --kw:#cf222e;--str:#0a3069;--num:#0550ae;--fn:#8250df;--ln:#8c959f;
+  --note:#0969da;--tip:#1a7f37;--important:#8250df;--warning:#9a6700;--caution:#cf222e;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1117;--panel:#161b22;--text:#e6edf3;--muted:#8b949e;--border:#30363d;
+    --link:#58a6ff;--code-bg:#262c36;--pre-bg:#161b22;
+    --kw:#ff7b72;--str:#a5d6ff;--num:#79c0ff;--fn:#d2a8ff;--ln:#6e7681;
+    --note:#58a6ff;--tip:#3fb950;--important:#a371f7;--warning:#d29922;--caution:#f85149;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1117;--panel:#161b22;--text:#e6edf3;--muted:#8b949e;--border:#30363d;
+  --link:#58a6ff;--code-bg:#262c36;--pre-bg:#161b22;
+  --kw:#ff7b72;--str:#a5d6ff;--num:#79c0ff;--fn:#d2a8ff;--ln:#6e7681;
+  --note:#58a6ff;--tip:#3fb950;--important:#a371f7;--warning:#d29922;--caution:#f85149;
+  color-scheme:dark;
+}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.app{display:grid;grid-template-columns:260px minmax(0,1fr);min-height:100vh}
+nav{position:sticky;top:0;align-self:start;height:100vh;overflow:auto;box-sizing:border-box;padding:56px 14px 20px;border-right:1px solid var(--border);background:var(--panel);font-size:14px}
+nav a{display:block;padding:3px 8px;margin:1px 0;color:var(--muted);text-decoration:none;border-left:2px solid transparent;border-radius:0 6px 6px 0}
+nav a.l3{padding-left:22px;font-size:13px}
+nav a:hover{color:var(--text)}
+nav a.active{color:var(--link);border-left-color:var(--link)}
+main{padding:32px 40px 90px;max-width:900px;width:100%;box-sizing:border-box}
+#theme{position:fixed;top:12px;right:16px;z-index:5;padding:6px 12px;font:13px system-ui,sans-serif;color:var(--text);background:var(--panel);border:1px solid var(--border);border-radius:8px;cursor:pointer}
+#theme:hover{border-color:var(--link)}
+h1,h2,h3,h4,h5,h6{line-height:1.25;margin:1.6em 0 .6em;scroll-margin-top:16px}
+h1{font-size:2em;margin-top:0;padding-bottom:.3em;border-bottom:1px solid var(--border)}
+h2{font-size:1.5em;padding-bottom:.3em;border-bottom:1px solid var(--border)}
+h3{font-size:1.2em}
+p{margin:.8em 0}
+a{color:var(--link)}
+code{font:.88em ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;background:var(--code-bg);padding:.15em .4em;border-radius:6px}
+pre{background:var(--pre-bg);border:1px solid var(--border);border-radius:8px;padding:14px 16px;overflow:auto;line-height:1.5;margin:1em 0}
+pre code{background:none;padding:0;font-size:.88em}
+.kw{color:var(--kw);font-weight:600}.str{color:var(--str)}.num{color:var(--num)}.fn{color:var(--fn)}.ln{color:var(--ln)}
+.tw{overflow-x:auto;margin:1em 0}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid var(--border);padding:6px 12px;text-align:left;vertical-align:top}
+th{background:var(--panel)}
+tbody tr:nth-child(even){background:var(--panel)}
+blockquote{margin:1em 0;padding:.1em 1em;border-left:4px solid var(--border);color:var(--muted)}
+.alert{margin:1em 0;padding:.6em 1em;border-left:4px solid var(--c);background:var(--panel);border-radius:0 8px 8px 0}
+.alert>:last-child{margin-bottom:0}
+.alert-title{color:var(--c);font-weight:600}
+.alert p{margin:.3em 0}
+.alert.note{--c:var(--note)}.alert.tip{--c:var(--tip)}.alert.important{--c:var(--important)}
+.alert.warning{--c:var(--warning)}.alert.caution{--c:var(--caution)}
+hr{border:0;border-top:1px solid var(--border);margin:2em 0}
+img{max-width:100%;vertical-align:middle}
+ul,ol{padding-left:1.6em}
+li{margin:.2em 0}
+@media (max-width:900px){.app{display:block}nav{display:none}main{padding:56px 18px 70px}}
+</style>
+</head>
+<body>
+<button id="theme" type="button">Theme</button>
+<div class="app">
+  <nav id="toc"></nav>
+  <main id="content"></main>
+</div>
+
+<script type="text/markdown" id="md-source">
+
+</script>
+
+<script>
+(function(){
+var $=function(s){return document.querySelector(s);};
+var esc=function(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");};
+var used={};
+function slug(t){
+  var s=t.toLowerCase().replace(/[`*_~]/g,"").replace(/[^\w\s-]/g,"").trim().replace(/\s+/g,"-")||"section";
+  used[s]=(used[s]||0)+1;
+  return used[s]>1?s+"-"+(used[s]-1):s;
+}
+function safe(u){
+  u=u.replace(/&amp;/g,"&").trim();
+  if(/^(javascript|data|vbscript):/i.test(u))return "#";
+  return u.replace(/&/g,"&amp;").replace(/"/g,"%22");
+}
+function inline(s){
+  var codes=[];
+  s=s.replace(/`([^`]+)`/g,function(m,c){codes.push(c);return "\u0000"+(codes.length-1)+"\u0000";});
+  s=esc(s);
+  s=s.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g,function(m,a,u){return '<img alt="'+a.replace(/"/g,"&quot;")+'" src="'+safe(u)+'">';});
+  s=s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,function(m,t,u){return '<a href="'+safe(u)+'">'+t+"</a>";});
+  s=s.replace(/\*\*(?=\S)(.+?)\*\*/g,"<strong>$1</strong>").replace(/__(?=\S)(.+?)__/g,"<strong>$1</strong>");
+  s=s.replace(/\*(?=\S)([^*\n]*?\S)\*/g,"<em>$1</em>");
+  s=s.replace(/(^|[\s(>])_(?=\S)([^_\n]*?\S)_(?=[\s).,!?:;<]|$)/g,"$1<em>$2</em>");
+  s=s.replace(/~~(?=\S)(.+?)~~/g,"<del>$1</del>");
+  return s.replace(/\u0000(\d+)\u0000/g,function(m,i){return "<code>"+esc(codes[+i])+"</code>";});
+}
+
+var KW=/^(LET|PRINT|IF|THEN|ELSE|GOTO|DIM|CLS|VSYNC|END|INPUT|RUN|SPRITE)$/;
+function basic(code){
+  return code.split("\n").map(function(l){
+    return esc(l).replace(/^(\s*\d+)|("[^"]*")|\b([A-Z][A-Z0-9]*)\b(\()?|\b(\d+)\b/g,function(m,ln,str,w,p,n){
+      if(ln)return '<span class="ln">'+ln+"</span>";
+      if(str)return '<span class="str">'+str+"</span>";
+      if(w){
+        if(KW.test(w))return '<span class="kw">'+w+"</span>"+(p||"");
+        if(p)return '<span class="fn">'+w+"</span>(";
+        return w;
+      }
+      return '<span class="num">'+n+"</span>";
+    });
+  }).join("\n");
+}
+
+var lr=/^(\s*)([-*+]|\d+[.)])\s+(.*)$/;
+function isHr(l){return /^\s*([-*_])(\s*\1){2,}\s*$/.test(l);}
+function isSep(l){return l.indexOf("|")>-1&&/^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$/.test(l);}
+function startsBlock(L,i){
+  var l=L[i];
+  return /^\s*(```|#{1,6}\s|>)/.test(l)||lr.test(l)||isHr(l)||(l.indexOf("|")>-1&&i+1<L.length&&isSep(L[i+1]));
+}
+function cells(r){
+  r=r.trim();
+  if(r.charAt(0)==="|")r=r.slice(1);
+  if(r.slice(-1)==="|"&&r.slice(-2)!=="\\|")r=r.slice(0,-1);
+  var c=[],cur="",tick=false;
+  for(var k=0;k<r.length;k++){
+    var ch=r.charAt(k);
+    if(ch==="\\"&&r.charAt(k+1)==="|"){cur+="|";k++;}
+    else if(ch==="`"){tick=!tick;cur+=ch;}
+    else if(ch==="|"&&!tick){c.push(cur.trim());cur="";}
+    else cur+=ch;
+  }
+  c.push(cur.trim());
+  return c;
+}
+function listHtml(items){
+  var pos=0;
+  function parse(base){
+    var tag=items[pos].ord?"ol":"ul",h="<"+tag+">";
+    while(pos<items.length&&items[pos].ind>=base){
+      var it=items[pos++],li="<li>"+inline(it.t);
+      if(pos<items.length&&items[pos].ind>it.ind)li+=parse(items[pos].ind);
+      h+=li+"</li>";
+    }
+    return h+"</"+tag+">";
+  }
+  return parse(items[0].ind);
+}
+
+function blocks(L,heads){
+  var out=[],i=0,m;
+  while(i<L.length){
+    var line=L[i];
+    if(!line.trim()){i++;continue;}
+    if((m=line.match(/^\s*```+\s*([\w+-]*)/))){
+      var code=[];i++;
+      while(i<L.length&&!/^\s*```/.test(L[i]))code.push(L[i++]);
+      i++;
+      var lang=m[1].toLowerCase();
+      out.push("<pre><code>"+((lang==="basic"||lang==="bas")?basic(code.join("\n")):esc(code.join("\n")))+"</code></pre>");
+      continue;
+    }
+    if((m=line.match(/^(#{1,6})\s+(.*?)(?:\s+#+)?\s*$/))){
+      var lv=m[1].length,id=slug(m[2]);
+      if(heads)heads.push({lv:lv,id:id,t:m[2].replace(/[`*_]/g,"")});
+      out.push("<h"+lv+' id="'+id+'">'+inline(m[2])+"</h"+lv+">");
+      i++;continue;
+    }
+    if(isHr(line)){out.push("<hr>");i++;continue;}
+    if(line.indexOf("|")>-1&&i+1<L.length&&isSep(L[i+1])){
+      var head=cells(line),al=cells(L[i+1]).map(function(a){
+        return /^:-+:$/.test(a)?"center":/-:$/.test(a)?"right":/^:/.test(a)?"left":"";
+      });
+      i+=2;
+      var rows=[];
+      while(i<L.length&&L[i].trim()&&L[i].indexOf("|")>-1)rows.push(cells(L[i++]));
+      var cell=function(tag,t,k){
+        return "<"+tag+(al[k]?' style="text-align:'+al[k]+'"':"")+">"+inline(t||"")+"</"+tag+">";
+      };
+      var t='<div class="tw"><table><thead><tr>'+head.map(function(h,k){return cell("th",h,k);}).join("")+"</tr></thead><tbody>";
+      rows.forEach(function(r){
+        t+="<tr>"+head.map(function(h,k){return cell("td",r[k],k);}).join("")+"</tr>";
+      });
+      out.push(t+"</tbody></table></div>");
+      continue;
+    }
+    if(/^\s*>/.test(line)){
+      var q=[];
+      while(i<L.length&&/^\s*>/.test(L[i]))q.push(L[i++].replace(/^\s*>\s?/,""));
+      var a=q[0].match(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*$/i);
+      if(a){
+        var k=a[1].toLowerCase();
+        out.push('<div class="alert '+k+'"><div class="alert-title">'+k.charAt(0).toUpperCase()+k.slice(1)+"</div>"+blocks(q.slice(1))+"</div>");
+      }else out.push("<blockquote>"+blocks(q)+"</blockquote>");
+      continue;
+    }
+    if(lr.test(line)){
+      var items=[];
+      while(i<L.length){
+        var lm=L[i].match(lr);
+        if(lm&&!isHr(L[i])){
+          var nit={ind:lm[1].replace(/\t/g,"    ").length,ord:/\d/.test(lm[2]),t:lm[3]};
+          if(items.length&&nit.ind===items[0].ind&&nit.ord!==items[0].ord)break;
+          items.push(nit);i++;
+        }else if(!L[i].trim()){
+          var j=i+1;
+          while(j<L.length&&!L[j].trim())j++;
+          if(j<L.length&&lr.test(L[j])&&!isHr(L[j]))i=j;else break;
+        }else if(items.length&&/^\s{2,}\S/.test(L[i])&&!startsBlock(L,i)){
+          items[items.length-1].t+=" "+L[i].trim();i++;
+        }else break;
+      }
+      out.push(listHtml(items));
+      continue;
+    }
+    var p=[];
+    while(i<L.length&&L[i].trim()&&!(p.length&&startsBlock(L,i)))p.push(L[i++]);
+    out.push("<p>"+p.map(function(l,k){
+      return inline(l.trim())+((/ {2,}$/.test(l)&&k<p.length-1)?"<br>":"");
+    }).join("\n")+"</p>");
+  }
+  return out.join("\n");
+}
+
+function spy(){
+  try{
+    var links={};
+    document.querySelectorAll("#toc a").forEach(function(a){links[a.getAttribute("href").slice(1)]=a;});
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){
+          document.querySelectorAll("#toc a.active").forEach(function(a){a.classList.remove("active");});
+          if(links[e.target.id])links[e.target.id].classList.add("active");
+        }
+      });
+    },{rootMargin:"0px 0px -75% 0px"});
+    document.querySelectorAll("#content h2,#content h3").forEach(function(h){io.observe(h);});
+  }catch(e){}
+}
+
+function build(md){
+  var heads=[];
+  $("#content").innerHTML=blocks(md.replace(/\r\n?/g,"\n").split("\n"),heads);
+  $("#toc").innerHTML=heads.filter(function(h){return h.lv===2||h.lv===3;}).map(function(h){
+    return '<a class="l'+h.lv+'" href="#'+h.id+'">'+esc(h.t)+"</a>";
+  }).join("");
+  var t=heads.filter(function(h){return h.lv===1;})[0];
+  if(t)document.title=t.t;
+  spy();
+}
+
+var root=document.documentElement,btn=$("#theme");
+function cur(){return root.getAttribute("data-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}
+function label(){btn.textContent=cur()==="dark"?"Light mode":"Dark mode";}
+try{var s=localStorage.getItem("theme");if(s)root.setAttribute("data-theme",s);}catch(e){}
+btn.onclick=function(){
+  var n=cur()==="dark"?"light":"dark";
+  root.setAttribute("data-theme",n);
+  try{localStorage.setItem("theme",n);}catch(e){}
+  label();
+};
+label();
+
+var src=$("#md-source").textContent,want=new URLSearchParams(location.search).get("src");
+if(want||!src.trim()){
+  fetch(want||"README.md").then(function(r){return r.text();}).then(build).catch(function(){
+    build(src.trim()?src:"# Manual\n\n404 Manual not found! \n Please contact the github repo's maintainer.");
+  });
+}else build(src);
+})();
+</script>
+</body>
+</html>

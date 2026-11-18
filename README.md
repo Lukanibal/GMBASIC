@@ -1,4 +1,5 @@
 # GMBASIC Language Reference
+CURRENT LANGUAGE SPEC AS OF v26.11.18.0  
 
 A LIVE DEMO OF GMBASIC CAN BE FOUND ON ITCH.IO, YOU CAN ALSO DOWNLOAD A WINDOWS BUILD OF IT [HERE!](https://lukanspellweaver.itch.io/gmbasic)
 
@@ -10,8 +11,7 @@ LET X = 5
 Assigns the value `5` to the variable `X`.
 
 ### Variable Name Rules  
-Variable names must start with a letter and contain ONLY LETTERS AND DIGITS!  
-Currently even underscores aren't allowed, but a later update will add these to make it easier to read your own variables if you need long names.  
+Variable names must start with a letter and contain letters, digits, and underscores `_`.
 
 ```basic
 PRINT "HELLO WORLD"
@@ -48,7 +48,7 @@ The Editor itself has some useful commands that cannot be used in a BASIC progra
 The `F5` key is a nifty `RUN` shortcut!   
 `ESCAPE` will halt the runner, and `F5` or `RUN` will continue it.
 
-## CONSTANTS and RESERVED WORDS  
+## Constants and Reserved Words 
 The following words cannot be used as variable names as they are reserved by the system, it will not stop you from trying to set them, but the reserved system value will always be returned.  
 All FUNCTION names are also reserved.
 
@@ -87,7 +87,7 @@ Simple expressions can be done via the `LET` command, for example
 Will make `X = 12` and so forth.  
 Mixed with the math commands below, you can perform more complex calculations.
 
-## OPERATORS  
+## Operators 
 | OPERATOR | Description |
 |---|---|
 |`=`|Assigns in LET, compares everywhere else. Works on strings too!|
