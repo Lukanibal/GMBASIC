@@ -211,5 +211,12 @@ function load_project(_compiled = false)
         
         file_find_close();
     }
+    
+    if(_compiled)
+    {
+        objSystem.running = true;
+        objSystem.program.tokens = tokenize(objSystem.program);
+        objSystem.program.start();
+    }
 }
 
