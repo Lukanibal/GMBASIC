@@ -33,6 +33,7 @@ ELSE is optional. With no ELSE, a false condition falls through to the next line
 The Editor itself has some useful commands that cannot be used in a BASIC program.  
 |COMMAND | Description |
 |---|---|
+|`HELP` or `?`|Opens the manual in your default browser, you do need to be online!|
 |`RUN`| Runs the program to its natural end, til an `END` statement is reached, or ad infinitum via a `GOTO` loop.|
 |`SAVE`| Saves the current `PROJECT`|
 |`LOAD`| Load a `PROJECT`, if no assets folder is found, then only `MAIN.BAS` will be loaded.|
