@@ -1,5 +1,5 @@
 # GMBASIC Language Reference
-CURRENT LANGUAGE SPEC AS OF v26.11.18.0  
+CURRENT LANGUAGE SPEC AS OF v26.11.18.0
 
 A LIVE DEMO OF GMBASIC CAN BE FOUND ON ITCH.IO, YOU CAN ALSO DOWNLOAD A WINDOWS BUILD OF IT [HERE!](https://lukanspellweaver.itch.io/gmbasic)
 
@@ -54,8 +54,8 @@ All FUNCTION names are also reserved.
 
 |Constant | Description |
 |---|---|
-|`PI`| 3.14|
-|`TAU`| PI * 2(6.28)|
+|`PI`| 3.14....|
+|`TAU`| PI * 2(6.28....)|
 |`EUL`| 2.718281828459045| 
 
 `EUL` is usually expressed as `E` in settings like these, but stealing a letter of the alphabet from use as a variable name felt rude.
@@ -221,6 +221,8 @@ There are 16 colors that come packaged with **GMBASIC**
 | `PURPLE` |#800080|![](https://placehold.co/16x16/800080/800080.png)|
 | `FUCHSIA` |#FF00FF|![](https://placehold.co/16x16/FF00FF/FF00FF.png)|
 
+>[!NOTE]
+>`MAKECOLORRGB` allows you to create custome colors at runtime!
 
 ## Input
 You may collect basic input from the user in 2 ways:  
@@ -239,6 +241,7 @@ Simply check one of the following CONSTANTS to get instant input feedback!
 |`KRIGHT`| The right arrow key's state, where 0 is not pressed and 1 is pressed|
 |`KUP`| The up arrow key's state, where 0 is not pressed and 1 is pressed|
 |`KDOWN`| The down arrow key's state, where 0 is not pressed and 1 is pressed|
+|`KSPACE`| The down arrow key's state, where 0 is not pressed and 1 is pressed|
 |`MLEFT`| The left mouse button's state, where 0 is not pressed and 1 is pressed|
 |`MRIGHT`| The right mouse button's state, where 0 is not pressed and 1 is pressed|
 |`MX`|The mouse's current X value|
@@ -285,7 +288,7 @@ Animates a red circle across the canvas:
 >[!NOTE]
 >`GOTO` can jump to LATER in the program as well, it is NOT just a jump BACK.  
 
-A basic Array assignment:  
+A basic array assignment:  
 ```basic
 10 DIM A(4)
 20 LET I = 0
