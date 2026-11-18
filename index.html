@@ -4,14 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Manual</title>
-<!--
-  HOW TO USE
-  1. Paste your markdown between the <script id="md-source"> tags at the bottom
-     (it must not contain the closing script tag), OR leave that block empty and put
-     a manual.md next to this file (loading a file only works when served over http,
-     not from file://). You can also open this page with ?src=other.md
-  2. The theme follows the system setting. The button top-right switches it.
--->
+
 <style>
 :root{
   --bg:#ffffff;--panel:#f6f8fa;--text:#1f2328;--muted:#656d76;--border:#d0d7de;
@@ -284,7 +277,7 @@ label();
 var src=$("#md-source").textContent,want=new URLSearchParams(location.search).get("src");
 if(want||!src.trim()){
   fetch(want||"README.md").then(function(r){return r.text();}).then(build).catch(function(){
-    build(src.trim()?src:"# Manual\n\nNo manual found. Paste markdown into the `md-source` block, or put a `manual.md` next to this file and serve it over http.");
+    build(src.trim()?src:"# Manual\n\n404 Manual not found! \n Please contact the github repo's maintainer.");
   });
 }else build(src);
 })();
