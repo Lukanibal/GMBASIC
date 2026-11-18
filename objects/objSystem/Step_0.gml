@@ -35,6 +35,32 @@ else
             });
             can_delete = false;
         }
+        
+        if(keyboard_lastkey == vk_left)
+       {
+           if(position > 1)
+           {
+               position --;
+           }
+           call_later(0.35, time_source_units_seconds, function()
+            {
+                can_move = true;
+            });
+            can_move = false;
+       }
+       
+       if(keyboard_lastkey == vk_right)
+       {
+           if(position <= string_length(typed_text))
+           {
+                position ++;
+           }
+           call_later(0.35, time_source_units_seconds, function()
+            {
+                can_move = true;
+            });
+            can_move = false;
+       }
     }
     
     if(keyboard_check_pressed(vk_anykey))
@@ -57,27 +83,6 @@ else
             program.running := false;
             program.steps = 0;
             position = 1;
-       }
-       
-       
-       if(keyboard_lastkey == vk_left)
-       {
-           if(position > 1)
-           {
-               position --;
-           }
-           keyboard_lastkey = vk_nokey;
-           keyboard_string = "";
-       }
-       
-       if(keyboard_lastkey == vk_right)
-       {
-           if(position <= string_length(typed_text))
-           {
-                position ++;
-           }
-           keyboard_lastkey = vk_nokey;
-           keyboard_string = "";
        }
        
        

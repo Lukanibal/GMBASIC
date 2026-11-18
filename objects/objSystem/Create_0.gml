@@ -24,7 +24,7 @@ sprites = {};
 sprite_info = {};
 
 can_delete = true;
-
+can_move = true;
 
 
 global.COLORS = [c_black, c_white, c_maroon, c_red, c_green, c_lime, c_blue, c_aqua, c_orange, c_yellow, c_purple, c_fuchsia, c_silver, c_gray, c_navy, c_teal];
