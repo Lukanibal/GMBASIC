@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"save_files",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"save_files",
+  "parent":{
+    "name":"BASIC",
+    "path":"BASIC.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

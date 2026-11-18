@@ -9,6 +9,7 @@
     {"name":"debug","order":8,"path":"scripts/debug/debug.yy",},
     {"name":"FUNCTION_TABLE","order":11,"path":"scripts/FUNCTION_TABLE/FUNCTION_TABLE.yy",},
     {"name":"Manual","order":4,"path":"scripts/Manual/Manual.yy",},
+    {"name":"save_files","order":14,"path":"scripts/save_files/save_files.yy",},
     {"name":"screen_saver","order":9,"path":"scripts/screen_saver/screen_saver.yy",},
     {"name":"SystemMacros","order":2,"path":"scripts/SystemMacros/SystemMacros.yy",},
     {"name":"sprPalette","order":5,"path":"sprites/sprPalette/sprPalette.yy",},

@@ -140,7 +140,7 @@ function SCRIPT(_text = "") constructor
         self.tokens = tokenize(self);
     }
     
-    run = function( _steps = 1000)
+    run = function( _steps = 10000)
     {
         var _i = self.pc;
         var _len = array_length(self.tokens);
@@ -598,7 +598,7 @@ function tokenize(_SCRIPT)
         {
             var _value = "";
             
-            while (_i <= _len && is_digit(string_char_at(_SCRIPT.text, _i)))
+            while (_i <= _len && is_digit(string_char_at(_SCRIPT.text, _i)) || _i <= _len && string_char_at(_SCRIPT.text, _i) == ".")
             {
                 _value += string_char_at(_SCRIPT.text, _i);
                 _i++;
@@ -610,7 +610,7 @@ function tokenize(_SCRIPT)
         {
             var _value = "";
             
-            while (_i <= _len && (is_letter(string_char_at(_SCRIPT.text, _i)) || is_digit(string_char_at(_SCRIPT.text, _i))))
+            while (_i <= _len && (is_letter(string_char_at(_SCRIPT.text, _i)) || is_digit(string_char_at(_SCRIPT.text, _i)) || string_char_at(_SCRIPT.text, _i) == "_"))
             {
                 _value += string_char_at(_SCRIPT.text, _i);
                 _i++;
@@ -758,6 +758,9 @@ function operator_pecedence(_op)
         case "*":
         case "/":
             return 2;
+            
+        case "NEG":
+            return 3;
     }
     
     return 0;
@@ -786,6 +789,7 @@ function to_postfix(_tokens, _start)
     var _ops = [];
     var _i = _start;
     var _len = array_length(_tokens);
+    var _expect_value = true;
 
     while (_i < _len && _tokens[_i].kind != "NEWLINE")
     {
@@ -831,6 +835,7 @@ function to_postfix(_tokens, _start)
                 }
                 
                 array_push(_output, new TOKEN("FUNCTION", {name: string_upper(_value), arguments: _args_pf}));
+                _expect_value = false;
             }
             else 
             {
@@ -849,6 +854,7 @@ function to_postfix(_tokens, _start)
                 }
                 
                 array_push(_output, new TOKEN("ARRAYREF", { name: _value, index: _index_pf }));
+                _expect_value = false;
                 
             }
             
@@ -858,10 +864,12 @@ function to_postfix(_tokens, _start)
         else if (_token.kind == "NUMBER" || _token.kind == "WORD" || _token.kind == "STRING")
         {
             array_push(_output, _token);
+            _expect_value = false;
         }
         else if (_token.kind == "SYMBOL" && _value == "(")
         {
             array_push(_ops, _token);
+            _expect_value = true;
         }
         else if (_token.kind == "SYMBOL" && _value == ")")
         {
@@ -888,26 +896,31 @@ function to_postfix(_tokens, _start)
         }
         else if (_token.kind == "SYMBOL" && is_expr_op(_value))
         {
-            while (array_length(_ops) > 0)
+            if (_value == "-" && _expect_value)
             {
-                var _top = _ops[array_length(_ops) - 1];
-                
-                if (_top.value == "(")
-                {
-                    break;
-                }
-                
-                if (operator_pecedence(_top.value) >= operator_pecedence(_value))
-                {
-                    array_push(_output, array_pop(_ops));
-                }
-                else
-                {
-                    break;
-                }
+                array_push(_ops, new TOKEN("UNARY", "NEG"));
             }
-            
-            array_push(_ops, _token);
+            else
+            {
+                while (array_length(_ops) > 0)
+                {
+                    var _top = _ops[array_length(_ops) - 1];
+                    if (_top.value == "(")
+                    {
+                        break;
+                    }
+                    if (operator_pecedence(_top.value) >= operator_pecedence(_value))
+                    {
+                        array_push(_output, array_pop(_ops));
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                array_push(_ops, _token);
+                _expect_value = true;
+            }
         }
         else
         {
@@ -1444,8 +1457,28 @@ function evaluate_postfix(_pf)
                 
                 array_push(_values, make_colour_rgb(_args[0], _args[1], _args[2]));
             }
+            if(_func == "GETTIMER")
+            {
+                if(_arg_count != 0)
+                {
+                    notify("FUNCTION: GETTIMER EXPECTS NO ARGUMENTS", true);
+                    return 0;
+                }
+                
+                array_push(_values, get_timer());
+            }
             
-            
+        }
+        else if (_token.kind == "UNARY" && _token.value == "NEG")
+        {
+            if (array_length(_values) < 1)
+            {
+                notify("LET EXPRESSION: MISSING OPERAND", true);
+                return 0;
+            }
+        
+            var _op = array_pop(_values);
+            array_push(_values, 0 - _op);
         }
         else if (_token.kind == "SYMBOL" && is_expr_op(_token.value))
         {

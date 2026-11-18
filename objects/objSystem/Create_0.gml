@@ -6,6 +6,8 @@ position = 1;
 cursor = "_";
 on = true;
 
+project = -1;
+
 program_scroll_y = 0;
 program_scroll_speed = 36;
 
@@ -19,6 +21,11 @@ errors_scroll_speed = 36;
 graphics_color = c_white;
 
 sprites = {};
+sprite_info = {};
+
+can_delete = true;
+
+
 
 global.COLORS = [c_black, c_white, c_maroon, c_red, c_green, c_lime, c_blue, c_aqua, c_orange, c_yellow, c_purple, c_fuchsia, c_silver, c_gray, c_navy, c_teal];
 ///RESERVED SYSTEM VARIABLES
@@ -68,7 +75,7 @@ call_later(0.5, time_source_units_seconds, function()
 tasks = [];
 program = new SCRIPT();
 program.add_line("10 TYPE NEW TO BEGIN A NEW BASIC PROGRAM");
-program.add_line("20 TYPE RUN TO RUN THE PROGRAM AND HIT ESCAPE TO GO BACK TO EDIT MODE");
+program.add_line("20 TYPE RUN OR HIT F5 TO RUN THE PROGRAM\nAND HIT ESCAPE TO GO BACK TO EDIT MODE");
 back_task = -1;
 
 row_length = 0;

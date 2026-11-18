@@ -125,7 +125,7 @@ var _b = program_line_bounds(program.current_line, _pane_width);
 if (_b != undefined)
 {
     var _hy = _pane_top - program_scroll_y + _b.top;
-    draw_set_color(c_ltgray);
+    draw_set_color(c_maroon);
     draw_rectangle(_pane_left, _hy, _pane_left + _pane_width, _hy + _b.height, false);
     draw_set_color(text_color);
 }
@@ -142,7 +142,7 @@ if(program.loaded)
         
         if (_i == program.current_line)
         {
-            draw_set_color(c_ltgray);
+            draw_set_color(c_maroon);
             draw_rectangle( _pane_left, _y, _pane_left + _pane_width, _y + _line_h, false );
         }
         

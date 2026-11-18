@@ -2,41 +2,7 @@
 
 if (program.waiting_for_input)
 {
-    if (program.input_mode == "KEY")
-    {
-        var _key = "";
-
-        if (keyboard_check_pressed(vk_left))       _key = "LEFT";
-        else if (keyboard_check_pressed(vk_right)) _key = "RIGHT";
-        else if (keyboard_check_pressed(vk_up))    _key = "UP";
-        else if (keyboard_check_pressed(vk_down))  _key = "DOWN";
-        else if (keyboard_check_pressed(vk_space))  _key = "SPACE";
-        else if (mouse_check_button_pressed(mb_left))  _key = "LEFTCLICK";
-        else if (mouse_check_button_pressed(mb_right))  _key = "RIGHTCLICK";
-
-        if (_key != "")
-        {
-            
-            ///mouse clicks
-            if(_key == "LEFTCLICK" || _key == "RIGHTCLICK")
-            {
-                program.variables[$ program.input_var] = [mouse_x, mouse_y];
-            }
-            else 
-            {
-            	program.variables[$ program.input_var] = _key;
-            }
-            
-            program.waiting_for_input = false;
-            program.running = true;
-            program.input_var = "";
-            program.input_mode = "";
-            program.steps = 0;
-        }
-    }
-    else
-    {
-        program.input_text = string_upper(keyboard_string);
+    program.input_text = string_upper(keyboard_string);
 
         if (keyboard_check_pressed(vk_enter))
         {
@@ -50,23 +16,30 @@ if (program.waiting_for_input)
             keyboard_string = "";
             program.steps = 0;
         }
-    }
 }
 else
 {
-    if(keyboard_check_pressed(vk_anykey))
-   {
-       if (keyboard_lastkey == vk_backspace)
-       {
-           if (position > 1 && string_length(typed_text) > 0)
-           {
+    if(keyboard_check(vk_anykey))
+    {
+        if (keyboard_lastkey == vk_backspace && can_delete)
+        {
+            if (position > 1 && string_length(typed_text) > 0)
+            {
                 typed_text = string_delete(typed_text, position - 1, 1);
                 position--;
-           }
+            }
+            
+            call_later(0.25, time_source_units_seconds, function()
+            {
+                can_delete = true;
+            });
+            can_delete = false;
+        }
+    }
+    
+    if(keyboard_check_pressed(vk_anykey))
+   {
        
-            keyboard_string = "";
-            keyboard_lastkey = vk_nokey;
-       }
         
         if (keyboard_lastkey == vk_delete)
        {
@@ -129,6 +102,15 @@ else
                 program.start();
                 _handled = true;
            }
+           if(typed_text == "STOP")
+           {
+                   typed_text = "";
+                   position = 1;
+                   running = false;
+                   program.running = false;
+                   program.steps = 0;
+                   _handled = true;
+           }
             if (string_pos("SPRITE ", typed_text) == 1)
             {
                 var _rest = string_trim(string_delete(typed_text, 1, 7));
@@ -157,7 +139,7 @@ else
                 else
                 {
                     var _spr = sprite_add(_path, _frames, false, false, 0, 0);
-                    
+                    file_copy(_path, objSystem.project.name+$"/assets/sprites/{_name}_{_frames}.png");
                     if (_spr == -1)
                     {
                         notify("SPRITE: COULD NOT LOAD " + _path);
@@ -165,7 +147,18 @@ else
                     else
                     {
                         objSystem.sprites[$ _name] = _spr;
-                        notify($"SPRITE {_name} ADDED");
+                        
+                        objSystem.sprite_info[$ _name] = 
+                        {
+                            name:_name,
+                            source_path: objSystem.project.name+$"/assets/sprites/{_name}_{_frames}.png",
+                            frames: _frames
+                        };
+                        var _file  = file_text_open_write(objSystem.project.name+$"/assets/sprites/{_name}_{_frames}.json");
+                        file_text_write_string(_file, json_stringify(objSystem.sprite_info[$ _name]));
+                        file_text_close(_file);
+                        
+                        notify($"SPRITE {_name} ADDED TO PROJECT");
                     }
                 }
                 
@@ -193,17 +186,18 @@ else
            {
                 typed_text = "";
                 position = 1; 
+                project = new PROJECT(string_upper(get_save_filename_ext("", "", working_directory, "Create a Project Directory")));
                 program = new SCRIPT();
                 program.add_line("10 PRINT \"HELLO WORLD!\"");
                 program.add_line("20 GOTO 10");
                 _handled = true;
            }
            else
-           if(typed_text == "FLOAD")
+           if(typed_text == "LOAD")
            {
                 typed_text = "";
                 position = 1; 
-                upload_basic();
+                load_project();
                 _handled = true;
             }
             else
@@ -244,57 +238,28 @@ else
                 _handled = true;
             }
            else
-           if(typed_text == "FSAVE")
+            if(string_count("AUTO", typed_text) && !array_contains(global.function_names, string_letters(typed_text)))
            {
-                typed_text = "";
-                position = 1;
-            
-            
-                var _name = get_save_filename("BASIC Program|*.bas;*.BAS;*.txt", "");
-                var _file = file_text_open_write($"{_name}.BAS");
-                var _len = array_length(program.lines);
-                var _i = 0;
-                while(_i < _len)
+                
+                var _end = real(string_digits(typed_text))
+                for(var _j = 10; _j <= _end; _j += 10)
                 {
-                    file_text_write_string(_file, program.lines[_i]);
-                    file_text_writeln(_file);
-                    _i++
+                    program.add_line($"{_j}", false);
                 }
-            
-                file_text_close(_file);
+                notify($"AUTOMATICALLY ADDED {_end} LINES, DESTRUCTIVELY")    
+                typed_text = "";
+                position = 1; 
                 _handled = true;
-           }
+            }
+           else
            if(typed_text == "SAVE")
            {
                 typed_text = "";
                 position = 1;
-            
-                var _str = json_stringify(program);
-                var _buff = buffer_create(8, buffer_grow, 1);
-                buffer_write(_buff, buffer_string, _str);
-                buffer_save(_buff,"PROGRAM.bas");
-                buffer_delete(_buff);
+                objSystem.project.to_file();
                 _handled = true;
            }
            else
-           if(typed_text == "LOAD")
-           {
-                 typed_text = "";
-                 position = 1;
-                 
-                 var _buff = buffer_load("PROGRAM.bas");
-                 var _str = buffer_read(_buff, buffer_string);
-                 var _data := json_parse(_str);
-                 
-                 program = new SCRIPT();
-                 program.lines := _data.lines;
-                 program.tokens = _data.tokens;
-                 //program.text = _data.text;
-                 
-                 buffer_delete(_buff);
-                _handled = true;
-               
-           }
            if(string_count("TEXTCOLOR",typed_text) && !string_count("SETDRAWCOLOR",typed_text))
            {
                 var _color = string_upper(string_replace(typed_text, "TEXTCOLOR ", ""));
@@ -353,7 +318,7 @@ else
        
        
        
-       if(keyboard_lastkey != vk_nokey)
+       if(keyboard_lastkey != vk_nokey && keyboard_lastkey != vk_backspace)
        {
            var _typed = string_upper(keyboard_string);
            typed_text = string_insert(_typed, typed_text, position);

@@ -29,6 +29,9 @@ array_push(global.function_names, "POINTDIST3D");
 array_push(global.function_names, "MOD");
 array_push(global.function_names, "DIV");
 array_push(global.function_names, "FRAC");
+array_push(global.function_names, "RAD");
+array_push(global.function_names, "DEG");
+array_push(global.function_names, "NEG");
 
 
 ///MATRIX LIBRARY
@@ -54,3 +57,6 @@ array_push(global.function_names, "FCIRC");
 array_push(global.function_names, "DRAWSPRITE");
 array_push(global.function_names, "SETDRAWCOLOR");
 array_push(global.function_names, "MAKECOLORRGB");
+
+///TIME AND TIMERS
+array_push(global.function_names, "GETTIMER");
