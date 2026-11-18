@@ -1,4 +1,5 @@
 # GMBASIC Language Reference
+CURRENT LANGUAGE SPEC AS OF v26.11.18.0  
 
 A LIVE DEMO OF GMBASIC CAN BE FOUND ON ITCH.IO, YOU CAN ALSO DOWNLOAD A WINDOWS BUILD OF IT [HERE!](https://lukanspellweaver.itch.io/gmbasic)
 
