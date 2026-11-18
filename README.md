@@ -34,14 +34,12 @@ The Editor itself has some useful commands that cannot be used in a BASIC progra
 |COMMAND | Description |
 |---|---|
 |`RUN`| Runs the program to its natural end, til an `END` statement is reached, or ad infinitum via a `GOTO` loop.|
-|`SAVE`| Quicksaves the current program for later LOADing, only one may be saved at a time and they will overwrite.|
-|`LOAD`| Load the quicksaved file if it's there.|
+|`SAVE`| Saves the current `PROJECT`|
+|`LOAD`| Load a `PROJECT`, if no assets folder is found, then only `MAIN.BAS` will be loaded.|
 |`COPY`| Copy the entire program into the clipboard|
 |`COPY <LINENUMBER>`| Copy the line at `<LINENUMBER>` to the typing field and the clipboard.|
 |`PASTE`| Paste a full program from your clipboard into the program register.|
-|`FSAVE`| Opens the Windows File Dialog to save the program to a .BAS file.|
-|`FLOAD`| Opens Windows File Dialog to load a .BAS or .TXT file, will crash if not properly formatted with line numbers!|
-|`SPRITE <NAME> [FRAMES]`| Opens the Windows File Dialog to load a .PNG file into the program as a `SPRITE`. The `SPRITE` can be referenced in drawing functions by `<NAME>` you can optionally tell the engine how many `FRAMES` there are and it will cut the image into that many horizontal slices with each slice being a `FRAME`, the `SPRITE`'s origin for drawing is always (0, 0), or it's TOP LEFT corner.|
+|`SPRITE <NAME> [FRAMES]`| Opens the Windows File Dialog to load a .PNG file into the `PROJECT` as a `SPRITE`. The `SPRITE` can be referenced in drawing functions by `<NAME>` you can optionally tell the engine how many `FRAMES` there are and it will cut the image into that many horizontal slices with each slice being a `FRAME`, the `SPRITE`'s origin for drawing is always (0, 0), or it's TOP LEFT corner.|
 |`TEXTCOLOR <COLORNAME>`| Set the IDE TEXT COLOR.|
 |`BACKGROUND <COLORNAME>`| Set the IDE BACKGROUND COLOR.|
 |`AUTO <NUMBER>`| Will fill from 10 to `<NUMBER>` with blank lines in `10` line increments.|
@@ -105,44 +103,45 @@ Mixed with the math commands below, you can perform more complex calculations.
 Operators are evaluated in this order, from first to last: `*` and `/`, then `+` and `-`, then the comparisons. Use parentheses to change the order.  
 There is no `AND`, `OR` or `NOT` yet, so to test two conditions at once, use two `IF` lines.
 
-> [!NOTE]
-> `SIN`, `COS` and `TAN` use radians, but `LENGTHDIR*` and `POINTDIR` use degrees.
+
 
 >[!NOTE]
 >Functions will work anywhere an expression does, such as `PRINT SQRT(16)`. 
 
 | Function | Description |
 |---|---|
-| `SQR(X)` | Returns the square of `X`. |
-| `SQRT(X)` | Returns the square root of `X`. |
-| `ABS(X)` | Returns the absolute value of `X`. |
-| `SIN(X)` | Returns the sine of `X` (in radians). |
-| `COS(X)` | Returns the cosine of `X` (in radians). |
-| `TAN(X)` | Returns the tangent of `X` (in radians). |
-| `FLOOR(X)` | Returns the largest integer less than or equal to `X`. |
-| `CEIL(X)` | Returns the smallest integer greater than or equal to `X`. |
-| `ROUND(X)` | Returns `X` rounded to the nearest integer. |
-| `SIGN(X)` | Returns `-1` if `X` is negative, `0` if `X` is zero, and `1` if `X` is positive. |
-| `ARCTAN(X)` | Returns the arctangent of `X` (in radians). |
-| `ARCTAN2(Y, X)` | Returns the arctangent of `Y/X` (in radians). |
-| `POW(X, Y)` | Returns `X` raised to the power of `Y`. |
-| `LOG(X, Y)` | Returns the logarithm of `Y` with base `X`. |
-| `CLAMP(X, MIN, MAX)` | Clamps a value between a minimum and maximum range. |
-| `LERP(A, B, T)` | Linearly interpolates between `A` and `B` by `T`. |
-| `MOD(X, Y)` | Returns the remainder of `X` divided by `Y`. |
-| `DIV(X, Y)` | Returns the integer division of `X` by `Y`. |
-| `MIN(X, Y)` | Returns the minimum of X and Y. |
-| `MAX(X, Y)` | Returns the maximum of X and Y. |
-| `FRAC(X)`| Returns the fractional part of X. |
-| `RANDOM(X)`| Returns a random number from 0 to X|
-| `POINTDIR(X1, Y1, X2, Y2)` | Returns the direction from point `(X1, Y1)` to point `(X2, Y2)` in degrees. |
+| `SQR(X)` | Returns the square of `X`. |  
+| `SQRT(X)` | Returns the square root of `X`. |  
+| `ABS(X)` | Returns the absolute value of `X`. |  
+| `SIN(X)` | Returns the sine of `X` (in radians). |  
+| `COS(X)` | Returns the cosine of `X` (in radians). |  
+| `TAN(X)` | Returns the tangent of `X` (in radians). |  
+| `FLOOR(X)` | Returns the largest integer less than or equal to `X`. |  
+| `CEIL(X)` | Returns the smallest integer greater than or equal to `X`. |  
+| `ROUND(X)` | Returns `X` rounded to the nearest integer. |  
+| `SIGN(X)` | Returns `-1` if `X` is negative, `0` if `X` is zero, and `1` if `X` is positive. |  
+| `ARCTAN(X)` | Returns the arctangent of `X` (in radians). |  
+| `ARCTAN2(Y, X)` | Returns the arctangent of `Y/X` (in radians). |  
+| `POW(X, Y)` | Returns `X` raised to the power of `Y`. |  
+| `LOG(X, Y)` | Returns the logarithm of `Y` with base `X`. |  
+| `CLAMP(X, MIN, MAX)` | Clamps a value between a minimum and maximum range. |  
+| `LERP(A, B, T)` | Linearly interpolates between `A` and `B` by `T`. |  
+| `MOD(X, Y)` | Returns the remainder of `X` divided by `Y`. |  
+| `DIV(X, Y)` | Returns the integer division of `X` by `Y`. |  
+| `MIN(X, Y)` | Returns the minimum of X and Y. |  
+| `MAX(X, Y)` | Returns the maximum of X and Y. |  
+| `FRAC(X)`| Returns the fractional part of X. |  
+| `RANDOM(X)`| Returns a random number from 0 to X|  
+| `POINTDIR(X1, Y1, X2, Y2)` | Returns the direction from point `(X1, Y1)` to point `(X2, Y2)` in degrees. |  
 | `POINTDIST(X1, Y1, X2, Y2)` | Returns the distance from point `(X1, Y1)` to point `(X2, Y2)` in pixels. |
-| `POINTDIST3D(X1, Y1, Z1, X2, Y2, Z2)` | Returns the distance from point `(X1, Y1, Z1)` to point `(X2, Y2, Z2)` in pixels. |
-| `LENGTHDIRX(L, D)` | Returns the X component of a vector with length `L` and direction `D` (in degrees). |
-| `LENGTHDIRY(L, D)` | Returns the Y component of a vector with length `L` and direction `D` (in degrees). |
-| `LENGTHDIRZ(L, P)` | Returns the Z (vertical) component of a vector with length `L` and pitch `P`, in degrees. A pitch of 0 is level (returns 0), 90 is straight up (returns L), and -90 is straight down (returns -L). |
-| `RAD(X)`| Turns degrees to radians. |
-| `DEG(X)`| Turns radians to degrees. |
+| `POINTDIST3D(X1, Y1, Z1, X2, Y2, Z2)` | Returns the distance from point `(X1, Y1, Z1)` to point `(X2, Y2, Z2)` in pixels. |  
+| `LENGTHDIRX(L, D)` | Returns the X component of a vector with length `L` and direction `D` (in degrees). |  
+| `LENGTHDIRY(L, D)` | Returns the Y component of a vector with length `L` and direction `D` (in degrees). |  
+| `LENGTHDIRZ(L, P)` | Returns the Z (vertical) component of a vector with length `L` and pitch `P`, in degrees. A pitch of 0 is level (returns 0), 90 is straight up (returns L), and -90 is straight down (returns -L). |  
+| `RAD(X)`| Turns degrees to radians. |  
+| `DEG(X)`| Turns radians to degrees. |  
+> [!NOTE]
+> `SIN`, `COS` and `TAN` use radians, but `LENGTHDIR*` and `POINTDIR` use degrees.
 
 ## Matrix
 | Function | Description |
@@ -293,4 +292,24 @@ A basic Array assignment:
 40 LET I = I + 1
 50 IF I <= 4 THEN GOTO 30
 60 PRINT A(3)
+```  
+  
+
+Using arrays and functions together to draw circles of different colors:
+```basic
+10 DIM COL(7)
+20 LET COL(0) = RED
+30 LET COL(1) = ORANGE
+40 LET COL(2) = YELLOW
+50 LET COL(3) = GREEN
+60 LET COL(4) = BLUE
+70 LET COL(5) = PURPLE
+80 LET COL(6) = FUCHSIA
+90 CLS
+100 SETDRAWCOLOR(COL(RANDOM(6)))
+110 FCIRC(400, 300, 25)
+120 SETDRAWCOLOR(COL(RANDOM(6)))
+130 CIRC(400, 300, 26)
+140 VSYNC
+150 GOTO 90
 ```
