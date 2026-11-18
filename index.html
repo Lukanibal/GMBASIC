@@ -283,7 +283,7 @@ label();
 
 var src=$("#md-source").textContent,want=new URLSearchParams(location.search).get("src");
 if(want||!src.trim()){
-  fetch(want||"manual.md").then(function(r){return r.text();}).then(build).catch(function(){
+  fetch(want||"README.md").then(function(r){return r.text();}).then(build).catch(function(){
     build(src.trim()?src:"# Manual\n\nNo manual found. Paste markdown into the `md-source` block, or put a `manual.md` next to this file and serve it over http.");
   });
 }else build(src);
