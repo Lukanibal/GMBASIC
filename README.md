@@ -225,27 +225,27 @@ There are 16 colors that come packaged with **GMBASIC**
 >`MAKECOLORRGB` allows you to create custome colors at runtime!
 
 ## Input
-You may collect basic input from the user in 2 ways:  
+You may collect basic input from the user in a few ways:  
 ```basic
 20 INPUT NAME
 ```
 
 This will halt the program's execution and prompt the user to input text and only resume running when ENTER is pressed.  
-When ENTER is pressed, the input value will be stored in NAME(or whatever variable name you choose) and continue execution.  
+When ENTER is pressed, the input value will be stored in NAME(or whatever variable name you choose) and continue execution. This is useful for text based programs that need input from the user.
   
 The other method is more useful for games, but only checks certain keys.  
 Simply check one of the following CONSTANTS to get instant input feedback!  
 | Constant| Description |
 |---|---|
-|`KLEFT`| The left arrow key's state, where 0 is not pressed and 1 is pressed|
-|`KRIGHT`| The right arrow key's state, where 0 is not pressed and 1 is pressed|
-|`KUP`| The up arrow key's state, where 0 is not pressed and 1 is pressed|
-|`KDOWN`| The down arrow key's state, where 0 is not pressed and 1 is pressed|
-|`KSPACE`| The down arrow key's state, where 0 is not pressed and 1 is pressed|
-|`MLEFT`| The left mouse button's state, where 0 is not pressed and 1 is pressed|
-|`MRIGHT`| The right mouse button's state, where 0 is not pressed and 1 is pressed|
-|`MX`|The mouse's current X value|
-|`MY`|The mouse's current Y value|
+|`KLEFT`| The left arrow key's state, where 0 is not pressed and 1 is pressed.|
+|`KRIGHT`| The right arrow key's state, where 0 is not pressed and 1 is pressed.|
+|`KUP`| The up arrow key's state, where 0 is not pressed and 1 is pressed.|
+|`KDOWN`| The down arrow key's state, where 0 is not pressed and 1 is pressed.|
+|`KSPACE`| The down arrow key's state, where 0 is not pressed and 1 is pressed.|
+|`MLEFT`| The left mouse button's state, where 0 is not pressed and 1 is pressed.|
+|`MRIGHT`| The right mouse button's state, where 0 is not pressed and 1 is pressed.|
+|`MX`|The mouse's current X value.|
+|`MY`|The mouse's current Y value.|
 
 An example of a simple way to check keys without using IF branches:  
 ```basic
@@ -260,6 +260,16 @@ An example of a simple way to check keys without using IF branches:
 90 VSYNC
 100 GOTO 30
 ```
+For more general keys on the keyboards, currently these functions exist.
+
+>[!NOTE]
+>`KEY` may be a LETTER or DIGIT such as `"K"` or `"4"` in these functions!
+
+| Function| Description |
+|---|---|
+|`KEYCHECK("KEY")`|Returns the `KEY`'s state, where 0 is up and 1 is down.|
+|`KEYCHECK_PRESSED("KEY")`|Returns 1 if the `KEY` was pressed this frame, otherwise returns 0.|
+|`KEYCHECK_RELEASED("KEY")`|Returns 1 if the `KEY` was released this frame, otherwise returns 0.|
 
 ## Timing  
 The functions here are to help with program timing
