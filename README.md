@@ -19,11 +19,6 @@ PRINT "HELLO WORLD"
 Prints `HELLO WORLD` to the console. `PRINT` also accepts variables and arrays.  
 This will NOT print a NEWLINE at the end.
 
-`CLS` publishes the frame built since the previous CLS and starts a new one. Anything drawn before the first CLS is discarded.  
-
-`VSYNC` Ends the program’s slice for this frame and resumes next frame.  
-Without it, the program runs up to the per-frame step limit and carries on next frame, so its timing isn’t controlled.
-
 `IF` `THEN` `ELSE` are supported, but only accept `GOTO` for `THEN` and `ELSE`, so  
 ```basic
 IF X = 1 THEN GOTO 100 ELSE GOTO 200
@@ -38,17 +33,18 @@ ELSE is optional. With no ELSE, a false condition falls through to the next line
 The Editor itself has some useful commands that cannot be used in a BASIC program.  
 |COMMAND | Description |
 |---|---|
-|`RUN`| Runs the program to its natural end, til an `END` statement is reached, or ad infinitum via a goto loop|
-|`SAVE`| Quicksaves the current program for later LOADing, only one may be saved at a time and they will overwrite|
-|`LOAD`| Load the quicksaved file if it's there|
+|`RUN`| Runs the program to its natural end, til an `END` statement is reached, or ad infinitum via a `GOTO` loop.|
+|`SAVE`| Quicksaves the current program for later LOADing, only one may be saved at a time and they will overwrite.|
+|`LOAD`| Load the quicksaved file if it's there.|
 |`COPY`| Copy the entire program into the clipboard|
-|`COPY <LINENUMBER>`| Copy the line at `<LINENUMBER>` to the typing field and the clipboard|
-|`PASTE`| Paste a full program from your clipboard into the program register|
-|`FSAVE`| Opens the Windows File Dialog to save the program to a .BAS file|
+|`COPY <LINENUMBER>`| Copy the line at `<LINENUMBER>` to the typing field and the clipboard.|
+|`PASTE`| Paste a full program from your clipboard into the program register.|
+|`FSAVE`| Opens the Windows File Dialog to save the program to a .BAS file.|
 |`FLOAD`| Opens Windows File Dialog to load a .BAS or .TXT file, will crash if not properly formatted with line numbers!|
-|`SPRITE <NAME> [FRAMES]`| Opens the Windows File Dialog to load a .PNG file into the program as a `SPRITE`. The `SPRITE` can be referenced in drawing functions by `<NAME>` you can optionally tell the engine how many `FRAMES` there are and it will cut the image into that many horizontal slices with each slice being a `FRAME`, the `SPRITE`'s origin for drawing is always (0, 0), or it's TOP LEFT corner|
-|`TEXTCOLOR <COLORNAME>`| Set the IDE TEXT COLOR|
-|`BACKGROUND <COLORNAME>`| Set the IDE BACKGROUND COLOR|
+|`SPRITE <NAME> [FRAMES]`| Opens the Windows File Dialog to load a .PNG file into the program as a `SPRITE`. The `SPRITE` can be referenced in drawing functions by `<NAME>` you can optionally tell the engine how many `FRAMES` there are and it will cut the image into that many horizontal slices with each slice being a `FRAME`, the `SPRITE`'s origin for drawing is always (0, 0), or it's TOP LEFT corner.|
+|`TEXTCOLOR <COLORNAME>`| Set the IDE TEXT COLOR.|
+|`BACKGROUND <COLORNAME>`| Set the IDE BACKGROUND COLOR.|
+|`AUTO <NUMBER>`| Will fill from 10 to `<NUMBER>` with blank lines in `10` line increments.|
 
 The `F5` key is a nifty `RUN` shortcut!   
 `ESCAPE` will halt the runner, and `F5` or `RUN` will continue it.
@@ -69,9 +65,9 @@ All FUNCTION names are also reserved.
 |Type | Description |
 |---|---|
 |`STRING`|"THIS IS A STRING"|
-|`NUMBER`| `420` is a number, decimals cannot be typed in but they can be held within `NUMBERS`|
-|`ARRAY`| `A(9)` accesses the 10th position in the array assigned to `A`|
-|`SPRITE`| Loading images via the `SPRITE` command creates a `SPRITE`|
+|`NUMBER`| `420`, `69.420`, and `-69` are all `NUMBERS`.|
+|`ARRAY`| `A(9)` accesses the 10th position in the array assigned to `A`.|
+|`SPRITE`| Loading images via the `SPRITE` command creates a `SPRITE`.|
 
 Strings can have a NEWLINE character inserted via `\N`, you may also add numbers to strings, they will convert to a string automagically and be appended to the string accordingly.
 
@@ -102,22 +98,18 @@ Mixed with the math commands below, you can perform more complex calculations.
 |`<=`|Less than or equal to. Gives `1` if the left value is smaller than or equal to the right, otherwise `0`.|
 |`>=`|Greater than or equal to. Gives `1` if the left value is larger than or equal to the right, otherwise `0`.|
 |`+`|Adds `NUMBERS`. If either side is a `STRING`, joins the two sides together as text instead.|
-|`-`|Subtract `NUMBERS`|
-|`*`|Multiply `NUMBERS`|
+|`-`|Subtract `NUMBERS` or unary negation.|
+|`*`|Multiply `NUMBERS`.|
 |`/`|Divide `NUMBERS`. Dividing by `0` shows an error.|
 
 Operators are evaluated in this order, from first to last: `*` and `/`, then `+` and `-`, then the comparisons. Use parentheses to change the order.  
 There is no `AND`, `OR` or `NOT` yet, so to test two conditions at once, use two `IF` lines.
 
-> [HEADSUP!]
+> [!NOTE]
 > `SIN`, `COS` and `TAN` use radians, but `LENGTHDIR*` and `POINTDIR` use degrees.
 
->[ALSO]
->Functions will work anywhere an expression does, such as `PRINT SQRT(16)`
-
-There are currently no NEGATIVE or DECIMALs picked up by my tokenizer, so you can work around that by:  
-For a decimal something like `LET P = 314/100` WILL assign the value as a decimal, YOU just cannot type it in.  
-For a negative simply subtract the value you want from `0` like so `LET X = 0 - 69` will yeild `X = -69` to the engine underneath GMBASIC. I just need to work these into the tokenizer at some point, sorry!  
+>[!NOTE]
+>Functions will work anywhere an expression does, such as `PRINT SQRT(16)`. 
 
 | Function | Description |
 |---|---|
@@ -165,7 +157,7 @@ For a negative simply subtract the value you want from `0` like so `LET X = 0 - 
 | `MATRIXBUILDPROJPERS(WIDTH, HEIGHT, ZNEAR, ZFAR)` | Builds a perspective projection matrix with the specified view width, view height, near plane, and far plane. |
 | `MATRIXBUILDPROJPERSFOV(FOVY, ASPECT, ZNEAR, ZFAR)` | Builds a perspective projection matrix with the specified field of view (in degrees), aspect ratio, near plane, and far plane. |
 
->[TIP] Matrix setters apply to everything drawn after them in the same frame, so call them after `CLS`.
+>[!NOTE] Matrix setters apply to everything drawn after them in the same frame, so call them after `CLS`.
 
 Shows a spinning triangle and 3D logic:  
 ```basic
@@ -254,13 +246,26 @@ Simply check one of the following CONSTANTS to get instant input feedback!
 
 An example of a simple way to check keys without using IF branches:  
 ```basic
-10 LET X = 100
-20 CLS
-30 LET X = X + KRIGHT * 2 - KLEFT * 2
-40 FCIRC(X, 100, 10)
-50 VSYNC
-60 GOTO 20
+10 LET Y = 300
+20 LET X = 400
+30 CLS
+40 LET X = X + KRIGHT * 2 - KLEFT * 2
+50 LET Y = Y + KDOWN * 2 - KUP * 2
+60 LET X = CLAMP(X, 0, 800)
+70 LET Y = CLAMP(Y, 0, 600)
+80 FCIRC(X, Y, 10)
+90 VSYNC
+100 GOTO 30
 ```
+
+## Timing  
+The functions here are to help with program timing
+| Function| Description |
+|---|---|
+|`GETTIMER`| Returns the time in microseconds since the BASIC MACHINE has started running|
+|`VSYNC`|Ends the program’s slice for this frame and resumes next frame. Without it, the program runs up to the per-frame step limit and carries on next frame, so its timing isn’t controlled.|
+|`CLS`| Publishes the frame built since the previous `CLS` and starts a new one. Anything drawn before the first `CLS` is discarded!|
+
 
 ## Some Examples
 I struggle writing BASIC, which I know is funny, but here are some examples of the things I struggle to retain the most, array usage and loops.  
@@ -277,7 +282,8 @@ Animates a red circle across the canvas:
 70 VSYNC
 80 GOTO 20
 ```
-Note that GOTO can jump to LATER in the program as well, it is NOT just a jump BACK.  
+>[!NOTE]
+>`GOTO` can jump to LATER in the program as well, it is NOT just a jump BACK.  
 
 A basic Array assignment:  
 ```basic
