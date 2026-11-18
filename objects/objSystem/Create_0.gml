@@ -87,8 +87,8 @@ repeat(80)
 row_length = string_width(_row);
 ini_open("prefs.ini");
 
-text_color = ini_read_real("SETTINGS", "TEXT", c_lime);
-back_color = ini_read_real("SETTINGS", "BACK", c_black);
+text_color = ini_read_real("SETTINGS", "TEXT", c_white);
+back_color = ini_read_real("SETTINGS", "BACK", c_blue);
 
 ini_close();
 

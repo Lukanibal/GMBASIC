@@ -13,10 +13,7 @@
   "ForcedPrefabProjectReferences":[
     {"link":"io.gamemaker.sdfshaders-1.0.0","name":"io.gamemaker.sdfshaders-1.0.0","path":"io.gamemaker.sdfshaders-1.0.0.yyp",},
   ],
-  "IncludedFiles":[
-    {"$GMIncludedFile":"","%Name":"breakout_BAS.BAS","CopyToMask":-1,"filePath":"datafiles","name":"breakout_BAS.BAS","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"LudusDemo.bas","CopyToMask":-1,"filePath":"datafiles","name":"LudusDemo.bas","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-  ],
+  "IncludedFiles":[],
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{

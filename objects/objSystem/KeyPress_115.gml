@@ -1,1 +1,0 @@
-load_basic("LudusDemo.bas");
