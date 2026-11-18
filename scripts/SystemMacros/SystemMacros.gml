@@ -140,7 +140,7 @@ function SCRIPT(_text = "") constructor
         self.tokens = tokenize(self);
     }
     
-    run = function( _steps = 10000)
+    run = function( _steps = 1300)
     {
         var _i = self.pc;
         var _len = array_length(self.tokens);
@@ -568,14 +568,26 @@ function get_line_number(_line)
 
 function tokenize(_SCRIPT)
 {
-    var _tokens = [];
+    var _len = array_length(_SCRIPT.lines);
+    var _result = [];
+    
+    for(var _i = 0; _i < _len; _i++)
+    {
+        _result = array_concat(_result, tokenizer(_SCRIPT.lines[_i]));
+        array_push(_result, new TOKEN("NEWLINE", "\n"));
+    }
+    return _result;
+}
+
+function tokenizer(_line, _tokens = [])
+{
     var _i = 1;
-    var _len = string_length(_SCRIPT.text);
+    var _len = string_length(_line);
     var _cmd = false;
     
     while (_i <= _len)
     {
-        var _ch = string_char_at(_SCRIPT.text, _i);
+        var _ch = string_char_at(_line, _i);
         
         if (_ch == " " || _ch == "\t")
         {
@@ -583,7 +595,7 @@ function tokenize(_SCRIPT)
         }
         else if (_ch == "\r" || _ch == "\n")
         {
-            if (_ch == "\r" && _i < _len && string_char_at(_SCRIPT.text, _i + 1) == "\n")
+            if (_ch == "\r" && _i < _len && string_char_at(_line, _i + 1) == "\n")
             {
                 _i += 2;
             }
@@ -598,9 +610,9 @@ function tokenize(_SCRIPT)
         {
             var _value = "";
             
-            while (_i <= _len && is_digit(string_char_at(_SCRIPT.text, _i)) || _i <= _len && string_char_at(_SCRIPT.text, _i) == ".")
+            while (_i <= _len && is_digit(string_char_at(_line, _i)) || _i <= _len && string_char_at(_line, _i) == ".")
             {
-                _value += string_char_at(_SCRIPT.text, _i);
+                _value += string_char_at(_line, _i);
                 _i++;
             }
             
@@ -610,9 +622,9 @@ function tokenize(_SCRIPT)
         {
             var _value = "";
             
-            while (_i <= _len && (is_letter(string_char_at(_SCRIPT.text, _i)) || is_digit(string_char_at(_SCRIPT.text, _i)) || string_char_at(_SCRIPT.text, _i) == "_"))
+            while (_i <= _len && (is_letter(string_char_at(_line, _i)) || is_digit(string_char_at(_line, _i)) || string_char_at(_line, _i) == "_"))
             {
-                _value += string_char_at(_SCRIPT.text, _i);
+                _value += string_char_at(_line, _i);
                 _i++;
             }
             
@@ -624,10 +636,10 @@ function tokenize(_SCRIPT)
             _i++;
             var _value = "";
             
-            while (_i <= _len && string_char_at(_SCRIPT.text, _i) != "\"")
+            while (_i <= _len && string_char_at(_line, _i) != "\"")
             {
-                var _c = string_char_at(_SCRIPT.text, _i);
-                var _n = string_char_at(_SCRIPT.text, _i + 1);
+                var _c = string_char_at(_line, _i);
+                var _n = string_char_at(_line, _i + 1);
                 
                 if (_c == "\\" && (_n == "n" || _n == "N"))
                 {
@@ -653,7 +665,7 @@ function tokenize(_SCRIPT)
             var _next = "";
             if (_i < _len)
             {
-                _next = string_char_at(_SCRIPT.text, _i + 1);
+                _next = string_char_at(_line, _i + 1);
             }
             
             if ((_ch == "<" && (_next == ">" || _next == "=")) ||  (_ch == ">" && _next == "="))
@@ -1466,6 +1478,39 @@ function evaluate_postfix(_pf)
                 }
                 
                 array_push(_values, get_timer());
+            }
+            if(_func == "KEYCHECK")
+            {
+                if(_arg_count != 1)
+                {
+                    notify("FUNCTION: KEYCHECK EXPECTS 1 ARGUMENT", true);
+                    return 0;
+                }
+                
+                if(is_letter(_argument) || is_digit(_argument))
+                array_push(_values, keyboard_check(ord(_argument)));
+            }
+            if(_func == "KEYCHECK_PRESSED")
+            {
+                if(_arg_count != 1)
+                {
+                    notify("FUNCTION: KEYCHECK_PRESSED EXPECTS 1 ARGUMENT", true);
+                    return 0;
+                }
+                
+                if(is_letter(_argument) || is_digit(_argument))
+                array_push(_values, keyboard_check_pressed(ord(_argument)));
+            }
+            if(_func == "KEYCHECK_RELEASED")
+            {
+                if(_arg_count != 1)
+                {
+                    notify("FUNCTION: KEYCHECK_RELEASED EXPECTS 1 ARGUMENT", true);
+                    return 0;
+                }
+                
+                if(is_letter(_argument) || is_digit(_argument))
+                array_push(_values, keyboard_check_released(ord(_argument)));
             }
             
         }

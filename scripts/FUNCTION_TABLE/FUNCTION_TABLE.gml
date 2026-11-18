@@ -60,3 +60,23 @@ array_push(global.function_names, "MAKECOLORRGB");
 
 ///TIME AND TIMERS
 array_push(global.function_names, "GETTIMER");
+
+//INPUT
+array_push(global.function_names, "KEYCHECK");
+array_push(global.function_names, "KEYCHECK_PRESSED");
+array_push(global.function_names, "KEYCHECK_RELEASED");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

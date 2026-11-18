@@ -94,3 +94,8 @@ ini_close();
 
 game_surface = surface_create(800, 600);
 back_buffer = surface_create(800, 600);
+
+if(room == rmRunnerOnly && program.lines[0] == "10 TYPE NEW TO BEGIN A NEW BASIC PROGRAM")
+{
+    load_project(true);
+}

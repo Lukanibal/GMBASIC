@@ -119,10 +119,20 @@ function load_basic_from_clipboard()
 }
 
 
-function load_project()
+function load_project(_compiled = false)
 {
     objSystem.program.loaded = false;
-    var _filename = get_open_filename("GMBASIC PROJECT|*.BAS;", "");
+    var _filename = "";
+    
+    if(!_compiled)
+    {
+        _filename = get_open_filename("GMBASIC PROJECT|*.BAS;", "");
+    }
+    else 
+    {
+        _filename = "MAIN.BAS";
+    }
+    
     if (_filename == "") return;
     
     var _file = file_text_open_read(_filename);
@@ -171,7 +181,7 @@ function load_project()
     _program.text = buffer_read(_buf, buffer_string);
     buffer_delete(_buf);
     
-    _program.tokens = tokenize(_program);
+    //_program.tokens = tokenize(_program);
     objSystem.program = _program;
     objSystem.program.loaded = true;
     

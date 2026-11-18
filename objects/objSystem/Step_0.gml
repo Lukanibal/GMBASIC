@@ -70,6 +70,7 @@ else
         if (keyboard_lastkey == vk_delete)
        {
             typed_text = "";
+            position = 1;
             keyboard_string = "";
             keyboard_lastkey = vk_nokey;
        }
@@ -86,7 +87,7 @@ else
        }
        
        
-       if(keyboard_lastkey == vk_enter && typed_text != "")
+       if(keyboard_lastkey == vk_enter && typed_text != "" && room == rmConsole)
        {
            var _handled = false;
 
@@ -115,7 +116,7 @@ else
                    program.running = false;
                    program.steps = 0;
                    _handled = true;
-           }
+            }
             if (string_pos("SPRITE ", typed_text) == 1)
             {
                 var _rest = string_trim(string_delete(typed_text, 1, 7));
@@ -343,19 +344,21 @@ else
    }
 }
 
-if(running)
+if(room == rmConsole)
 {
-    window_set_caption("BASIC - RUNNING");
+   if(running)
+   {
+       window_set_caption("GMBASIC - RUNNING");
+   }
+   else if(viewing)
+   {
+       window_set_caption("GMBASIC - VIEWING PROGRAM OUTPUT");
+   }
+   else 
+   {
+       window_set_caption("GMBASIC - EDITING");
+   }
 }
-else if(viewing)
-{
-    window_set_caption("BASIC - VIEWING PROGRAM OUTPUT");
-}
-else 
-{
-    window_set_caption("BASIC - EDITING");
-}
-
 ///keep running!
 if(program.running && program.steps <= 0 && objSystem.running)
 {
