@@ -51,7 +51,7 @@ function SCRIPT(_text = "") constructor
         current_line = -1;
         errors = [];
         running = true;
-        
+        tokens = tokenize(self);
         self.run();
     };
     
