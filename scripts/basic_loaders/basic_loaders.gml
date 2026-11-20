@@ -181,7 +181,6 @@ function load_project(_compiled = false)
     _program.text = buffer_read(_buf, buffer_string);
     buffer_delete(_buf);
     
-    //_program.tokens = tokenize(_program);
     objSystem.program = _program;
     objSystem.program.loaded = true;
     

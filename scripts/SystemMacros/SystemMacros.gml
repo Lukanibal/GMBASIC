@@ -11,7 +11,10 @@ function SCRIPT(_text = "") constructor
     text = _text;
     lines = [];
     tokens = [];
-    output = $"GMBASIC v26.11.18.1";
+    func_cache = [];
+    if_cache = [];
+    let_cache = [];
+    output = $"GMBASIC v26.11.20.0";
     variables =  {};
     pc = 0;
     running = false;
@@ -37,6 +40,13 @@ function SCRIPT(_text = "") constructor
     //also graphics but kinda seperate
     sprites = {};
     
+    clear_caches = function()
+    {
+        func_cache = [];
+        if_cache = [];
+        let_cache = [];
+    }
+    
     start = function()
     {
         output = "";
@@ -51,7 +61,10 @@ function SCRIPT(_text = "") constructor
         current_line = -1;
         errors = [];
         running = true;
-        tokens = tokenize(self);
+        if(array_length(self.tokens) == 0)
+        {
+            tokens = tokenize(self);
+        }
         self.run();
     };
     
