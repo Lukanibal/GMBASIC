@@ -68,7 +68,20 @@ function SPECIAL() constructor
         "BUFF_FIXED": buffer_fixed,
         "BUFF_GROW" : buffer_grow,
         "BUFF_WRAP" : buffer_wrap,
-        "BUFF_FAST" : buffer_fast
+        "BUFF_FAST" : buffer_fast,
+        "BUFF_U8" : buffer_u8,
+        "BUFF_S8" : buffer_s8, 
+        "BUFF_U16": buffer_u16,
+        "BUFF_S16": buffer_s16,
+        "BUFF_U32": buffer_u32,
+        "BUFF_S32": buffer_s32,
+        "BUFF_U64": buffer_u64,
+        "BUFF_F16": buffer_f16,
+        "BUFF_F32": buffer_f32,
+        "BUFF_F64": buffer_f64,
+        "BUFF_TEXT": buffer_text,
+        "BUFF_STRING": buffer_string,
+        "BUFF_BOOL" : buffer_bool
     }
 }
 

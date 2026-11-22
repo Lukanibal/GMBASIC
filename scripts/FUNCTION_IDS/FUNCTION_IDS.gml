@@ -63,5 +63,6 @@ enum function_ids
     BUFF_PEEK,
     BUFF_READ,
     BUFF_WRITE,
-    BUFF_POKE
+    BUFF_POKE,
+    BUFF_DELETE,
 }

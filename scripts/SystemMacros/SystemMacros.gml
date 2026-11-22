@@ -1734,6 +1734,17 @@ function evaluate_postfix(_pf)
                     array_push(_values, 0);
                     break;
                 }
+                case function_ids.BUFF_DELETE:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("BUFF_DELETE: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    buffer_delete(_args[0])
+                    array_push(_values, 0);
+                    break;
+                } 
                 default:
                 {
                     notify("UNKNOWN FUNCTION", true);

@@ -63,5 +63,7 @@ global.function_bridge =
     "BUFF_PEEK" : function_ids.BUFF_PEEK,
     "BUFF_READ" : function_ids.BUFF_READ,
     "BUFF_WRITE" : function_ids.BUFF_WRITE,
-    "BUFF_POKE" : function_ids.BUFF_POKE
+    "BUFF_POKE" : function_ids.BUFF_POKE,
+    "BUFF_DELETE" : function_ids.BUFF_DELETE,
+    
 }
