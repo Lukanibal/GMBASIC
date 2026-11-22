@@ -1,5 +1,5 @@
 # GMBASIC Language Reference
-CURRENT LANGUAGE SPEC AS OF v26.11.18.2
+CURRENT LANGUAGE SPEC AS OF v26.11.22.1
 
 A LIVE DEMO OF GMBASIC CAN BE FOUND ON ITCH.IO, YOU CAN ALSO DOWNLOAD A WINDOWS BUILD OF IT [HERE!](https://lukanspellweaver.itch.io/gmbasic)
 
@@ -279,6 +279,53 @@ The functions here are to help with program timing
 |`VSYNC`|Ends the program’s slice for this frame and resumes next frame. Without it, the program runs up to the per-frame step limit and carries on next frame, so its timing isn’t controlled.|
 |`CLS`| Publishes the frame built since the previous `CLS` and starts a new one. Anything drawn before the first `CLS` is discarded!|
 
+## Buffers  
+Buffers are a way to store and manipulate data FAST.  
+Always remember to DELETE buffers when you're done with them, they are NOT garbage collected!  
+  
+Buffer Types are constants:  
+| Constant| Description |
+|---|---|
+|`BUFF_GROW`| a buffer that grows past it's initial size|
+|`BUFF_FIXED`| a buffer that will NOT grow beyond it's initial size.|
+|`BUFF_WRAP`| a buffer that wraps around to the beginning when going past it's initial size|
+
+Buffer Data Types are the following:  
+| Constant| Description |
+|---|---|
+|`BUFF_U8`| an unsigned 8 bit integer, from `0` to `255`.|
+|`BUFF_S8`| a signed 8 bit integer, from `-128` to `127`.|
+|`BUFF_U16`| an unsigned 16 bit integer, from `0` to `65,535`.|
+|`BUFF_S16`| a signed 16 bit integer, from `-32,768` to `32,767`.|
+|`BUFF_U32`| an unsigned 32 bit integer, from `0` to `4,294,967,295`.|
+|`BUFF_S32`| a signed 32 bit integer, from `-2,147,483,648` to `2,147,483,647`.|
+|`BUFF_U64`| an unsigned 64 bit integer, from `0` to `18,446,744,073,709,551,615`.|
+|`BUFF_F16`| a 16 bit float with a range of +/- 65504.|
+|`BUFF_F32`| a 32 bit float with a range of +/- 16777216. |
+|`BUFF_F64`| a 64 bit float with a range of approximately `±2.23 × 10⁻³⁰⁸` to `±1.80 × 10³⁰⁸`, with a precision of about 15 to 16 decimal digits.|
+|`BUFF_TEXT`| a `STRING` of any size without the final null terminating character.|
+|`BUFF_STRING`| a  `STRING` of any size with the final null terminating character.|
+|`BUFF_BOOL`| can be `1` or `0` for `true` or `false`.|
+
+BUFF_SEEK uses the following contstants:  
+| Constant| Description |
+|---|---|
+|`BUFF_SEEK_START`| Sets the seek to the start of the buffer|
+|`BUFF_SEEK_REL`| Sets the seek to a position relative to the current seek position|
+|`BUFF_SEEK_END`| Sets the seek to the end of the buffer|
+
+>[!NOTE]
+>in all signed buffer data type, `0` is considered a positive number!
+
+| Function| Description |
+|---|---|
+|`BUFF_CREATE(SIZE, TYPE, ALIGNMENT)`| returns a new `BUFFER` of `TYPE`, with `SIZE` and `ALIGNMENT`.|
+|`BUFF_SEEK(BUFFER,  BASE, OFFSET)`| returns the new seek position of the `BUFFER`.|
+|`BUFF_PEEK(BUFFER,  OFFSET, TYPE)`| returns the value stored in the `BUFFER` at `OFFSET`, or `undefined` if it fails.|
+|`BUFF_POKE(BUFFER,  OFFSET, TYPE, VALUE)`| poke `VALUE` of `TYPE` into the `BUFFER` at `OFFSET`.|
+|`BUFF_WRITE(BUFFER, TYPE, VALUE)`| writes `VALUE` of `TYPE` into `BUFFER`'s current seek position and moves the seek accordingly.|
+|`BUFF_READ(BUFFER, TYPE)`| returns the value at `BUFFER`'s current seek position, be sure your `TYPE` is correct!|
+|`BUFF_DELETE(BUFFER)`| Deletes `BUFFER` and frees that memory.|
 
 ## Some Examples
 I struggle writing BASIC, which I know is funny, but here are some examples of the things I struggle to retain the most, array usage and loops.  
@@ -327,3 +374,6 @@ Using arrays and functions together to draw circles of different colors:
 140 VSYNC
 150 GOTO 90
 ```
+## Credit
+Written By Lukan Spellweaver, adapted from the [GameMaker Documentation](https://manual.gamemaker.io)  
+Adapted to HTML from my Markdown by Claude  
