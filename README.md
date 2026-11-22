@@ -313,6 +313,15 @@ BUFF_SEEK uses the following contstants:
 |`BUFF_SEEK_START`| Sets the seek to the start of the buffer|
 |`BUFF_SEEK_REL`| Sets the seek to a position relative to the current seek position|
 |`BUFF_SEEK_END`| Sets the seek to the end of the buffer|
+  
+A simple example of `BUFFER`s in use:  
+```basic
+10 LET X = BUFF_CREATE(16, BUFF_FIXED, 1)
+20 BUFF_WRITE(X, BUFF_STRING, "HELLO WORLD!")
+30 LET Y = BUFF_PEEK(X, 0, BUFF_STRING)
+40 PRINT Y
+50 BUFFER_DELETE(X)
+```
 
 >[!NOTE]
 >in all signed buffer data type, `0` is considered a positive number!
