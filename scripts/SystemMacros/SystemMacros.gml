@@ -1676,7 +1676,6 @@ function evaluate_postfix(_pf)
                     array_push(_values, buffer_create(_argument, _args[1], _args[2]));
                     break;
                 }
-                //these five were not in the old parser, check the argument orders are what you want
                 case function_ids.BUFF_SEEK:
                 {
                     if (_arg_count != 3)

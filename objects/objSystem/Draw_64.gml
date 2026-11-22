@@ -126,14 +126,18 @@ if(room == rmConsole)
     
     if(program.loaded)
     {
-        var _b = program_line_bounds(program.current_line, _pane_width);
-        if (_b != undefined)
+        if(show_highlight)
         {
-            var _hy = _pane_top - program_scroll_y + _b.top;
-            draw_set_color(c_white - text_color);
-            draw_rectangle(_pane_left, _hy, _pane_left + _pane_width, _hy + _b.height, false);
-            draw_set_color(text_color);
+            var _b = program_line_bounds(program.current_line, _pane_width);
+            if (_b != undefined)
+            {
+                var _hy = _pane_top - program_scroll_y + _b.top;
+                draw_set_color(c_white - text_color);
+                draw_rectangle(_pane_left, _hy, _pane_left + _pane_width, _hy + _b.height, false);
+                draw_set_color(text_color);
+            }
         }
+        
         
         
         var _line_count = array_length(program.lines);
