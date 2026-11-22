@@ -3,7 +3,7 @@ program_text = "";
 running = false;
 viewing = false;
 position = 1;
-cursor = "_";
+cursor = "|";
 on = true;
 
 project = -1;
@@ -32,7 +32,6 @@ show_highlight = true;
 
 global.COLORS = [c_black, c_white, c_maroon, c_red, c_green, c_lime, c_blue, c_aqua, c_orange, c_yellow, c_purple, c_fuchsia, c_silver, c_gray, c_navy, c_teal];
 ///RESERVED SYSTEM VARIABLES
-/// 
 function SPECIAL() constructor 
 {
     WORDS = 

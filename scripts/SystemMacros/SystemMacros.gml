@@ -1,4 +1,4 @@
-draw_set_font(fntDejaVuSansMono);
+draw_set_font(fntCQMono);
 
 function TOKEN(_kind, _value) constructor 
 {
@@ -14,7 +14,7 @@ function SCRIPT(_text = "") constructor
     func_cache = [];
     if_cache = [];
     let_cache = [];
-    output = $"GMBASIC v26.11.22.0";
+    output = $"GMBASIC v26.11.22.1";
     variables =  {};
     pc = 0;
     running = false;

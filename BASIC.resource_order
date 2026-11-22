@@ -1,7 +1,7 @@
 {
   "FolderOrderSettings":[],
   "ResourceOrderSettings":[
-    {"name":"fntDejaVuSansMono","order":1,"path":"fonts/fntDejaVuSansMono/fntDejaVuSansMono.yy",},
+    {"name":"fntCQMono","order":1,"path":"fonts/fntCQMono/fntCQMono.yy",},
     {"name":"objSystem","order":3,"path":"objects/objSystem/objSystem.yy",},
     {"name":"objSystemNotification","order":7,"path":"objects/objSystemNotification/objSystemNotification.yy",},
     {"name":"rmRunnerOnly","order":13,"path":"rooms/rmRunnerOnly/rmRunnerOnly.yy",},

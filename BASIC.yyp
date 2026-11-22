@@ -13,9 +13,7 @@
   "ForcedPrefabProjectReferences":[
     {"link":"io.gamemaker.sdfshaders-1.0.0","name":"io.gamemaker.sdfshaders-1.0.0","path":"io.gamemaker.sdfshaders-1.0.0.yyp",},
   ],
-  "IncludedFiles":[
-    {"$GMIncludedFile":"","%Name":"badapple.mp4","CopyToMask":-1,"filePath":"datafiles","name":"badapple.mp4","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-  ],
+  "IncludedFiles":[],
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
@@ -23,7 +21,7 @@
   },
   "name":"BASIC",
   "resources":[
-    {"id":{"name":"fntDejaVuSansMono","path":"fonts/fntDejaVuSansMono/fntDejaVuSansMono.yy",},},
+    {"id":{"name":"fntCQMono","path":"fonts/fntCQMono/fntCQMono.yy",},},
     {"id":{"name":"objSystem","path":"objects/objSystem/objSystem.yy",},},
     {"id":{"name":"objSystemNotification","path":"objects/objSystemNotification/objSystemNotification.yy",},},
     {"id":{"name":"rmConsole","path":"rooms/rmConsole/rmConsole.yy",},},
