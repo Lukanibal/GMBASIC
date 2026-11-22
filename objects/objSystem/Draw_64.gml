@@ -122,17 +122,20 @@ if(room == rmConsole)
     
     gpu_set_scissor(_pane_left, _pane_top, _pane_width, _pane_height);
     
-    /*var _b = program_line_bounds(program.current_line, _pane_width);
-    if (_b != undefined)
-    {
-        var _hy = _pane_top - program_scroll_y + _b.top;
-        draw_set_color(c_maroon);
-        draw_rectangle(_pane_left, _hy, _pane_left + _pane_width, _hy + _b.height, false);
-        draw_set_color(text_color);
-    }*/
+    
     
     if(program.loaded)
     {
+        var _b = program_line_bounds(program.current_line, _pane_width);
+        if (_b != undefined)
+        {
+            var _hy = _pane_top - program_scroll_y + _b.top;
+            draw_set_color(c_white - text_color);
+            draw_rectangle(_pane_left, _hy, _pane_left + _pane_width, _hy + _b.height, false);
+            draw_set_color(text_color);
+        }
+        
+        
         var _line_count = array_length(program.lines);
         var _first_line = max(0, floor(program_scroll_y / _line_h));
         var _last_line = min(_line_count - 1, ceil((program_scroll_y + _pane_height) / _line_h));
@@ -143,7 +146,7 @@ if(room == rmConsole)
             
             if (_i == program.current_line)
             {
-                draw_set_color(c_maroon);
+                draw_set_color(c_white - text_color);
                 draw_rectangle( _pane_left, _y, _pane_left + _pane_width, _y + _line_h, false );
             }
             
@@ -174,7 +177,7 @@ if(room == rmConsole)
     gpu_set_scissor(_pane_left, _pane_top, _pane_width, _pane_height);
     
     draw_text(_pane_left, _pane_top, "VARIABLES:");
-    /*
+    
     for (var _i = _first; _i <= _last; _i++)
     {
         var _y = _pane_top + _line_h + (_i * _line_h) - variables_scroll_y;
@@ -184,7 +187,7 @@ if(room == rmConsole)
         
         draw_text(_pane_left, _y, _name + ": " + string(_value));
     }
-    */
+    
     gpu_set_scissor(_scissor);
     
     draw_line_width_colour(row_length+15, 0, row_length+15, window_get_height(), 4, text_color, text_color);

@@ -63,7 +63,11 @@ function SPECIAL() constructor
         "SILVER": c_silver,
         "GRAY" : c_gray,
         "NAVY" : c_navy,
-        "TEAL" : c_teal
+        "TEAL" : c_teal,
+        "BUFF_FIXED": buffer_fixed,
+        "BUFF_GROW" : buffer_grow,
+        "BUFF_WRAP" : buffer_wrap,
+        "BUFF_FAST" : buffer_fast
     }
 }
 

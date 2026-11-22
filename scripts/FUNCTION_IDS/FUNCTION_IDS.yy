@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"FUNCTION_IDS",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"FUNCTION_IDS",
+  "parent":{
+    "name":"BASIC",
+    "path":"BASIC.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

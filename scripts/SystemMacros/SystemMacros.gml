@@ -14,7 +14,7 @@ function SCRIPT(_text = "") constructor
     func_cache = [];
     if_cache = [];
     let_cache = [];
-    output = $"GMBASIC v26.11.20.0";
+    output = $"GMBASIC v26.11.22.0";
     variables =  {};
     pc = 0;
     running = false;
@@ -858,8 +858,8 @@ function to_postfix(_tokens, _start)
                     
                     array_push(_args_pf, _arg_pf);
                 }
-                
-                array_push(_output, new TOKEN("FUNCTION", {name: string_upper(_value), arguments: _args_pf}));
+                var _name = string_upper(_value);
+                array_push(_output, new TOKEN("FUNCTION", {id: global.function_bridge[$ _name], name: _name, arguments: _args_pf}));
                 _expect_value = false;
             }
             else 
@@ -1047,485 +1047,700 @@ function evaluate_postfix(_pf)
             }
 
             
-            var _func = _token.value.name;
+            var _func = _token.value.id;
             
-            if (_func == "SQRT")
+            switch(_func)
             {
-                if (_argument < 0)
+                case function_ids.SQRT:
                 {
-                    notify("SQRT: ARGUMENT MUST NOT BE NEGATIVE", true);
+                    if (_arg_count != 1)
+                    {
+                        notify("SQRT: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    if (_argument < 0)
+                    {
+                        notify("SQRT: ARGUMENT MUST NOT BE NEGATIVE", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, sqrt(_argument));
+                    break;
+                }
+                case function_ids.ABS:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("ABS: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, abs(_argument));
+                    break;
+                }
+                case function_ids.COS:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("COS: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, cos(_argument));
+                    break;
+                }
+                case function_ids.SIN:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("SIN: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, sin(_argument));
+                    break;
+                }
+                case function_ids.TAN:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("TAN: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, tan(_argument));
+                    break;
+                }
+                case function_ids.MAX:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("MAX: EXPECTS 2 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, max(_argument, _args[1]));
+                    break;
+                }
+                case function_ids.MIN:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("MIN: EXPECTS 2 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, min(_argument, _args[1]));
+                    break;
+                }
+                case function_ids.FLOOR:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("FLOOR: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, floor(_argument));
+                    break;
+                }
+                case function_ids.CEIL:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("CEIL: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, ceil(_argument));
+                    break;
+                }
+                case function_ids.ROUND:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("ROUND: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, round(_argument));
+                    break;
+                }
+                case function_ids.SIGN:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("SIGN: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, sign(_argument));
+                    break;
+                }
+                case function_ids.ARCTAN:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("ARCTAN: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, arctan(_argument));
+                    break;
+                }
+                case function_ids.ARCTAN2:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("ARCTAN2: EXPECTS 2 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, arctan2(_argument, _args[1]));
+                    break;
+                }
+                case function_ids.SQR:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("SQR: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, sqr(_argument));
+                    break;
+                }
+                case function_ids.RANDOM:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("RANDOM: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, irandom(_argument));
+                    break;
+                }
+                case function_ids.POW:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("POW: EXPECTS 2 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, power(_argument, _args[1]));
+                    break;
+                }
+                case function_ids.LOG:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("LOG: EXPECTS 2 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, logn(_argument, _args[1]));
+                    break;
+                }
+                case function_ids.CLAMP:
+                {
+                    if (_arg_count != 3)
+                    {
+                        notify("CLAMP: EXPECTS 3 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, clamp(_argument, _args[1], _args[2]));
+                    break;
+                }
+                case function_ids.LERP:
+                {
+                    if (_arg_count != 3)
+                    {
+                        notify("LERP: EXPECTS 3 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, lerp(_argument, _args[1], _args[2]));
+                    break;
+                }
+                case function_ids.LENGTHDIRX:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("LENGTHDIRX: EXPECTS 2 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, lengthdir_x(_argument, _args[1]));
+                    break;
+                }
+                case function_ids.LENGTHDIRY:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("LENGTHDIRY: EXPECTS 2 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, lengthdir_y(_argument, _args[1]));
+                    break;
+                }
+                case function_ids.LENGTHDIRZ:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("LENGTHDIRZ: EXPECTS 2 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, lengthdir_z(_argument, _args[1]));
+                    break;
+                }
+                case function_ids.POINTDIR:
+                {
+                    if (_arg_count != 4)
+                    {
+                        notify("POINTDIR: EXPECTS 4 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, point_direction(_argument, _args[1], _args[2], _args[3]));
+                    break;
+                }
+                case function_ids.POINTDIST:
+                {
+                    if (_arg_count != 4)
+                    {
+                        notify("POINTDIST: EXPECTS 4 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, point_distance(_argument, _args[1], _args[2], _args[3]));
+                    break;
+                }
+                case function_ids.POINTDIST3D:
+                {
+                    if (_arg_count != 6)
+                    {
+                        notify("POINTDIST3D: EXPECTS 6 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, point_distance_3d(_argument, _args[1], _args[2], _args[3], _args[4], _args[5]));
+                    break;
+                }
+                case function_ids.MOD:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("MOD: EXPECTS 2 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, _argument mod _args[1]);
+                    break;
+                }
+                case function_ids.DIV:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("DIV: EXPECTS 2 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, _argument div _args[1]);
+                    break;
+                }
+                case function_ids.FRAC:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("FRAC: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, frac(_argument));
+                    break;
+                }
+                case function_ids.RAD:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("RAD: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, degtorad(_argument));
+                    break;
+                }
+                case function_ids.DEG:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("DEG: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, radtodeg(_argument));
+                    break;
+                }
+                ///MATRIX
+                case function_ids.MATRIXSETWORLD:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("MATRIXSETWORLD: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    //show_debug_message("MATRIX SET WORLD!");
+                    array_push(objSystem.program.graphics_build, {kind: "MATRIXSETWORLD", matrix: _argument });
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.MATRIXSETVIEW:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("MATRIXSETVIEW: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(objSystem.program.graphics_build, {kind: "MATRIXSETVIEW", matrix: _argument });
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.MATRIXSETPROJ:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("MATRIXSETPROJ: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(objSystem.program.graphics_build, {kind: "MATRIXSETPROJ", matrix: _argument });
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.MATRIXBUILD:
+                {
+                    if (_arg_count != 9)
+                    {
+                        notify("MATRIXBUILD: EXPECTS 9 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, matrix_build(_argument, _args[1], _args[2], _args[3], _args[4], _args[5], _args[6], _args[7], _args[8]));
+                    break;
+                }
+                case function_ids.MATRIXBUILDID:
+                {
+                    if (_arg_count != 0)
+                    {
+                        notify("MATRIXBUILDID: EXPECTS NO ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, matrix_build_identity());
+                    break;
+                }
+                case function_ids.MATRIXBUILDLOOKAT:
+                {
+                    if (_arg_count != 9)
+                    {
+                        notify("MATRIXBUILDLOOKAT: EXPECTS 9 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, matrix_build_lookat(_argument, _args[1], _args[2], _args[3], _args[4], _args[5], _args[6], _args[7], _args[8]));
+                    break;
+                }
+                case function_ids.MATRIXBUILDPROJORTHO:
+                {
+                    if (_arg_count != 4)
+                    {
+                        notify("MATRIXBUILDPROJORTHO: EXPECTS 4 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, matrix_build_projection_ortho(_argument, _args[1], _args[2], _args[3]));
+                    break;
+                }
+                case function_ids.MATRIXBUILDPROJPERS:
+                {
+                    if (_arg_count != 4)
+                    {
+                        notify("MATRIXBUILDPROJPERS: EXPECTS 4 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, matrix_build_projection_perspective(_argument, _args[1], _args[2], _args[3]));
+                    break;
+                }
+                case function_ids.MATRIXBUILDPROJPERSFOV:
+                {
+                    if (_arg_count != 4)
+                    {
+                        notify("MATRIXBUILDPROJPERSFOV: EXPECTS 4 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, matrix_build_projection_perspective_fov(_argument, _args[1], _args[2], _args[3]));
+                    break;
+                }
+                ///GRAPHICS
+                case function_ids.LINE:
+                {
+                    if (_arg_count != 4)
+                    {
+                        notify("LINE: EXPECTS 4 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(objSystem.program.graphics_build, {kind: "LINE", x1:_args[0], y1:_args[1], x2:_args[2], y2:_args[3]});
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.TRI:
+                {
+                    if (_arg_count != 6)
+                    {
+                        notify("TRI: EXPECTS 6 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(objSystem.program.graphics_build, {kind: "TRI", x1:_args[0], y1:_args[1], x2:_args[2], y2:_args[3], x3:_args[4], y3:_args[5]});
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.RECT:
+                {
+                    if (_arg_count != 4)
+                    {
+                        notify("RECT: EXPECTS 4 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(objSystem.program.graphics_build, {kind: "RECT", x1:_args[0], y1:_args[1], x2:_args[2], y2:_args[3]});
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.CIRC:
+                {
+                    if (_arg_count != 3)
+                    {
+                        notify("CIRC: EXPECTS 3 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(objSystem.program.graphics_build, {kind: "CIRC", x1:_args[0], y1:_args[1], x2:_args[2]});
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.FTRI:
+                {
+                    if (_arg_count != 6)
+                    {
+                        notify("FTRI: EXPECTS 6 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(objSystem.program.graphics_build, {kind: "FTRI", x1:_args[0], y1:_args[1], x2:_args[2], y2:_args[3], x3:_args[4], y3:_args[5]});
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.FRECT:
+                {
+                    if (_arg_count != 4)
+                    {
+                        notify("FRECT: EXPECTS 4 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(objSystem.program.graphics_build, {kind: "FRECT", x1:_args[0], y1:_args[1], x2:_args[2], y2:_args[3]});
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.FCIRC:
+                {
+                    if (_arg_count != 3)
+                    {
+                        notify("FCIRC: EXPECTS 3 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(objSystem.program.graphics_build, {kind: "FCIRC", x1:_args[0], y1:_args[1], x2:_args[2]});
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.DRAWSPRITE:
+                {
+                    if (_arg_count != 4)
+                    {
+                        notify("DRAWSPRITE: EXPECTS 4 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(objSystem.program.graphics_build, {kind: "DRAWSPRITE", sprite:_args[0], frame:_args[1], x:_args[2], y:_args[3]});
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.SETDRAWCOLOR:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("SETDRAWCOLOR: EXPECTS 1 COLOR ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(objSystem.program.graphics_build, {kind: "SETDRAWCOLOR", col:_args[0]});
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.MAKECOLORRGB:
+                {
+                    if (_arg_count != 3)
+                    {
+                        notify("MAKECOLORRGB: EXPECTS 3 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, make_colour_rgb(_argument, _args[1], _args[2]));
+                    break;
+                }
+                case function_ids.GETTIMER:
+                {
+                    if (_arg_count != 0)
+                    {
+                        notify("GETTIMER: EXPECTS NO ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, get_timer());
+                    break;
+                }
+                case function_ids.KEYCHECK:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("KEYCHECK: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    if(is_letter(_argument) || is_digit(_argument))
+                    {
+                        array_push(_values, keyboard_check(ord(_argument)));
+                    }
+                    break;
+                }
+                case function_ids.KEYCHECK_PRESSED:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("KEYCHECK_PRESSED: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    if(is_letter(_argument) || is_digit(_argument))
+                    {
+                        array_push(_values, keyboard_check_pressed(ord(_argument)));
+                    }
+                    break;
+                }
+                case function_ids.KEYCHECK_RELEASED:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("KEYCHECK_RELEASED: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    if(is_letter(_argument) || is_digit(_argument))
+                    {
+                        array_push(_values, keyboard_check_released(ord(_argument)));
+                    }
+                    break;
+                }
+                ///BUFFERS
+                case function_ids.BUFF_CREATE:
+                {
+                    if (_arg_count != 3)
+                    {
+                        notify("BUFF_CREATE: EXPECTS 3 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, buffer_create(_argument, _args[1], _args[2]));
+                    break;
+                }
+                //these five were not in the old parser, check the argument orders are what you want
+                case function_ids.BUFF_SEEK:
+                {
+                    if (_arg_count != 3)
+                    {
+                        notify("BUFF_SEEK: EXPECTS 3 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    buffer_seek(_args[0], _args[1], _args[2]);
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.BUFF_PEEK:
+                {
+                    if (_arg_count != 3)
+                    {
+                        notify("BUFF_PEEK: EXPECTS 3 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, buffer_peek(_args[0], _args[1], _args[2]));
+                    break;
+                }
+                case function_ids.BUFF_READ:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("BUFF_READ: EXPECTS 2 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, buffer_read(_args[0], _args[1]));
+                    break;
+                }
+                case function_ids.BUFF_WRITE:
+                {
+                    if (_arg_count != 3)
+                    {
+                        notify("BUFF_WRITE: EXPECTS 3 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    buffer_write(_args[0], _args[1], _args[2]);
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.BUFF_POKE:
+                {
+                    if (_arg_count != 4)
+                    {
+                        notify("BUFF_POKE: EXPECTS 4 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    buffer_poke(_args[0], _args[1], _args[2], _args[3]);
+                    array_push(_values, 0);
+                    break;
+                }
+                default:
+                {
+                    notify("UNKNOWN FUNCTION", true);
                     return 0;
                 }
-                
-                array_push(_values, sqrt(_argument));
             }
-            if (_func == "SQR")
-            {
-                array_push(_values, sqr(_argument));
-            }
-            if (_func == "ABS")
-            {
-                array_push(_values, abs(_argument));
-            }
-            if (_func == "SIGN")
-            {
-                array_push(_values, sign(_argument));
-            }
-            if (_func == "COS")
-            {
-                array_push(_values, cos(_argument));
-            }
-            if (_func == "TAN")
-            {
-                array_push(_values, tan(_argument));
-            }
-            if (_func == "SIN")
-            {
-                array_push(_values, sin(_argument));
-            }
-            if (_func == "FLOOR")
-            {
-                array_push(_values, floor(_argument));
-            }
-            if (_func == "CEIL")
-            {
-                array_push(_values, ceil(_argument));
-            }
-            if (_func == "ROUND")
-            {
-                array_push(_values, round(_argument));
-            }
-            if (_func == "ARCTAN")
-            {
-                array_push(_values, arctan(_argument));
-            }
-            if(_func == "ARCTAN2")
-            {
-                if(_arg_count != 2)
-                {
-                    notify("FUNCTION: ARCTAN2 EXPECTS 2 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, arctan2(_argument, _args[1]));
-            }
-            if (_func == "RANDOM")
-            {
-                array_push(_values, irandom(_argument));
-            }
-            if (_func == "FRAC")
-            {
-                array_push(_values, frac(_argument));
-            }
-            if(_func == "POW")
-            {
-                if(_arg_count != 2)
-                {
-                    notify("FUNCTION: POW EXPECTS 2 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, power(_argument, _args[1]));
-            }
-            if(_func == "LOG")
-            {
-                if(_arg_count != 2)
-                {
-                    notify("FUNCTION: LOG EXPECTS 2 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, logn(_argument, _args[1]));
-            }
-            if(_func == "MIN")
-            {
-                if(_arg_count != 2)
-                {
-                    notify("FUNCTION: MIN EXPECTS 2 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, min(_argument, _args[1]));
-            }
-            if(_func == "MAX")
-            {
-                if(_arg_count != 2)
-                {
-                    notify("FUNCTION: MAX EXPECTS 2 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, max(_argument, _args[1]));
-            }
-            if(_func == "CLAMP")
-            {
-                if(_arg_count != 3)
-                {
-                    notify("FUNCTION: CLAMP EXPECTS 3 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, clamp(_argument, _args[1], _args[2]));
-            }
-            if(_func == "MOD")
-            {
-                if(_arg_count != 2)
-                {
-                    notify("FUNCTION: MOD EXPECTS 2 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, _argument mod _args[1]);
-            }
-            if(_func == "DIV")
-            {
-                if(_arg_count != 2)
-                {
-                    notify("FUNCTION: DIV EXPECTS 2 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, _argument div _args[1]);
-            }
-            if(_func == "LERP")
-            {
-                if(_arg_count != 3)
-                {
-                    notify("FUNCTION: LERP EXPECTS 3 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, lerp(_argument, _args[1], _args[2]));
-            }
-            if(_func == "RAD")
-            {
-                if(_arg_count != 1)
-                {
-                    notify("FUNCTION: RAD EXPECTS 1 ARGUMENT", true);
-                    return 0;
-                }
-                
-                array_push(_values, degtorad(_argument));
-            }
-            if(_func == "DEG")
-            {
-                if(_arg_count != 1)
-                {
-                    notify("FUNCTION: DEG EXPECTS 1 ARGUMENT", true);
-                    return 0;
-                }
-                
-                array_push(_values, radtodeg(_argument));
-            }
-            if(_func == "LENGTHDIRX")
-            {
-                if(_arg_count != 2)
-                {
-                    notify("FUNCTION: LENGTHDIRX EXPECTS 2 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, lengthdir_x(_argument, _args[1]));
-            }
-            if(_func == "LENGTHDIRY")
-            {
-                if(_arg_count != 2)
-                {
-                    notify("FUNCTION: LENGTHDIRY EXPECTS 2 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, lengthdir_y(_argument, _args[1]));
-            }
-            if(_func == "LENGTHDIRZ")
-            {
-                if(_arg_count != 2)
-                {
-                    notify("FUNCTION: LENGTHDIRZ EXPECTS 2 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, lengthdir_z(_argument, _args[1]));
-            }
-            if(_func == "POINTDIR")
-            {
-                if(_arg_count != 4)
-                {
-                    notify("FUNCTION: PONTDIR EXPECTS 4 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, point_direction(_argument, _args[1], _args[2], _args[3]));
-            }
-            if(_func == "POINTDIST")
-            {
-                if(_arg_count != 4)
-                {
-                    notify("FUNCTION: PONTDIST EXPECTS 4 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, point_distance(_argument, _args[1], _args[2], _args[3]));
-            }
-            if(_func == "POINTDIST3D")
-            {
-                if(_arg_count != 6)
-                {
-                    notify("FUNCTION: PONTDIST3D EXPECTS 6 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, point_distance_3d(_argument, _args[1], _args[2], _args[3], _args[4], _args[5]));
-            }
-            if(_func == "MATRIXSETWORLD")
-            {
-                if(_arg_count != 1)
-                {
-                    notify("FUNCTION: MATRIXSETWORLD EXPECTS 1 ARGUMENT", true);
-                    return 0;
-                }
-                show_debug_message("MATRIX SET WORLD!")
-                array_push(objSystem.program.graphics_build, {kind: "MATRIXSETWORLD", matrix: _argument });
-                array_push(_values, 0);
-                //matrix_set(matrix_world, _argument);
-            }
-            if(_func == "MATRIXSETVIEW")
-            {
-                if(_arg_count != 1)
-                {
-                    notify("FUNCTION: MATRIXSETVIEW EXPECTS 1 ARGUMENT", true);
-                    return 0;
-                }
-                array_push(objSystem.program.graphics_build, {kind: "MATRIXSETVIEW", matrix: _argument });
-                array_push(_values, 0);
-                //matrix_set(matrix_view, _argument);
-            }
-            if(_func == "MATRIXSETPROJ")
-            {
-                if(_arg_count != 1)
-                {
-                    notify("FUNCTION: MATRIXSETPROJ EXPECTS 1 ARGUMENT", true);
-                    return 0;
-                }
-                array_push(objSystem.program.graphics_build, {kind: "MATRIXSETPROJ", matrix: _argument });
-                array_push(_values, 0);
-                
-                //matrix_set(matrix_projection, _argument);
-            }
-            if(_func == "MATRIXBUILD")
-            {
-                if(_arg_count != 9)
-                {
-                    notify("FUNCTION: MATRIXBUILD EXPECTS 9 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, matrix_build(_argument, _args[1], _args[2], _args[3], _args[4], _args[5], _args[6], _args[7], _args[8]));
-            }
-            if(_func == "MATRIXBUILDID")
-            {
-                if(_arg_count != 0)
-                {
-                    notify("FUNCTION: MATRIXBUILDID EXPECTS NO ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, matrix_build_identity());
-            }
-            if(_func == "MATRIXBUILDLOOKAT")
-            {
-                if(_arg_count != 9)
-                {
-                    notify("FUNCTION: MATRIXBUILDLOOKAT EXPECTS 9 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, matrix_build_lookat(_argument, _args[1], _args[2], _args[3], _args[4], _args[5], _args[6], _args[7], _args[8]));
-            }
-            if(_func == "MATRIXBUILDPROJPERS")
-            {
-                if(_arg_count != 4)
-                {
-                    notify("FUNCTION: MATRIXBUILDPROJPERS EXPECTS 4 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, matrix_build_projection_perspective(_argument, _args[1], _args[2], _args[3]));
-            }
-            if(_func == "MATRIXBUILDPROJORTHO")
-            {
-                if(_arg_count != 4)
-                {
-                    notify("FUNCTION: MATRIXBUILDPROJORTHO EXPECTS 4 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, matrix_build_projection_ortho(_argument, _args[1], _args[2], _args[3]));
-            }
-            if(_func == "MATRIXBUILDPROJPERSFOV")
-            {
-                if(_arg_count != 4)
-                {
-                    notify("FUNCTION: MATRIXBUILDPROJPERS EXPECTS 4 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, matrix_build_projection_perspective_fov(_argument, _args[1], _args[2], _args[3]));
-            }
-            ///GRAPHICS
-            if(_func == "LINE")
-            {
-                if(_arg_count != 4)
-                {
-                    notify("FUNCTION: LINE EXPECTS 4 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(objSystem.program.graphics_build, {kind: "LINE", x1:_args[0], y1:_args[1], x2:_args[2], y2:_args[3]});
-                array_push(_values, 0);
-            }
-            if(_func == "TRI")
-            {
-                if(_arg_count != 6)
-                {
-                    notify("FUNCTION: TRI EXPECTS 6 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(objSystem.program.graphics_build, {kind: "TRI", x1:_args[0], y1:_args[1], x2:_args[2], y2:_args[3], x3:_args[4], y3:_args[5]});
-                array_push(_values, 0);
-            }
-            if(_func == "FTRI")
-            {
-                if(_arg_count != 6)
-                {
-                    notify("FUNCTION: FTRI EXPECTS 6 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(objSystem.program.graphics_build, {kind: "FTRI", x1:_args[0], y1:_args[1], x2:_args[2], y2:_args[3], x3:_args[4], y3:_args[5]});
-                array_push(_values, 0);
-            }
-            if(_func == "RECT")
-            {
-                if(_arg_count != 4)
-                {
-                    notify("FUNCTION: RECT EXPECTS 4 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(objSystem.program.graphics_build, {kind: "RECT", x1:_args[0], y1:_args[1], x2:_args[2], y2:_args[3]});
-                array_push(_values, 0);
-            }
-            if(_func == "FRECT")
-            {
-                if(_arg_count != 4)
-                {
-                    notify("FUNCTION: RECT EXPECTS 4 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(objSystem.program.graphics_build, {kind: "FRECT", x1:_args[0], y1:_args[1], x2:_args[2], y2:_args[3]});
-                array_push(_values, 0);
-            }
-            if(_func == "CIRC")
-            {
-                if(_arg_count != 3)
-                {
-                    notify("FUNCTION: RECT EXPECTS 3 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(objSystem.program.graphics_build, {kind: "CIRC", x1:_args[0], y1:_args[1], x2:_args[2]});
-                array_push(_values, 0);
-            }
-            if(_func == "FCIRC")
-            {
-                if(_arg_count != 3)
-                {
-                    notify("FUNCTION: RECT EXPECTS 3 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(objSystem.program.graphics_build, {kind: "FCIRC", x1:_args[0], y1:_args[1], x2:_args[2]});
-                array_push(_values, 0);
-            }
-            if(_func == "SETDRAWCOLOR")
-            {
-                if(_arg_count != 1)
-                {
-                    notify("FUNCTION: SETDRAWCOLOR EXPECTS 1 COLOR ARGUMENT", true);
-                    return 0;
-                }
-                
-                array_push(objSystem.program.graphics_build, {kind: "SETDRAWCOLOR", col:_args[0]});
-                array_push(_values, 0);
-            }
-            if(_func == "DRAWSPRITE")
-            {
-                if(_arg_count != 4)
-                {
-                    notify("FUNCTION: DRAWSPRITE EXPECTS 4 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(objSystem.program.graphics_build, {kind: "DRAWSPRITE", sprite:_args[0], frame:_args[1], x:_args[2], y:_args[3]});
-                array_push(_values, 0);
-            }
-            if(_func == "MAKECOLORRGB")
-            {
-                if(_arg_count != 3)
-                {
-                    notify("FUNCTION: MAKECOLORRGB EXPECTS 3 ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, make_colour_rgb(_args[0], _args[1], _args[2]));
-            }
-            if(_func == "GETTIMER")
-            {
-                if(_arg_count != 0)
-                {
-                    notify("FUNCTION: GETTIMER EXPECTS NO ARGUMENTS", true);
-                    return 0;
-                }
-                
-                array_push(_values, get_timer());
-            }
-            if(_func == "KEYCHECK")
-            {
-                if(_arg_count != 1)
-                {
-                    notify("FUNCTION: KEYCHECK EXPECTS 1 ARGUMENT", true);
-                    return 0;
-                }
-                
-                if(is_letter(_argument) || is_digit(_argument))
-                array_push(_values, keyboard_check(ord(_argument)));
-            }
-            if(_func == "KEYCHECK_PRESSED")
-            {
-                if(_arg_count != 1)
-                {
-                    notify("FUNCTION: KEYCHECK_PRESSED EXPECTS 1 ARGUMENT", true);
-                    return 0;
-                }
-                
-                if(is_letter(_argument) || is_digit(_argument))
-                array_push(_values, keyboard_check_pressed(ord(_argument)));
-            }
-            if(_func == "KEYCHECK_RELEASED")
-            {
-                if(_arg_count != 1)
-                {
-                    notify("FUNCTION: KEYCHECK_RELEASED EXPECTS 1 ARGUMENT", true);
-                    return 0;
-                }
-                
-                if(is_letter(_argument) || is_digit(_argument))
-                array_push(_values, keyboard_check_released(ord(_argument)));
-            }
-            
         }
         else if (_token.kind == "UNARY" && _token.value == "NEG")
         {
@@ -1729,17 +1944,16 @@ function notify(_text, _halt = false)
 /// @returns {struct|undefined} the pixel top and height of a program line in the pane
 function program_line_bounds(_line_num, _width)
 {
-    var _lines = objSystem.program.lines;
-    var _count = array_length(_lines);
+    var _count = array_length(objSystem.program.lines);
     var _prefix = "";
     
     for (var _i = 0; _i < _count; _i++)
     {
-        _prefix += (_prefix == "" ? "" : "\r\n") + _lines[_i];
+        _prefix += (_prefix == "" ? "" : "\r\n") + objSystem.program.lines[_i];
         
-        if (get_line_number(_lines[_i]) == _line_num)
+        if (get_line_number(objSystem.program.lines[_i]) == _line_num)
         {
-            var _line_h = string_height_ext(_lines[_i], 24, _width);
+            var _line_h = string_height_ext(objSystem.program.lines[_i], 24, _width);
             var _end_h  = string_height_ext(_prefix, 24, _width);
             return { top: _end_h - _line_h, height: _line_h };
         }
