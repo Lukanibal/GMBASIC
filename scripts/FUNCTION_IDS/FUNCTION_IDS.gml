@@ -1,3 +1,4 @@
+///GMBASIC Function ID Enum
 enum function_ids
 {
     SQRT,
