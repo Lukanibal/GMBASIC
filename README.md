@@ -1,5 +1,5 @@
 # GMBASIC Language Reference
-CURRENT LANGUAGE SPEC AS OF v26.11.22.1
+CURRENT LANGUAGE SPEC AS OF v26.11.23.0
 
 A LIVE DEMO OF GMBASIC CAN BE FOUND ON ITCH.IO, YOU CAN ALSO DOWNLOAD A WINDOWS BUILD OF IT [HERE!](https://lukanspellweaver.itch.io/gmbasic)
 
@@ -336,6 +336,25 @@ A simple example of `BUFFER`s in use:
 |`BUFF_WRITE(BUFFER, TYPE, VALUE)`| writes `VALUE` of `TYPE` into `BUFFER`'s current seek position and moves the seek accordingly.|
 |`BUFF_READ(BUFFER, TYPE)`| returns the value at `BUFFER`'s current seek position, be sure your `TYPE` is correct!|
 |`BUFF_DELETE(BUFFER)`| Deletes `BUFFER` and frees that memory.|
+|`BUFF_SAVE(BUFFER, FILENAME)`| Save the contents of `BUFFER` to `FILENAME`. |
+|`BUFF_LOAD(FILENAME)`| Returns the contents of `FILENAME` as a buffer. |
+
+## Files  
+`GMBASIC` allows for you to access up to `10` files at a time!
+Store a file handle in a variable like so:
+```basic
+10 LET X = FOPEN("FILE.TXT")
+```
+This stores the file handle in variable `X`, which can then be used by all of the file functions below!  
+| Function| Description |
+|---|---|
+|`FOPEN(FILENAME, [MODE])`| Returns a file handle for `FILENAME`, optional `MODE` can be `"W"`, `"R"`, or `"A"` for `WRITE`, `READ`, or `APPEND` respectively. |
+|`FREAD_LINE_STRING(FILEHANDLE)`| Returns the next line of the file and increases the read position for the next operation.|
+|`FREAD_LINE_NUMBER(FILEHANDLE)`| Returns the next line of the file and increases the read position for the next operation.|
+|`FWRITE_LINE_STRING(FILEHANDLE, VALUE)`| Writes `VALUE` to `FILEHANDLE` as a `STRING` and increases the write positiong for the next operation.|
+|`FWRITE_LINE_NUMBER(FILEHANDLE, VALUE)`| Writes `VALUE` to `FILEHANDLE` as a `NUMBER` and increases the write positiong for the next operation.|
+|`FCLOSE(FILEHANDLE)`| Closes the file handle `FILEHANDLE`, no further operations can be done after it's closed!(until it's reopened!)|
+|`FEXISTS(FILENAME)`| Returns whether a file with `FILENAME` exists.|
 
 ## Some Examples
 I struggle writing BASIC, which I know is funny, but here are some examples of the things I struggle to retain the most, array usage and loops.  
