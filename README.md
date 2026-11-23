@@ -1,3 +1,4 @@
+![GMBASIC Logo](options/main/template_icon.png)
 # GMBASIC Language Reference
 CURRENT LANGUAGE SPEC AS OF v26.11.23.0
 
