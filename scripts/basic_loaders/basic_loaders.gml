@@ -213,8 +213,8 @@ function load_project(_compiled = false)
     
     if(_compiled)
     {
+        load_GBCOM();
         objSystem.running = true;
-        objSystem.program.tokens = tokenize(objSystem.program);
         objSystem.program.start();
     }
 }

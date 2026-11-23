@@ -78,5 +78,6 @@ global.function_bridge =
     "HTTP_GET" : function_ids.HTTP_GET, 
     "HTTP_POST" : function_ids.HTTP_POST, 
     "HTTP_GET_FILE" : function_ids.HTTP_GET_FILE, 
+    "FEXISTS" : function_ids.FEXISTS, 
     
 }

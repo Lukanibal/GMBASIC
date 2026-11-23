@@ -78,5 +78,6 @@ enum function_ids
     BUFF_LOAD, 
     HTTP_GET, 
     HTTP_POST,
-    HTTP_GET_FILE
+    HTTP_GET_FILE,
+    FEXISTS,
 }

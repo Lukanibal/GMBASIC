@@ -196,11 +196,12 @@ else
                 url_open_full("https://lukanibal.github.io/GMBASIC", "_top", _options);
             }
            else
-           if(typed_text == "NEW")
+           if(string_count("NEW ", typed_text) > 0)
            {
                 typed_text = "";
                 position = 1; 
-                project = new PROJECT(string_upper(get_save_filename_ext("", "", working_directory, "Create a Project Directory")));
+                var _n = string_replace(typed_text, "NEW ", ""); 
+                project = new PROJECT(_n, string_upper(get_save_filename_ext("", "", working_directory, "Create a Project Directory")));
                 program = new SCRIPT();
                 program.add_line("10 PRINT \"HELLO WORLD!\"");
                 program.add_line("20 GOTO 10");
@@ -252,6 +253,14 @@ else
                 _handled = true;
             }
            else
+            if(typed_text == "BUILD")
+           {
+                typed_text = "";
+                position = 1;
+                compile();
+                _handled = true;
+            }
+            else
             if(string_count("AUTO", typed_text) && !array_contains(global.function_names, string_letters(typed_text)))
            {
                 

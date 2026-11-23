@@ -6,6 +6,7 @@
     {"name":"objSystemNotification","order":7,"path":"objects/objSystemNotification/objSystemNotification.yy",},
     {"name":"rmRunnerOnly","order":13,"path":"rooms/rmRunnerOnly/rmRunnerOnly.yy",},
     {"name":"basic_loaders","order":10,"path":"scripts/basic_loaders/basic_loaders.yy",},
+    {"name":"COMPILATION","order":17,"path":"scripts/COMPILATION/COMPILATION.yy",},
     {"name":"debug","order":8,"path":"scripts/debug/debug.yy",},
     {"name":"FUNCTION_IDS","order":15,"path":"scripts/FUNCTION_IDS/FUNCTION_IDS.yy",},
     {"name":"FUNCTION_MAP","order":16,"path":"scripts/FUNCTION_MAP/FUNCTION_MAP.yy",},

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"COMPILATION",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"COMPILATION",
+  "parent":{
+    "name":"BASIC",
+    "path":"BASIC.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

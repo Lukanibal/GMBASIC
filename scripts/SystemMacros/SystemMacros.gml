@@ -14,7 +14,7 @@ function SCRIPT(_text = "") constructor
     func_cache = [];
     if_cache = [];
     let_cache = [];
-    output = $"GMBASIC v26.11.22.1";
+    output = $"GMBASIC v26.11.23.0";
     variables =  {};
     pc = 0;
     running = false;
@@ -1836,7 +1836,56 @@ function evaluate_postfix(_pf)
                     
                     array_push(_values, 0);
                     break;
-                } 
+                }
+                case function_ids.FWRITE_LINE_NUMBER:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("FWRITE_LINE_NUMBER: EXPECTS 2 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    file_text_write_real(_args[0], real(_args[1]));
+                    file_text_writeln(_args[0]);
+                    
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.FREAD_LINE_STRING:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("FREAD_LINE_STRING: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, file_text_read_string(_args[0]));
+                    file_text_readln(_args[0]);
+                    break;
+                }
+                case function_ids.FREAD_LINE_NUMBER:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("FREAD_LINE_NUMBER: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, file_text_read_real(_args[0]));
+                    file_text_readln(_args[0]);
+                    break;
+                }
+                case function_ids.FEXISTS:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("FEXISTS: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, file_exists(_args[0]));
+                    break;
+                }
                 default:
                 {
                     notify("UNKNOWN FUNCTION", true);
@@ -1844,7 +1893,7 @@ function evaluate_postfix(_pf)
                 }
             }
         }
-        else if (_token.kind == "UNARY" && _token.value == "NEG")
+        else if (_token.kind == "UNARY")
         {
             if (array_length(_values) < 1)
             {

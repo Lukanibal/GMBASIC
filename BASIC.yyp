@@ -27,6 +27,7 @@
     {"id":{"name":"rmConsole","path":"rooms/rmConsole/rmConsole.yy",},},
     {"id":{"name":"rmRunnerOnly","path":"rooms/rmRunnerOnly/rmRunnerOnly.yy",},},
     {"id":{"name":"basic_loaders","path":"scripts/basic_loaders/basic_loaders.yy",},},
+    {"id":{"name":"COMPILATION","path":"scripts/COMPILATION/COMPILATION.yy",},},
     {"id":{"name":"debug","path":"scripts/debug/debug.yy",},},
     {"id":{"name":"FUNCTION_IDS","path":"scripts/FUNCTION_IDS/FUNCTION_IDS.yy",},},
     {"id":{"name":"FUNCTION_MAP","path":"scripts/FUNCTION_MAP/FUNCTION_MAP.yy",},},
