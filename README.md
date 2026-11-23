@@ -332,6 +332,7 @@ A simple example of `BUFFER`s in use:
 |`BUFF_SEEK(BUFFER,  BASE, OFFSET)`| returns the new seek position of the `BUFFER`.|
 |`BUFF_PEEK(BUFFER,  OFFSET, TYPE)`| returns the value stored in the `BUFFER` at `OFFSET`, or `undefined` if it fails.|
 |`BUFF_POKE(BUFFER,  OFFSET, TYPE, VALUE)`| poke `VALUE` of `TYPE` into the `BUFFER` at `OFFSET`.|
+|`BUFF_TELLBUFFER)`| returns the seek position of `BUFFER`.|
 |`BUFF_WRITE(BUFFER, TYPE, VALUE)`| writes `VALUE` of `TYPE` into `BUFFER`'s current seek position and moves the seek accordingly.|
 |`BUFF_READ(BUFFER, TYPE)`| returns the value at `BUFFER`'s current seek position, be sure your `TYPE` is correct!|
 |`BUFF_DELETE(BUFFER)`| Deletes `BUFFER` and frees that memory.|
@@ -386,3 +387,4 @@ Using arrays and functions together to draw circles of different colors:
 ## Credit
 Written By Lukan Spellweaver, adapted from the [GameMaker Documentation](https://manual.gamemaker.io)  
 Adapted to HTML from my Markdown by Claude  
+Font in HTML version is [CQ Mono, by Chequered Ink](https://www.dafont.com/cq-mono.font), same font the project itself uses
