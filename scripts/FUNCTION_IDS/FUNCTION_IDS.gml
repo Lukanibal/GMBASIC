@@ -65,4 +65,18 @@ enum function_ids
     BUFF_WRITE,
     BUFF_POKE,
     BUFF_DELETE,
+    BUFF_TELL,
+    
+    ///FILES
+    FOPEN,
+    FREAD_LINE_STRING,
+    FREAD_LINE_NUMBER,
+    FWRITE_LINE_STRING,
+    FWRITE_LINE_NUMBER,
+    FCLOSE,
+    BUFF_SAVE,
+    BUFF_LOAD, 
+    HTTP_GET, 
+    HTTP_POST,
+    HTTP_GET_FILE
 }

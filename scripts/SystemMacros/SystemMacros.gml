@@ -1741,7 +1741,99 @@ function evaluate_postfix(_pf)
                         notify("BUFF_DELETE: EXPECTS 1 ARGUMENT", true);
                         return 0;
                     }
-                    buffer_delete(_args[0])
+                    buffer_delete(_args[0]);
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.BUFF_TELL:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("BUFF_TELL: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, buffer_tell(_args[0]));
+                    break;
+                } 
+                case function_ids.BUFF_SAVE:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("BUFF_SAVE: EXPECTS 2 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    buffer_save(_args[0], _args[1]);
+                    array_push(_values, 0);
+                    break;
+                } 
+                case function_ids.BUFF_LOAD:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("BUFF_SAVE: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, buffer_load(_args[0]));
+                    break;
+                } 
+                case function_ids.FOPEN:
+                {
+                    if (_arg_count < 1)
+                    {
+                        notify("FOPEN: EXPECTS AT LEAST 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    if(_arg_count > 1)
+                    {
+                        if(_args[1] == "W")
+                        {
+                            file_text_open_write(_args[0]);
+                        }
+                        if(_args[1] == "R")
+                        {
+                            file_text_open_read(_args[0]);
+                        }
+                        if(_args[1] == "A")
+                        {
+                            file_text_open_append(_args[0]);
+                        }
+                    }
+                    else
+                    {
+                        file_text_open_write(_args[0]);
+                    }
+                    
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.FCLOSE:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("FCLOSE: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    file_text_close(_args[0])
+                    
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.FWRITE_LINE_STRING:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("FWRITE_LINE_STRING: EXPECTS 2 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    file_text_write_string(_args[0], _args[1]);
+                    file_text_writeln(_args[0]);
+                    
                     array_push(_values, 0);
                     break;
                 } 

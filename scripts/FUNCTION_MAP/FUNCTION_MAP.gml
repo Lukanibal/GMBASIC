@@ -65,5 +65,18 @@ global.function_bridge =
     "BUFF_WRITE" : function_ids.BUFF_WRITE,
     "BUFF_POKE" : function_ids.BUFF_POKE,
     "BUFF_DELETE" : function_ids.BUFF_DELETE,
+    "BUFF_TELL" : function_ids.BUFF_TELL,
+    
+    "FOPEN" : function_ids.FOPEN, 
+    "FREAD_LINE_STRING" : function_ids.FREAD_LINE_STRING, 
+    "FREAD_LINE_NUMBER" : function_ids.FREAD_LINE_NUMBER,
+    "FWRITE_LINE_STRING" : function_ids.FWRITE_LINE_STRING,  
+    "FWRITE_LINE_NUMBER" : function_ids.FREAD_LINE_NUMBER, 
+    "FCLOSE" : function_ids.FCLOSE, 
+    "BUFF_SAVE" : function_ids.BUFF_SAVE, 
+    "BUFF_LOAD" : function_ids.BUFF_LOAD, 
+    "HTTP_GET" : function_ids.HTTP_GET, 
+    "HTTP_POST" : function_ids.HTTP_POST, 
+    "HTTP_GET_FILE" : function_ids.HTTP_GET_FILE, 
     
 }
