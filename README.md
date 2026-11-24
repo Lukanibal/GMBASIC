@@ -1,5 +1,6 @@
+![GMBASIC Logo](options/main/template_icon.png)
 # GMBASIC Language Reference
-CURRENT LANGUAGE SPEC AS OF v26.11.23.0
+CURRENT LANGUAGE SPEC AS OF v26.11.24.0
 
 A LIVE DEMO OF GMBASIC CAN BE FOUND ON ITCH.IO, YOU CAN ALSO DOWNLOAD A WINDOWS BUILD OF IT [HERE!](https://lukanspellweaver.itch.io/gmbasic)
 
@@ -78,6 +79,13 @@ DIM A(9)
 LET A(0) = X
 ```
 Arrays have a limit of `1000000` or `ONE MILLION` entries currently.
+Arrays can be maniuplated by the following functions:
+| Function | Description |
+|---|---|
+|`ARRAY_PUSH(ARRAY, VALUE)`|Adds a new entry to the end of `ARRAY` and sets it to `VALUE`|  
+|`ARRAY_POP(ARRAY)`|Returns the value at the end of `ARRAY` and removes it from `ARRAY`|  
+|`ARRAY_SHIFT(ARRAY)`|Returns the value at the start of `ARRAY` and removes it from `ARRAY`|  
+|`ARRAY_SHUFFLE(ARRAY)`|Shuffles the values of `ARRAY`|  
 
 ## Math
 Simple expressions can be done via the `LET` command, for example
@@ -197,8 +205,17 @@ The Y Vector INCREASES down the screen.
 | `FCIRC(X, Y, R)`| Draws a filled circle at `(X, Y)` with a radius of `R`|
 | `TRI(X1, Y1, X2, Y2, X3, Y3)`| Draws a triangle outline with the points at `(X1, Y1)`, `(X2, Y2)`, and `(X3, Y3)` respectively|
 | `FTRI(X1, Y1, X2, Y2, X3, Y3)`| Draws a filled triangle with the points at `(X1, Y1)`, `(X2, Y2)`, and `(X3, Y3)` respectively|
-| `DRAWSPRITE(SPRITE, FRAME, X, Y)`| Draws frame `FRAME` of the `SPRITE` at `(X, Y)`. Frames start at `0`.|
 | `MAKECOLORRGB(R, G, B)`| Returns a color with the rbg values set to `RGB` respectivly.|
+
+### Drawing Sprites  
+The following functions can be used to display art loaded into GMBASIC via the `SPRITE` command:  
+| Function | Description |
+|---|---|
+| `DRAWSPRITE(SPRITE, FRAME, X, Y)`| Draws frame `FRAME` of the `SPRITE` at `(X, Y)`. Frames start at `0`.|
+| `DRAWSPRITE_EXT(SPRITE, FRAME, X, Y, XSCALE, YSCALE, ROTATION, COLOR, ALPHA) `| Draws frame `FRAME` of `SPRITE` at position `(X, Y)`. `XSCALE` and `YSCALE` control horizontal and vertical size multiplicatively; for example, `2` doubles the size. `ROTATION` starts at `0` and goes counter clockwise in degrees, the origin point is always `(X, Y)`. `COLOR` is the draw color to use for the image, this overrules the set draw color in the program. `ALPHA` is the transparency of the image. Frames start at `0`. |
+| `DRAWSPRITE_POS(SPRITE, FRAME, X1, Y1, X2, Y2, X3, Y3, X4, Y4, ALPHA)`| Draws frame `FRAME` of the `SPRITE` distorted over `(X1, Y1)`, `(X2, Y2)`, `(X3, Y3)`, and `(X4, Y4)`. `ALPHA` is the transparency of the image. Frames start at `0`.|
+| `DRAWSPRITE_STRETCHED(SPRITE, FRAME, X, Y, WIDTH, HEIGHT)`| Draws frame `FRAME` of the `SPRITE` at `(X, Y)` stretched to be `WIDTH` x `HEIGHT`. Frames start at `0`.|
+
 
 ## Colors
 There are 16 colors that come packaged with **GMBASIC**
@@ -324,7 +341,7 @@ A simple example of `BUFFER`s in use:
 ```
 
 >[!NOTE]
->in all signed buffer data type, `0` is considered a positive number!
+>For all signed buffer data types, `0` is considered a positive number!
 
 | Function| Description |
 |---|---|
@@ -355,6 +372,21 @@ This stores the file handle in variable `X`, which can then be used by all of th
 |`FWRITE_LINE_NUMBER(FILEHANDLE, VALUE)`| Writes `VALUE` to `FILEHANDLE` as a `NUMBER` and increases the write positiong for the next operation.|
 |`FCLOSE(FILEHANDLE)`| Closes the file handle `FILEHANDLE`, no further operations can be done after it's closed!(until it's reopened!)|
 |`FEXISTS(FILENAME)`| Returns whether a file with `FILENAME` exists.|
+
+## Miscellany
+Various Functions that don't have enough sister functions for their own section yet:
+| Function| Description |
+|---|---|
+|`HTTP_GET(CALLBACK_VAR, URL)`| Sends a GET request to `URL` and stores the response in `CALLBACK_URL` asyncronously. See below example for usage.|
+
+An example of how to use `HTTP_GET`:
+```basic
+10 LET RESP = "WAITING"
+20 LET ID = HTTP_GET("RESP", "http://example.com/")
+30 VSYNC
+40 IF RESP = "WAITING" THEN GOTO 30
+50 PRINT "DONE!"
+```
 
 ## Some Examples
 I struggle writing BASIC, which I know is funny, but here are some examples of the things I struggle to retain the most, array usage and loops.  
