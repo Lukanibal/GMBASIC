@@ -72,6 +72,18 @@ for (var _i = 0; _i < _len; _i++)
     {
         draw_sprite_ext(_item.sprite, _item.frame, _item.x, _item.y, 1, 1, 0, graphics_color, 1.0);
     }
+    else if (_item.kind == "DRAWSPRITE_EXT")
+    {
+        draw_sprite_ext(_item.sprite, _item.frame, _item.x, _item.y, _item.xscale, _item.yscale, _item.rotation, _item.color, _item.alpha);
+    }
+    else if (_item.kind == "DRAWSPRITE_POS")
+    {
+        draw_sprite_pos(_item.sprite, _item.frame, _item.x1, _item.y1, _item.x2, _item.y2, _item.x3, _item.y3,_item.x4, _item.y4, _item.alpha);
+    }
+    else if (_item.kind == "DRAWSPRITE_STRETCHED")
+    {
+        draw_sprite_stretched(_item.sprite, _item.frame, _item.x1, _item.y1, _item.width, _item.height);
+    }
 }
 
 surface_reset_target();

@@ -81,4 +81,18 @@ enum function_ids
     HTTP_POST,
     HTTP_GET_FILE,
     FEXISTS,
+    
+    //more sprite funcs
+    DRAWSPRITE_EXT, 
+    DRAWSPRITE_STRETCHED,
+    DRAWSPRITE_POS,
+    DRAWSPRITE_PART,
+    DRAWSPRITE_GENERAL,
+    
+    //Array Funcs
+    ARRAY_PUSH,
+    ARRAY_POP,
+    ARRAY_SHIFT,
+    ARRAY_SHUFFLE
+    
 }

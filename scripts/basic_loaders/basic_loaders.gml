@@ -126,7 +126,7 @@ function load_project(_compiled = false)
     
     if(!_compiled)
     {
-        _filename = get_open_filename("GMBASIC PROJECT|*.BAS;", "");
+        _filename = get_open_filename("GMBASIC FILE|*.BAS;*.bas|GMBASIC Project|*.GMBP", "");
     }
     else 
     {
@@ -134,6 +134,23 @@ function load_project(_compiled = false)
     }
     
     if (_filename == "") return;
+    
+    var _fpath = filename_dir(_filename);
+    var _info = undefined;
+    
+    if(string_upper(filename_ext(_filename)) == ".GMBP")
+    {
+        var _gmbp = file_text_open_read(_filename);
+        if (_gmbp == -1)
+        {
+            notify("COULD NOT OPEN PROJECT FILE");
+            return;
+        }
+        
+        _info = json_parse(file_text_read_string(_gmbp));
+        file_text_close(_gmbp);
+        _filename = _fpath + "/MAIN.BAS";
+    }
     
     var _file = file_text_open_read(_filename);
     if (_file == -1)
@@ -184,26 +201,32 @@ function load_project(_compiled = false)
     objSystem.program = _program;
     objSystem.program.loaded = true;
     
-    var _fpath = string_replace(_filename, "MAIN.BAS", "")
+    if(!is_undefined(_info))
+    {
+        objSystem.project = new PROJECT(_info.name, _fpath, true);
+        objSystem.project.version = _info.version;
+    }
     
     ///SPRITES LOADING
-    if(directory_exists(_fpath+"/assets/sprites/"))
+    var _sprite_dir = _fpath + "/assets/sprites/";
+    if(directory_exists(_sprite_dir))
     {
-        var _file_name = file_find_first(_fpath+"/assets/sprites/*.json", fa_none);
+        var _file_name = file_find_first(_sprite_dir + "*.json", fa_none);
         while (_file_name != "")
         {
-            var _json_file = file_text_open_read(_fpath+"/assets/sprites/"+_file_name);
+            var _json_file = file_text_open_read(_sprite_dir + _file_name);
             var _json = json_parse(file_text_read_string(_json_file));
+            file_text_close(_json_file);
             
-            objSystem.sprites[$ _json.name] = sprite_add(_json.source_path, _json.frames, false, false, 0, 0);
+            var _png_path = _sprite_dir + $"{_json.name}_{_json.frames}.png";
+            objSystem.sprites[$ _json.name] = sprite_add(_png_path, _json.frames, false, false, 0, 0);
             objSystem.sprite_info[$ _json.name] = 
             {
                 name:_json.name,
-                source_path: _json.name+$"/assets/sprites/{_json.name}_{_json.frames}.png",
+                source_path: _png_path,
                 frames: _json.frames
             };
             notify($"SPRITE {_json.name} LOADED");
-            file_text_close(_json_file);
             
             _file_name = file_find_next();
         }

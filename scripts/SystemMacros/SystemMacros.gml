@@ -14,7 +14,7 @@ function SCRIPT(_text = "") constructor
     func_cache = [];
     if_cache = [];
     let_cache = [];
-    output = $"GMBASIC v26.11.23.0";
+    output = $"GMBASIC v26.11.24.0";
     variables =  {};
     pc = 0;
     running = false;
@@ -481,7 +481,7 @@ function SCRIPT(_text = "") constructor
                         }
                     }
                 }
-                else if (array_contains(global.function_names, _token.value))
+                else if (variable_struct_exists(global.function_bridge, _token.value))
                 {
                     var _postfix = to_postfix(self.tokens, _i);
                 
@@ -708,7 +708,7 @@ function get_variable(_var_name)
 {
     var _reserved = objSystem.RESERVED.WORDS;
     
-    if (array_contains(global.function_names, string_upper(_var_name)))
+    if (variable_struct_exists(global.function_bridge, string_upper(_var_name)))
     {
         notify("VARIABLE NAME CANNOT BE FUNCTION NAME");
         return undefined;
@@ -831,7 +831,7 @@ function to_postfix(_tokens, _start)
                 return [];
             }
             
-            if(array_contains(global.function_names, string_upper(_value)))
+            if(variable_struct_exists(global.function_bridge, string_upper(_value)))
             {
                 var _split = split_arguments(_tokens, _i + 2, _close);
                 
@@ -1884,6 +1884,99 @@ function evaluate_postfix(_pf)
                     }
                     
                     array_push(_values, file_exists(_args[0]));
+                    break;
+                }
+                case function_ids.DRAWSPRITE_EXT:
+                {
+                    if (_arg_count != 9)
+                    {
+                        notify("DRAWSPRITE_EXT: EXPECTS 9 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(objSystem.program.graphics_build, {kind: "DRAWSPRITE_EXT", sprite:_args[0], frame:_args[1], x:_args[2], y:_args[3], xscale:_args[4], yscale:_args[5], rotation:_args[6], color:_args[7], alpha:_args[8]});
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.DRAWSPRITE_POS:
+                {
+                    if (_arg_count != 11)
+                    {
+                        notify("DRAWSPRITE_POS: EXPECTS 11 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(objSystem.program.graphics_build, {kind: "DRAWSPRITE_POS", sprite:_args[0], frame:_args[1], x1:_args[2], y1:_args[3], x2:_args[4], y2:_args[5], x3:_args[6], y3:_args[7], x4:_args[8], y4:_args[9], alpha:_args[10]});
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.DRAWSPRITE_STRETCHED:
+                {
+                    if (_arg_count != 6)
+                    {
+                        notify("DRAWSPRITE_EXT: EXPECTS 6 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(objSystem.program.graphics_build, {kind: "DRAWSPRITE_STRETCHED", sprite:_args[0], frame:_args[1], x:_args[2], y:_args[3], width:_args[4], height:_args[5]});
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.ARRAY_PUSH:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("ARRAY_PUSH: EXPECTS 2 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    array_push(_args[0], _args[1]);
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.ARRAY_POP:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("ARRAY_POP: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, array_pop(_args[0]));
+                    break;
+                }
+                case function_ids.ARRAY_SHIFT:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("ARRAY_SHIFT: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, array_shift(_args[0]));
+                    break;
+                }
+                case function_ids.ARRAY_SHUFFLE:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("ARRAY_SHUFFLE: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    
+                    array_push(_values, array_shuffle(_args[0]));
+                    break;
+                }    
+                case function_ids.HTTP_GET:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("HTTP_GET: EXPECTS 2 ARGUMENTS", true);
+                        return 0;
+                    }
+                    var _id = http_get(_args[1]);
+                    array_push(objSystem.async_callbacks, {name : _args[0], id: _id});
+                    array_push(_values, _id);
                     break;
                 }
                 default:

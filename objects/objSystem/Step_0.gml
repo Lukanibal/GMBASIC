@@ -196,15 +196,24 @@ else
                 url_open_full("https://lukanibal.github.io/GMBASIC", "_top", _options);
             }
            else
-           if(string_count("NEW ", typed_text) > 0)
+           if(string_pos("NEW ", typed_text) == 1)
            {
+                var _n = string_replace(typed_text, "NEW ", ""); 
                 typed_text = "";
                 position = 1; 
-                var _n = string_replace(typed_text, "NEW ", ""); 
-                project = new PROJECT(_n, string_upper(get_save_filename_ext("", "", working_directory, "Create a Project Directory")));
-                program = new SCRIPT();
-                program.add_line("10 PRINT \"HELLO WORLD!\"");
-                program.add_line("20 GOTO 10");
+                
+                var _path = get_save_filename_ext("", "", working_directory, "Create a Project Directory");
+                if(_path != "")
+                {
+                    project = new PROJECT(_n, string_upper(_path));
+                    
+                    if(directory_exists(project.filepath))
+                    {
+                        program.add_line("10 PRINT \"HELLO WORLD!\"");
+                        program.add_line("20 GOTO 10");
+                        project.to_file();
+                    }
+                }
                 _handled = true;
            }
            else
@@ -261,7 +270,7 @@ else
                 _handled = true;
             }
             else
-            if(string_count("AUTO", typed_text) && !array_contains(global.function_names, string_letters(typed_text)))
+            if(string_count("AUTO", typed_text))
            {
                 
                 var _end = real(string_digits(typed_text))

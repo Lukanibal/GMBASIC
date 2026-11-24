@@ -79,5 +79,16 @@ global.function_bridge =
     "HTTP_POST" : function_ids.HTTP_POST, 
     "HTTP_GET_FILE" : function_ids.HTTP_GET_FILE, 
     "FEXISTS" : function_ids.FEXISTS, 
+    //more sprite funcs
+    "DRAWSPRITE_EXT" : function_ids.DRAWSPRITE_EXT,
+    "DRAWSPRITE_STRETCHED" : function_ids.DRAWSPRITE_STRETCHED,
+    "DRAWPSRITE_POS" : function_ids.DRAWSPRITE_POS,
+    "DRAWPSRITE_PART" : function_ids.DRAWSPRITE_PART,
+    "DRAWPSRITE_GENERAL" : function_ids.DRAWSPRITE_GENERAL,
+    ///ARRAYS
+    "ARRAY_PUSH" : function_ids.ARRAY_PUSH,
+    "ARRAY_POP" : function_ids.ARRAY_POP,
+    "ARRAY_SHIFT" : function_ids.ARRAY_SHIFT,
+    "ARRAY_SHUFFLE" : function_ids.ARRAY_SHUFFLE,
     
 }
