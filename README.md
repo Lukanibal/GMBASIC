@@ -377,7 +377,7 @@ This stores the file handle in variable `X`, which can then be used by all of th
 Various Functions that don't have enough sister functions for their own section yet:
 | Function| Description |
 |---|---|
-|`HTTP_GET(CALLBACK_VAR, URL)`| Sends a GET request to `URL` and stores the response in `CALLBACK_URL` asyncronously. See below example for usage.|
+|`HTTP_GET(CALLBACK_VAR, URL)`| Sends a GET request to `URL` and stores the response in `CALLBACK_VAR` asynchronously. See below example for usage.|
 
 An example of how to use `HTTP_GET`:
 ```basic
