@@ -53,6 +53,12 @@ a{color:var(--link)}
 code{font-family: "CQ Mono", ui-monospace, SFMono-Regular, Consolas, Menlo, monospace;line-height:1.5;font-size:16px;background:var(--code-bg);padding:.15em .4em;border-radius:6px}
 pre{background:var(--pre-bg);border:1px solid var(--border);border-radius:8px;padding:14px 16px;overflow:auto;line-height:1.5;margin:1em 0}
 pre code{background:none;padding:0;font-size:.88em}
+.cb{position:relative;margin:1em 0}
+.cb pre{margin:0}
+.copy{position:absolute;top:8px;right:8px;z-index:1;padding:2px 10px;font-family:inherit;font-size:13px;line-height:1.5;color:var(--muted);background:var(--panel);border:1px solid var(--border);border-radius:6px;cursor:pointer;opacity:0;transition:opacity .15s}
+.cb:hover .copy,.copy:focus{opacity:1}
+.copy:hover{color:var(--text);border-color:var(--link)}
+@media (hover:none){.copy{opacity:1}}
 .kw{color:var(--kw);font-weight:600}.str{color:var(--str)}.num{color:var(--num)}.fn{color:var(--fn)}.ln{color:var(--ln)}
 .tw{overflow-x:auto;margin:1em 0}
 table{border-collapse:collapse;width:100%}
@@ -174,7 +180,7 @@ function blocks(L,heads){
       while(i<L.length&&!/^\s*```/.test(L[i]))code.push(L[i++]);
       i++;
       var lang=m[1].toLowerCase();
-      out.push("<pre><code>"+((lang==="basic"||lang==="bas")?basic(code.join("\n")):esc(code.join("\n")))+"</code></pre>");
+      out.push('<div class="cb"><button class="copy" type="button">Copy</button><pre><code>'+((lang==="basic"||lang==="bas")?basic(code.join("\n")):esc(code.join("\n")))+"</code></pre></div>");
       continue;
     }
     if((m=line.match(/^(#{1,6})\s+(.*?)(?:\s+#+)?\s*$/))){
@@ -277,6 +283,29 @@ btn.onclick=function(){
   label();
 };
 label();
+
+function copyText(t,cb){
+  function fb(){
+    try{
+      var a=document.createElement("textarea");
+      a.value=t;a.style.position="fixed";a.style.opacity="0";
+      document.body.appendChild(a);a.select();
+      var ok=document.execCommand("copy");
+      document.body.removeChild(a);cb(ok);
+    }catch(e){cb(false);}
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(function(){cb(true);},fb);
+  }else fb();
+}
+$("#content").addEventListener("click",function(e){
+  var b=e.target.closest?e.target.closest(".copy"):null;
+  if(!b)return;
+  copyText(b.nextElementSibling.textContent,function(ok){
+    b.textContent=ok?"Copied!":"Failed";
+    setTimeout(function(){b.textContent="Copy";},1500);
+  });
+});
 
 var src=$("#md-source").textContent,want=new URLSearchParams(location.search).get("src");
 if(want||!src.trim()){
