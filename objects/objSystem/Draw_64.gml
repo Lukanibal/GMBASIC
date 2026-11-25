@@ -94,26 +94,53 @@ matrix_set(matrix_projection, _old_proj);
 
 draw_surface(back_buffer, 10, 10);
 
-
-///draw text
+//draw text
 draw_set_halign(fa_left);
 draw_set_color(text_color);
 var _display_string = "";
 var _num = 0;
-for(var _i = 1; _i <= string_length(program.output); _i++)
+var _out = program.output;
+var __len = string_length(_out);
+for(var _i = 1; _i <= __len; _i++)
 {
+    var _c = string_char_at(_out, _i);
     
-    _display_string += string_char_at(program.output, _i);
-    _num++;
+    if(_c == "\n" || _c == "\r")
+    {
+        _display_string += _c;
+        _num = 0;
+        continue;
+    }
+    
     if(_num == 80)
     {
         _display_string += "\r\n";
         _num = 0;
     }
+    
+    _display_string += _c;
+    _num++;
 }
 
-draw_text_ext(10, 10, _display_string, 24, room_width - 20);
+if(program.waiting_for_input)
+{
+    draw_set_valign(fa_bottom);
+    draw_text(10, 600, $">{program.input_text}");
+    draw_set_valign(fa_top);
+}
 
+var _row_h = 24;
+var _max_rows = floor((610 - 10) / _row_h);
+var _rows = string_count("\n", _display_string) + 1;
+if(_rows > _max_rows)
+{
+    repeat(_rows - _max_rows)
+    {
+        _display_string = string_delete(_display_string, 1, string_pos("\n", _display_string));
+    }
+}
+
+draw_text_ext(10, 10, _display_string, _row_h, room_width - 20);
 var _display_text = typed_text;
 if(on)
 {

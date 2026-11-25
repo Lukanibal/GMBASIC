@@ -47,7 +47,7 @@ function upload_basic()
     
     buffer_write(_buf, buffer_u8, 0);
     buffer_seek(_buf, buffer_seek_start, 0);
-    _program.text = buffer_read(_buf, buffer_string);
+    //_program.text = buffer_read(_buf, buffer_string);
     buffer_delete(_buf);
     
     _program.tokens = tokenize(_program);
@@ -199,7 +199,7 @@ function load_project(_compiled = false)
     
     buffer_write(_buf, buffer_u8, 0);
     buffer_seek(_buf, buffer_seek_start, 0);
-    _program.text = buffer_read(_buf, buffer_string);
+    //_program.text = buffer_read(_buf, buffer_string);
     buffer_delete(_buf);
     
     objSystem.program = _program;
