@@ -1,6 +1,6 @@
 ![GMBASIC Logo](options/main/template_icon.png)
 # GMBASIC Language Reference
-CURRENT LANGUAGE SPEC AS OF v26.11.24.0
+CURRENT LANGUAGE SPEC AS OF v26.11.24.1
 
 A LIVE DEMO OF GMBASIC CAN BE FOUND ON ITCH.IO, YOU CAN ALSO DOWNLOAD A WINDOWS BUILD OF IT [HERE!](https://lukanspellweaver.itch.io/gmbasic)
 
@@ -31,10 +31,15 @@ ELSE is optional. With no ELSE, a false condition falls through to the next line
 `END` Ends the program  
 ## Editor Commands  
 
+>[!HEY, LISTEN!]
+>If you want to `SAVE` your work, please use `NEW` to initialize a project folder!  
+>You can drop a pre existing .bas file into this folder, rename it to MAIN.BAS, and reload it via the `LOAD` command to load older projects!
+
 The Editor itself has some useful commands that cannot be used in a BASIC program.  
 |COMMAND | Description |
 |---|---|
 |`HELP` or `?`|Opens the manual in your default browser, you do need to be online!|
+|`NEW PROJECTNAME`| Opens the Windows File Dialog to create a Project Folder for a project with `PROJECTNAME`. This is required if you want to save your work!!!|
 |`RUN`| Runs the program to its natural end, til an `END` statement is reached, or ad infinitum via a `GOTO` loop.|
 |`SAVE`| Saves the current `PROJECT`|
 |`LOAD`| Load a `PROJECT`, if no assets folder is found, then only `MAIN.BAS` will be loaded.|
@@ -45,6 +50,7 @@ The Editor itself has some useful commands that cannot be used in a BASIC progra
 |`TEXTCOLOR <COLORNAME>`| Set the IDE TEXT COLOR.|
 |`BACKGROUND <COLORNAME>`| Set the IDE BACKGROUND COLOR.|
 |`AUTO <NUMBER>`| Will fill from 10 to `<NUMBER>` with blank lines in `10` line increments.|
+|`BUILD`|Export your project to a runnable EXE that you can share!|
 
 The `F5` key is a nifty `RUN` shortcut!   
 `ESCAPE` will halt the runner, and `F5` or `RUN` will continue it.
@@ -435,6 +441,13 @@ Using arrays and functions together to draw circles of different colors:
 140 VSYNC
 150 GOTO 90
 ```
+## Bugs
+If you experience bugs with GMBASIC, feel free to fix them or let me know on github!  
+Please remember to check for issues BEFORE reporting a new one!  
+[Check current issues](https://github.com/Lukanibal/GMBASIC/issues)  
+[Report a new issue](https://github.com/Lukanibal/GMBASIC/issues/new)  
+[Check out the Repo](https://github.com/Lukanibal/GMBASIC)
+
 ## Credit
 Written By Lukan Spellweaver, adapted from the [GameMaker Documentation](https://manual.gamemaker.io)  
 Adapted to HTML from my Markdown by Claude  
