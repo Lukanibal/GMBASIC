@@ -130,8 +130,12 @@ function load_project(_compiled = false)
     }
     else 
     {
-        _filename = "MAIN.BAS";
+        load_GBCOM();
+        objSystem.running = true;
+        objSystem.program.start();
+        return;
     }
+    
     
     if (_filename == "") return;
     
@@ -234,11 +238,6 @@ function load_project(_compiled = false)
         file_find_close();
     }
     
-    if(_compiled)
-    {
-        load_GBCOM();
-        objSystem.running = true;
-        objSystem.program.start();
-    }
+    
 }
 

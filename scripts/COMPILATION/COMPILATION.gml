@@ -66,7 +66,7 @@ function compile()
 
 function load_GBCOM()
 {
-    var _path = program_directory+"/MAIN.GBCOM";
+    var _path = program_directory+"MAIN.GBCOM";
     
     if(!file_exists(_path))
     {
