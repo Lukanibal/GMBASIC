@@ -11,82 +11,92 @@ var _old_world = matrix_get(matrix_world);
 var _old_view = matrix_get(matrix_view);
 var _old_proj = matrix_get(matrix_projection);
 
-surface_set_target(back_buffer);
-draw_clear_alpha(c_black, 1);
 
-var _graphics = objSystem.program.graphics;
-var _len = array_length(_graphics);
-
-for (var _i = 0; _i < _len; _i++)
+if(!array_equals(program.graphics_last, program.graphics_build))
 {
-    var _item = _graphics[_i];
+    surface_set_target(back_buffer);
+    draw_clear_alpha(c_black, 0);
     
-    if (_item.kind == "MATRIXSETWORLD")
+    var _graphics = objSystem.program.graphics;
+    var _len = array_length(_graphics);
+    
+    for (var _i = 0; _i < _len; _i++)
     {
-        matrix_set(matrix_world, _item.matrix);
+        var _item = _graphics[_i];
+        
+        if (_item.kind == "MATRIXSETWORLD")
+        {
+            matrix_set(matrix_world, _item.matrix);
+        }
+        if (_item.kind == "MATRIXSETPROJ")
+        {
+            matrix_set(matrix_projection, _item.matrix);
+        }
+        if (_item.kind == "MATRIXSETVIEW")
+        {
+            matrix_set(matrix_view, _item.matrix);
+        }
+        if (_item.kind == "LINE")
+        {
+            draw_line_color(_item.x1, _item.y1, _item.x2, _item.y2, graphics_color, graphics_color);
+        }
+        else if (_item.kind == "TRI")
+        {
+            draw_triangle_color(_item.x1, _item.y1, _item.x2, _item.y2,_item.x3, _item.y3, graphics_color, graphics_color, graphics_color, true);
+        }
+        else if (_item.kind == "FTRI")
+        {
+            draw_triangle_color(_item.x1, _item.y1, _item.x2, _item.y2,_item.x3, _item.y3, graphics_color, graphics_color, graphics_color, false);
+        }
+        else if (_item.kind == "RECT")
+        {
+            draw_rectangle_color(_item.x1, _item.y1, _item.x2, _item.y2, graphics_color, graphics_color, graphics_color, graphics_color, true);
+        }
+        else if (_item.kind == "CIRC")
+        {
+            draw_circle_color(_item.x1, _item.y1, _item.x2, graphics_color, graphics_color, true);
+        }
+        else if (_item.kind == "FCIRC")
+        {
+            draw_circle_color(_item.x1, _item.y1, _item.x2, graphics_color, graphics_color, false);
+        }
+        else if (_item.kind == "FRECT")
+        {
+            draw_rectangle_color(_item.x1, _item.y1, _item.x2, _item.y2, graphics_color, graphics_color, graphics_color, graphics_color, false);
+        }
+        else if (_item.kind == "SETDRAWCOLOR")
+        {
+            graphics_color = _item.col;
+        }
+        else if (_item.kind == "DRAWSPRITE")
+        {
+            draw_sprite_ext(_item.sprite, _item.frame, _item.x, _item.y, 1, 1, 0, graphics_color, 1.0);
+        }
+        else if (_item.kind == "DRAWSPRITE_EXT")
+        {
+            draw_sprite_ext(_item.sprite, _item.frame, _item.x, _item.y, _item.xscale, _item.yscale, _item.rotation, _item.color, _item.alpha);
+        }
+        else if (_item.kind == "DRAWSPRITE_POS")
+        {
+            draw_sprite_pos(_item.sprite, _item.frame, _item.x1, _item.y1, _item.x2, _item.y2, _item.x3, _item.y3,_item.x4, _item.y4, _item.alpha);
+        }
+        else if (_item.kind == "DRAWSPRITE_STRETCHED")
+        {
+            draw_sprite_stretched(_item.sprite, _item.frame, _item.x1, _item.y1, _item.width, _item.height);
+        }
+        else if (_item.kind == "VERTEX_SUBMIT")
+        {
+            gpu_set_ztestenable(true);
+            gpu_set_zwriteenable(true);
+            vertex_submit(_item.buffer, pr_trianglestrip, _item.tex);
+            gpu_set_ztestenable(false);
+            gpu_set_zwriteenable(false);
+        }
     }
-    if (_item.kind == "MATRIXSETPROJ")
-    {
-        matrix_set(matrix_projection, _item.matrix);
-    }
-    if (_item.kind == "MATRIXSETVIEW")
-    {
-        matrix_set(matrix_view, _item.matrix);
-    }
-    if (_item.kind == "LINE")
-    {
-        draw_line_color(_item.x1, _item.y1, _item.x2, _item.y2, graphics_color, graphics_color);
-    }
-    else if (_item.kind == "TRI")
-    {
-        draw_triangle_color(_item.x1, _item.y1, _item.x2, _item.y2,_item.x3, _item.y3, graphics_color, graphics_color, graphics_color, true);
-    }
-    else if (_item.kind == "FTRI")
-    {
-        draw_triangle_color(_item.x1, _item.y1, _item.x2, _item.y2,_item.x3, _item.y3, graphics_color, graphics_color, graphics_color, false);
-    }
-    else if (_item.kind == "RECT")
-    {
-        draw_rectangle_color(_item.x1, _item.y1, _item.x2, _item.y2, graphics_color, graphics_color, graphics_color, graphics_color, true);
-    }
-    else if (_item.kind == "CIRC")
-    {
-        draw_circle_color(_item.x1, _item.y1, _item.x2,
-            graphics_color, graphics_color, true);
-    }
-    else if (_item.kind == "FCIRC")
-    {
-        draw_circle_color(_item.x1, _item.y1, _item.x2,
-            graphics_color, graphics_color, false);
-    }
-    else if (_item.kind == "FRECT")
-    {
-        draw_rectangle_color(_item.x1, _item.y1, _item.x2, _item.y2,
-            graphics_color, graphics_color, graphics_color, graphics_color, false);
-    }
-    else if (_item.kind == "SETDRAWCOLOR")
-    {
-        graphics_color = _item.col;
-    }
-    else if (_item.kind == "DRAWSPRITE")
-    {
-        draw_sprite_ext(_item.sprite, _item.frame, _item.x, _item.y, 1, 1, 0, graphics_color, 1.0);
-    }
-    else if (_item.kind == "DRAWSPRITE_EXT")
-    {
-        draw_sprite_ext(_item.sprite, _item.frame, _item.x, _item.y, _item.xscale, _item.yscale, _item.rotation, _item.color, _item.alpha);
-    }
-    else if (_item.kind == "DRAWSPRITE_POS")
-    {
-        draw_sprite_pos(_item.sprite, _item.frame, _item.x1, _item.y1, _item.x2, _item.y2, _item.x3, _item.y3,_item.x4, _item.y4, _item.alpha);
-    }
-    else if (_item.kind == "DRAWSPRITE_STRETCHED")
-    {
-        draw_sprite_stretched(_item.sprite, _item.frame, _item.x1, _item.y1, _item.width, _item.height);
-    }
+    surface_reset_target();
 }
 
-surface_reset_target();
+
 
 matrix_set(matrix_world, _old_world);
 matrix_set(matrix_view, _old_view);

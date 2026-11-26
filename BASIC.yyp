@@ -35,7 +35,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2026.1.0.27",
+    "IDEVersion":"2026.1.1.34",
   },
   "name":"BASIC",
   "resources":[
@@ -54,6 +54,7 @@
     {"id":{"name":"save_files","path":"scripts/save_files/save_files.yy",},},
     {"id":{"name":"screen_saver","path":"scripts/screen_saver/screen_saver.yy",},},
     {"id":{"name":"SystemMacros","path":"scripts/SystemMacros/SystemMacros.yy",},},
+    {"id":{"name":"VERTEX_BUFFERS","path":"scripts/VERTEX_BUFFERS/VERTEX_BUFFERS.yy",},},
     {"id":{"name":"sprPalette","path":"sprites/sprPalette/sprPalette.yy",},},
     {"id":{"name":"sprPixel","path":"sprites/sprPixel/sprPixel.yy",},},
   ],

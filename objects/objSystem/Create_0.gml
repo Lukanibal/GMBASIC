@@ -83,7 +83,8 @@ function SPECIAL() constructor
         "BUFF_F64": buffer_f64,
         "BUFF_TEXT": buffer_text,
         "BUFF_STRING": buffer_string,
-        "BUFF_BOOL" : buffer_bool
+        "BUFF_BOOL" : buffer_bool,
+        "VERTEX_FORMAT_DEFAULT" : global.default_vertex_format,
     }
 }
 
@@ -121,3 +122,4 @@ if(room == rmRunnerOnly && program.lines[0] == "10 TYPE NEW TO BEGIN A NEW BASIC
 {
     load_project(true);
 }
+

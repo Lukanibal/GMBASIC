@@ -91,4 +91,40 @@ global.function_bridge =
     "ARRAY_SHIFT" : function_ids.ARRAY_SHIFT,
     "ARRAY_SHUFFLE" : function_ids.ARRAY_SHUFFLE,
     
+    //TEXTURE
+    "SPRITE_GET_TEXTURE" : function_ids.SPRITE_GET_TEXTURE,
+    
+    //VERTEX BUFFS
+    "VERTEX_BUFF_CREATE" : function_ids.VERTEX_BUFF_CREATE,
+    "VERTEX_GET_BUFF_SIZE" : function_ids.VERTEX_GET_BUFF_SIZE,
+    "VERTEX_BUFF_NUM" : function_ids.VERTEX_BUFF_NUM,
+    "VERTEX_BUFF_DELETE" : function_ids.VERTEX_BUFF_DELETE,
+    "VERTEX_BEGIN" : function_ids.VERTEX_BEGIN,
+    "VERTEX_POSITION_3D" : function_ids.VERTEX_POSITION_3D,
+    "VERTEX_COLOR" : function_ids.VERTEX_COLOR,
+    "VERTEX_TEXCOORD" : function_ids.VERTEX_TEXCOORD,
+    "VERTEX_END" : function_ids.VERTEX_END,
+    "VERTEX_SUBMIT" : function_ids.VERTEX_SUBMIT,
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

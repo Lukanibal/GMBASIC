@@ -36,6 +36,8 @@ function SCRIPT(_text = "") constructor
     //graphics api
     graphics = [];
     graphics_build = [];
+    graphics_last = graphics_build;
+    graphics_changed = false;
     has_built_frame = false;
     //also graphics but kinda seperate
     sprites = {};
@@ -1977,6 +1979,123 @@ function evaluate_postfix(_pf)
                     var _id = http_get(_args[1]);
                     array_push(objSystem.async_callbacks, {name : _args[0], id: _id});
                     array_push(_values, _id);
+                    break;
+                }
+                case function_ids.SPRITE_GET_TEXTURE:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("SPRITE_GET_TEXTURE: EXPECTS 2 ARGUMENTS", true);
+                        return 0;
+                    }
+                    array_push(_values, sprite_get_texture(_args[0], _args[1]));
+                    break;
+                }
+                case function_ids.VERTEX_BUFF_CREATE:
+                {
+                    if (_arg_count != 0)
+                    {
+                        notify("VERTEX_BUFF_CREATE: EXPECTS NO ARGUMENTS", true);
+                        return 0;
+                    }
+                    array_push(_values, vertex_create_buffer());
+                    break;
+                }
+                case function_ids.VERTEX_GET_BUFF_SIZE:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("VERTEX_GET_BUFF_SIZE: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    array_push(_values, vertex_get_buffer_size(_args[0]));
+                    break;
+                }
+                case function_ids.VERTEX_BUFF_NUM:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("VERTEX_BUFF_NUM: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    array_push(_values, vertex_get_number(_args[0]));
+                    break;
+                }
+                case function_ids.VERTEX_BUFF_DELETE:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("VERTEX_BUFF_DELETE: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    vertex_delete_buffer(_args[0])
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.VERTEX_BEGIN:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("VERTEX_BEGIN: EXPECTS 1 ARGUMENTS", true);
+                        return 0;
+                    }
+                    vertex_begin(_args[0], global.default_vertex_format);
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.VERTEX_POSITION_3D:
+                {
+                    if (_arg_count != 4)
+                    {
+                        notify("VERTEX_POSITION_3D: EXPECTS 4 ARGUMENTS", true);
+                        return 0;
+                    }
+                    vertex_position_3d(_args[0], _args[1], _args[2], _args[3]);
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.VERTEX_COLOR:
+                {
+                    if (_arg_count != 3)
+                    {
+                        notify("VERTEX_COLOR: EXPECTS 3 ARGUMENTS", true);
+                        return 0;
+                    }
+                    vertex_color(_args[0], _args[1], _args[2]);
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.VERTEX_TEXCOORD:
+                {
+                    if (_arg_count != 3)
+                    {
+                        notify("VERTEX_TEXCOORD: EXPECTS 3 ARGUMENTS", true);
+                        return 0;
+                    }
+                    vertex_texcoord(_args[0], _args[1], _args[2]);
+                    array_push(_values, 0);
+                    break;
+                }
+                case function_ids.VERTEX_END:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("VERTEX_END: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    vertex_end(_args[0]);
+                    array_push(_values, 0);
+                    break;
+                } 
+                case function_ids.VERTEX_SUBMIT:
+                {
+                    if (_arg_count != 2)
+                    {
+                        notify("VERTEX_SUBMIT: EXPECTS 2 ARGUMENTS", true);
+                        return 0;
+                    }
+                    array_push(objSystem.program.graphics_build, {kind: "VERTEX_SUBMIT", buffer:_args[0], tex: _args[1]});
+                    array_push(_values, 0);
                     break;
                 }
                 default:

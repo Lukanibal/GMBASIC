@@ -93,6 +93,40 @@ enum function_ids
     ARRAY_PUSH,
     ARRAY_POP,
     ARRAY_SHIFT,
-    ARRAY_SHUFFLE
+    ARRAY_SHUFFLE,
+    
+    //VERTEX BUFFERS 1
+    VERTEX_BUFF_CREATE,
+    VERTEX_GET_BUFF_SIZE,
+    VERTEX_BUFF_NUM,
+    VERTEX_BUFF_DELETE,
+    VERTEX_BEGIN,
+    VERTEX_POSITION_3D,
+    VERTEX_COLOR,
+    VERTEX_TEXCOORD,
+    VERTEX_END,
+    VERTEX_SUBMIT,
+    
+    //TEXTUREs
+    SPRITE_GET_TEXTURE
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

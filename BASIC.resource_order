@@ -15,6 +15,7 @@
     {"name":"save_files","order":14,"path":"scripts/save_files/save_files.yy",},
     {"name":"screen_saver","order":9,"path":"scripts/screen_saver/screen_saver.yy",},
     {"name":"SystemMacros","order":2,"path":"scripts/SystemMacros/SystemMacros.yy",},
+    {"name":"VERTEX_BUFFERS","order":18,"path":"scripts/VERTEX_BUFFERS/VERTEX_BUFFERS.yy",},
     {"name":"sprPalette","order":5,"path":"sprites/sprPalette/sprPalette.yy",},
     {"name":"sprPixel","order":12,"path":"sprites/sprPixel/sprPixel.yy",},
   ],

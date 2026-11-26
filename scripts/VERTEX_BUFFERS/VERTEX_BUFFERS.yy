@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"VERTEX_BUFFERS",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"VERTEX_BUFFERS",
+  "parent":{
+    "name":"BASIC",
+    "path":"BASIC.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
