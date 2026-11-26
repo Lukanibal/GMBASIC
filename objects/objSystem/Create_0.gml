@@ -29,6 +29,7 @@ can_move = true;
 last_highlight_line = 0;
 show_highlight = true;
 
+show_program = true;
 ///async stuff
 async_callbacks = [];
 async_holding = [];
