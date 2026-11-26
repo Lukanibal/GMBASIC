@@ -1,6 +1,6 @@
 ![GMBASIC Logo](options/main/template_icon.png)
 # GMBASIC Language Reference
-CURRENT LANGUAGE SPEC AS OF v26.11.24.1
+CURRENT LANGUAGE SPEC AS OF v26.11.26.0
 
 A LIVE DEMO OF GMBASIC CAN BE FOUND ON ITCH.IO, YOU CAN ALSO DOWNLOAD A WINDOWS BUILD OF IT [HERE!](https://lukanspellweaver.itch.io/gmbasic)
 
@@ -33,7 +33,8 @@ ELSE is optional. With no ELSE, a false condition falls through to the next line
 
 >[!HEY, LISTEN!]
 >If you want to `SAVE` your work, please use `NEW` to initialize a project folder!  
->You can drop a pre existing .bas file into this folder, rename it to MAIN.BAS, and reload it via the `LOAD` command to load older projects!
+>You can drop a pre existing .bas file into this folder, rename it to MAIN.BAS, and reload it via the `LOAD` command to load older projects!  
+>Choose the GMBASIC File dropdown and select GMBASIC PROJECT and load `MAIN.GMBP`, soon this will be the default!
 
 The Editor itself has some useful commands that cannot be used in a BASIC program.  
 |COMMAND | Description |
@@ -223,6 +224,7 @@ The following functions can be used to display art loaded into GMBASIC via the `
 | `DRAWSPRITE_STRETCHED(SPRITE, FRAME, X, Y, WIDTH, HEIGHT)`| Draws frame `FRAME` of the `SPRITE` at `(X, Y)` stretched to be `WIDTH` x `HEIGHT`. Frames start at `0`.|
 
 
+
 ## Colors
 There are 16 colors that come packaged with **GMBASIC**
 |Constant | Value | Color |
@@ -264,7 +266,7 @@ Simply check one of the following CONSTANTS to get instant input feedback!
 |`KRIGHT`| The right arrow key's state, where 0 is not pressed and 1 is pressed.|
 |`KUP`| The up arrow key's state, where 0 is not pressed and 1 is pressed.|
 |`KDOWN`| The down arrow key's state, where 0 is not pressed and 1 is pressed.|
-|`KSPACE`| The down arrow key's state, where 0 is not pressed and 1 is pressed.|
+|`KSPACE`| The spacebar's state, where 0 is not pressed and 1 is pressed.|
 |`MLEFT`| The left mouse button's state, where 0 is not pressed and 1 is pressed.|
 |`MRIGHT`| The right mouse button's state, where 0 is not pressed and 1 is pressed.|
 |`MX`|The mouse's current X value.|
@@ -355,7 +357,7 @@ A simple example of `BUFFER`s in use:
 |`BUFF_SEEK(BUFFER,  BASE, OFFSET)`| returns the new seek position of the `BUFFER`.|
 |`BUFF_PEEK(BUFFER,  OFFSET, TYPE)`| returns the value stored in the `BUFFER` at `OFFSET`, or `undefined` if it fails.|
 |`BUFF_POKE(BUFFER,  OFFSET, TYPE, VALUE)`| poke `VALUE` of `TYPE` into the `BUFFER` at `OFFSET`.|
-|`BUFF_TELLBUFFER)`| returns the seek position of `BUFFER`.|
+|`BUFF_TELL(BUFFER)`| returns the seek position of `BUFFER`.|
 |`BUFF_WRITE(BUFFER, TYPE, VALUE)`| writes `VALUE` of `TYPE` into `BUFFER`'s current seek position and moves the seek accordingly.|
 |`BUFF_READ(BUFFER, TYPE)`| returns the value at `BUFFER`'s current seek position, be sure your `TYPE` is correct!|
 |`BUFF_DELETE(BUFFER)`| Deletes `BUFFER` and frees that memory.|
@@ -378,6 +380,38 @@ This stores the file handle in variable `X`, which can then be used by all of th
 |`FWRITE_LINE_NUMBER(FILEHANDLE, VALUE)`| Writes `VALUE` to `FILEHANDLE` as a `NUMBER` and increases the write positiong for the next operation.|
 |`FCLOSE(FILEHANDLE)`| Closes the file handle `FILEHANDLE`, no further operations can be done after it's closed!(until it's reopened!)|
 |`FEXISTS(FILENAME)`| Returns whether a file with `FILENAME` exists.|
+
+## Vertex Buffers
+Feeling three dimensional? These help with threedee a lot, but have uses in twodee as well!  
+Currently they ONLY support the `VERTEX_FORMAT_DEFAULT` which is the same as GameMaker's, the underlying engine.  
+The default format is `VERTEX_POSITION_3D`, `VERTEX_COLOR`, `VERTEX_TEXCOORD`, that gives you a 3d position, a color, and a UV for texture mapping.  
+
+The following functions deal with `VERTEX_BUFFER`s:
+| Function| Description |
+|---|---|
+|`VERTEX_BUFF_CREATE()`|Returns a new empty `VERTEX_BUFFER`|
+|`VERTEX_GET_BUFF_SIZE(VERTEX_BUFFER)`|Returns the size of `VERTEX_BUFFER` in bytes.|
+|`VERTEX_BUFF_NUM(VERTEX_BUFFER)`| Returns the number of verticies in `VERTEX_BUFFER`.|
+|`VERTEX_BUFF_DELETE(VERTEX_BUFFER)`| Deletes `VERTEX_BUFFER`, freeing that memory.|
+
+You can _fill_ `VERTEX_BUFFER`s with the following functions:
+| Function| Description |
+|---|---|
+|`VERTEX_BEGIN(VERTEX_BUFFER,)`| Start writing vertex data to `VERTEX_BUFFER`.|
+|`VERTEX_POSITION_3D(VERTEX_BUFFER, X, Y, Z)`| Defines a point in 3D space for the vertex.|
+|`VERTEX_COLOR(VERTEX_BUFFER, COLOR, ALPHA)`| Defines a color and alpha for the vertex.|
+|`VERTEX_TEXCOORD(VERTEX_BUFFER, U, V)`| Defines a point in 2D space for mapping a `TEXTURE` to the vertex.|
+|`VERTEX_END(VERTEX_BUFFER)`| Finish writing vertex data to `VERTEX_BUFFER`.|
+|`VERTEX_SUBMIT(VERTEX_BUFFER, TEXTURE)`| Submits the vertex for drawing next frame.|
+
+`TEXTURE`s for mapping to a vertex can be generated from `SPRITE`s via the following function:
+| Function| Description |
+|---|---|
+|`SPRITE_GET_TEXTURE(SPRITE, FRAME)`| Returns a `TEXTURE` of `FRAME` of `SPRITE`, which can be used in Texture Mapping in `VERTEX_BUFFER`s.|
+
+>[!NOTE]
+>Right now the system ONLY supports drawing the DEFAULT FORMAT and TRIANGLE STRIPS! Format your buffer accordingly!
+
 
 ## Miscellany
 Various Functions that don't have enough sister functions for their own section yet:
