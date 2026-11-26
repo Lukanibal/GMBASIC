@@ -397,7 +397,7 @@ The following functions deal with `VERTEX_BUFFER`s:
 You can _fill_ `VERTEX_BUFFER`s with the following functions:
 | Function| Description |
 |---|---|
-|`VERTEX_BEGIN(VERTEX_BUFFER,)`| Start writing vertex data to `VERTEX_BUFFER`.|
+|`VERTEX_BEGIN(VERTEX_BUFFER)`| Start writing vertex data to `VERTEX_BUFFER`.|
 |`VERTEX_POSITION_3D(VERTEX_BUFFER, X, Y, Z)`| Defines a point in 3D space for the vertex.|
 |`VERTEX_COLOR(VERTEX_BUFFER, COLOR, ALPHA)`| Defines a color and alpha for the vertex.|
 |`VERTEX_TEXCOORD(VERTEX_BUFFER, U, V)`| Defines a point in 2D space for mapping a `TEXTURE` to the vertex.|
