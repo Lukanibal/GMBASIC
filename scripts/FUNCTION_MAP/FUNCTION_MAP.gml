@@ -110,7 +110,11 @@ global.function_bridge =
     "VERTEX_BUFF_SAVE" : function_ids.VERTEX_BUFF_SAVE,
     "VERTEX_BUFF_LOAD" : function_ids.VERTEX_BUFF_LOAD,
     
+    ///sphere is vis
+    "SPHERE_IS_VISIBLE" : function_ids.SPHERE_IS_VISIBLE,
     
+    ///zip files?
+    "ZIP_UNZIP" : function_ids.ZIP_UNZIP,
 }
 
 

@@ -157,7 +157,7 @@ function SCRIPT(_text = "") constructor
         self.tokens = tokenize(self);
     }
     
-    run = function( _steps = 1300)
+    run = function( _steps = 1600)
     {
         var _i = self.pc;
         var _len = array_length(self.tokens);
@@ -2023,6 +2023,30 @@ function evaluate_postfix(_pf)
                     array_push(_values, _id);
                     break;
                 }
+                case function_ids.HTTP_POST:
+                {
+                    if (_arg_count != 3)
+                    {
+                        notify("HTTP_POST: EXPECTS 3 ARGUMENTS", true);
+                        return 0;
+                    }
+                    var _id = http_post_string(_args[1], _args[2]);
+                    array_push(objSystem.async_callbacks, {name : _args[0], id: _id});
+                    array_push(_values, _id);
+                    break;
+                }    
+                case function_ids.HTTP_GET_FILE:
+                {
+                    if (_arg_count != 3)
+                    {
+                        notify("HTTP_GET_FILE: EXPECTS 3 ARGUMENTS", true);
+                        return 0;
+                    }
+                    var _id = http_get_file(_args[1], _args[2]);
+                    array_push(objSystem.async_callbacks, {name : _args[0], id: _id});
+                    array_push(_values, _id);
+                    break;
+                }   
                 case function_ids.SPRITE_GET_TEXTURE:
                 {
                     if (_arg_count != 2)
@@ -2162,6 +2186,35 @@ function evaluate_postfix(_pf)
                     	array_push(objSystem.program.graphics_build, {kind: "VERTEX_SUBMIT", buffer:_args[0], tex: _args[1], cull:_args[2]});
                     }
                     array_push(_values, 0);
+                    break;
+                } 
+                case function_ids.SPHERE_IS_VISIBLE:
+                {
+                    if (_arg_count != 4)
+                    {
+                        notify("SPHERE_IS_VISIBLE: EXPECTS 4 ARGUMENTS", true);
+                        return 0;
+                    }
+                    matrix_set(matrix_world, objSystem.world_mat);
+                    matrix_set(matrix_view, objSystem.view_mat);
+                    matrix_set(matrix_projection, objSystem.proj_mat);
+                    array_push(_values, sphere_is_visible(_args[0], _args[1], _args[2], _args[3]));
+                    matrix_set(matrix_world, objSystem.original_world_mat);
+                    matrix_set(matrix_view, objSystem.original_view_mat);
+                    matrix_set(matrix_projection, objSystem.original_proj_mat);
+                    break;
+                }
+                case function_ids.ZIP_UNZIP:
+                {
+                    if (_arg_count != 3)
+                    {
+                        notify("ZIP_UNZIP: EXPECTS 3 ARGUMENTS", true);
+                        return 0;
+                    }
+                    
+                    var _id = zip_unzip(_args[1], _args[2]);
+                    array_push(objSystem.zip_async_callbacks, {name : _args[0], id: _id});
+                    array_push(_values, _id);
                     break;
                 }
                 default:

@@ -8,6 +8,15 @@ on = true;
 
 project = -1;
 
+///matricies
+proj_mat = camera_get_proj_mat(view_camera);
+view_mat = camera_get_view_mat(view_camera);
+world_mat = matrix_world;
+
+original_proj_mat = camera_get_proj_mat(view_camera);
+original_view_mat = camera_get_view_mat(view_camera);
+original_world_mat = matrix_world;
+
 program_scroll_y = 0;
 program_scroll_speed = 36;
 
@@ -33,6 +42,7 @@ show_program = true;
 ///async stuff
 async_callbacks = [];
 async_holding = [];
+zip_async_callbacks = [];
 
 global.COLORS = [c_black, c_white, c_maroon, c_red, c_green, c_lime, c_blue, c_aqua, c_orange, c_yellow, c_purple, c_fuchsia, c_silver, c_gray, c_navy, c_teal];
 ///RESERVED SYSTEM VARIABLES

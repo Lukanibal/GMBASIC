@@ -115,6 +115,10 @@ enum function_ids
     //TEXTUREs
     SPRITE_GET_TEXTURE,
     
+    //3d helpers
+    SPHERE_IS_VISIBLE,
+    ZIP_UNZIP
+    
     
     
 }

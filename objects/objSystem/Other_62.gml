@@ -16,7 +16,7 @@ for(var _i = 0; _i < _len; _i ++)
     }
     else if(_status < 0)
     {
-        notify("HTTP_GET ERROR");
+        notify("HTTP ERROR");
         array_delete(async_callbacks, _i, 1);
     }
     

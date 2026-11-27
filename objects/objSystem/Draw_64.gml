@@ -27,14 +27,17 @@ if(!array_equals(program.graphics_last, program.graphics_build))
         if (_item.kind == "MATRIXSETWORLD")
         {
             matrix_set(matrix_world, _item.matrix);
+            world_mat = matrix_get(matrix_world)
         }
         if (_item.kind == "MATRIXSETPROJ")
         {
             matrix_set(matrix_projection, _item.matrix);
+            proj_mat = matrix_get(matrix_projection);
         }
         if (_item.kind == "MATRIXSETVIEW")
         {
             matrix_set(matrix_view, _item.matrix);
+            view_mat = matrix_get(matrix_view);
         }
         if (_item.kind == "LINE")
         {
