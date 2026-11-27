@@ -1,6 +1,6 @@
 ![GMBASIC Logo](options/main/template_icon.png)
 # GMBASIC Language Reference
-CURRENT LANGUAGE SPEC AS OF `v26.11.26.1`
+CURRENT LANGUAGE SPEC AS OF `v26.11.26.2`
 
 A LIVE DEMO OF GMBASIC CAN BE FOUND ON ITCH.IO, YOU CAN ALSO DOWNLOAD A WINDOWS BUILD OF IT [HERE!](https://lukanspellweaver.itch.io/gmbasic)
 
@@ -79,6 +79,7 @@ The Editor itself has some useful commands that cannot be used in a BASIC progra
 |`BACKGROUND <COLORNAME>`| Set the IDE BACKGROUND COLOR.|
 |`AUTO <NUMBER>`| Will fill from 10 to `<NUMBER>` with blank lines in `10` line increments.|
 |`BUILD`|Export your project to a runnable EXE that you can share!|
+  ___
 
 The `F5` key is a nifty `RUN` shortcut!   
 `ESCAPE` will halt the runner, and `F5` or `RUN` will continue it.
@@ -92,6 +93,7 @@ All FUNCTION names are also reserved.
 |`PI`| 3.14....|
 |`TAU`| PI * 2(6.28....)|
 |`EUL`| 2.718281828459045| 
+  ___
 
 `EUL` is usually expressed as `E` in settings like these, but stealing a letter of the alphabet from use as a variable name felt rude.
 
@@ -102,6 +104,7 @@ All FUNCTION names are also reserved.
 |`NUMBER`| `420`, `69.420`, and `-69` are all `NUMBERS`.|
 |`ARRAY`| `A(9)` accesses the 10th position in the array assigned to `A`.|
 |`SPRITE`| Loading images via the `SPRITE` command creates a `SPRITE`.|
+  ___
 
 Strings can have a NEWLINE character inserted via `\N`, you may also add numbers to strings, they will convert to a string automagically and be appended to the string accordingly.
 
@@ -120,6 +123,7 @@ Arrays can be maniuplated by the following functions:
 |`ARRAY_POP(ARRAY)`|Returns the value at the end of `ARRAY` and removes it from `ARRAY`|  
 |`ARRAY_SHIFT(ARRAY)`|Returns the value at the start of `ARRAY` and removes it from `ARRAY`|  
 |`ARRAY_SHUFFLE(ARRAY)`|Shuffles the values of `ARRAY`|  
+  ___
 
 ## Math
 Simple expressions can be done via the `LET` command, for example
@@ -142,6 +146,7 @@ Mixed with the math commands below, you can perform more complex calculations.
 |`-`|Subtract `NUMBERS` or unary negation.|
 |`*`|Multiply `NUMBERS`.|
 |`/`|Divide `NUMBERS`. Dividing by `0` shows an error.|
+  ___
 
 Operators are evaluated in this order, from first to last: `*` and `/`, then `+` and `-`, then the comparisons. Use parentheses to change the order.  
 There is no `AND`, `OR` or `NOT` yet, so to test two conditions at once, use two `IF` lines.
@@ -183,6 +188,8 @@ There is no `AND`, `OR` or `NOT` yet, so to test two conditions at once, use two
 | `LENGTHDIRZ(L, P)` | Returns the Z (vertical) component of a vector with length `L` and pitch `P`, in degrees. A pitch of 0 is level (returns 0), 90 is straight up (returns L), and -90 is straight down (returns -L). |  
 | `RAD(X)`| Turns degrees to radians. |  
 | `DEG(X)`| Turns radians to degrees. |  
+  ___
+
 > [!NOTE]
 > `SIN`, `COS` and `TAN` use radians, but `LENGTHDIR*` and `POINTDIR` use degrees.
 
@@ -198,6 +205,7 @@ There is no `AND`, `OR` or `NOT` yet, so to test two conditions at once, use two
 | `MATRIXBUILDPROJORTHO(WIDTH, HEIGHT, ZNEAR, ZFAR)` | Builds an orthographic projection matrix with the specified width, height, near plane, and far plane. |
 | `MATRIXBUILDPROJPERS(WIDTH, HEIGHT, ZNEAR, ZFAR)` | Builds a perspective projection matrix with the specified view width, view height, near plane, and far plane. |
 | `MATRIXBUILDPROJPERSFOV(FOVY, ASPECT, ZNEAR, ZFAR)` | Builds a perspective projection matrix with the specified field of view (in degrees), aspect ratio, near plane, and far plane. |
+  ___
 
 >[!NOTE] Matrix setters apply to everything drawn after them in the same frame, so call them after `CLS`.
 
@@ -240,6 +248,7 @@ The Y Vector INCREASES down the screen.
 | `TRI(X1, Y1, X2, Y2, X3, Y3)`| Draws a triangle outline with the points at `(X1, Y1)`, `(X2, Y2)`, and `(X3, Y3)` respectively|
 | `FTRI(X1, Y1, X2, Y2, X3, Y3)`| Draws a filled triangle with the points at `(X1, Y1)`, `(X2, Y2)`, and `(X3, Y3)` respectively|
 | `MAKECOLORRGB(R, G, B)`| Returns a color with the rbg values set to `RGB` respectivly.|
+   ___
 
 ### Drawing Sprites  
 The following functions can be used to display art loaded into GMBASIC via the `SPRITE` command:  
@@ -249,7 +258,7 @@ The following functions can be used to display art loaded into GMBASIC via the `
 | `DRAWSPRITE_EXT(SPRITE, FRAME, X, Y, XSCALE, YSCALE, ROTATION, COLOR, ALPHA) `| Draws frame `FRAME` of `SPRITE` at position `(X, Y)`. `XSCALE` and `YSCALE` control horizontal and vertical size multiplicatively; for example, `2` doubles the size. `ROTATION` starts at `0` and goes counter clockwise in degrees, the origin point is always `(X, Y)`. `COLOR` is the draw color to use for the image, this overrules the set draw color in the program. `ALPHA` is the transparency of the image. Frames start at `0`. |
 | `DRAWSPRITE_POS(SPRITE, FRAME, X1, Y1, X2, Y2, X3, Y3, X4, Y4, ALPHA)`| Draws frame `FRAME` of the `SPRITE` distorted over `(X1, Y1)`, `(X2, Y2)`, `(X3, Y3)`, and `(X4, Y4)`. `ALPHA` is the transparency of the image. Frames start at `0`.|
 | `DRAWSPRITE_STRETCHED(SPRITE, FRAME, X, Y, WIDTH, HEIGHT)`| Draws frame `FRAME` of the `SPRITE` at `(X, Y)` stretched to be `WIDTH` x `HEIGHT`. Frames start at `0`.|
-
+  ___
 
 
 ## Colors
@@ -272,7 +281,7 @@ There are 16 colors that come packaged with **GMBASIC**
 | `YELLOW` |#FFFF00|![](https://placehold.co/16x16/FFFF00/FFFF00.png)|
 | `PURPLE` |#800080|![](https://placehold.co/16x16/800080/800080.png)|
 | `FUCHSIA` |#FF00FF|![](https://placehold.co/16x16/FF00FF/FF00FF.png)|
-
+  ___
 >[!NOTE]
 >`MAKECOLORRGB` allows you to create custome colors at runtime!
 
@@ -298,6 +307,7 @@ Simply check one of the following CONSTANTS to get instant input feedback!
 |`MRIGHT`| The right mouse button's state, where 0 is not pressed and 1 is pressed.|
 |`MX`|The mouse's current X value.|
 |`MY`|The mouse's current Y value.|
+  ___  
 
 An example of a simple way to check keys without using IF branches:  
 ```basic
@@ -322,7 +332,7 @@ For more general keys on the keyboards, currently these functions exist.
 |`KEYCHECK("KEY")`|Returns the `KEY`'s state, where 0 is up and 1 is down.|
 |`KEYCHECK_PRESSED("KEY")`|Returns 1 if the `KEY` was pressed this frame, otherwise returns 0.|
 |`KEYCHECK_RELEASED("KEY")`|Returns 1 if the `KEY` was released this frame, otherwise returns 0.|
-
+  ___
 ## Timing  
 The functions here are to help with program timing
 | Function| Description |
@@ -330,18 +340,18 @@ The functions here are to help with program timing
 |`GETTIMER`| Returns the time in microseconds since the BASIC MACHINE has started running|
 |`VSYNC`|Ends the program’s slice for this frame and resumes next frame. Without it, the program runs up to the per-frame step limit and carries on next frame, so its timing isn’t controlled.|
 |`CLS`| Publishes the frame built since the previous `CLS` and starts a new one. Anything drawn before the first `CLS` is discarded!|
-
+  ___
 ## Buffers  
 Buffers are a way to store and manipulate data FAST.  
 Always remember to DELETE buffers when you're done with them, they are NOT garbage collected!  
-  
+
 Buffer Types are constants:  
 | Constant| Description |
 |---|---|
 |`BUFF_GROW`| a buffer that grows past it's initial size|
 |`BUFF_FIXED`| a buffer that will NOT grow beyond it's initial size.|
 |`BUFF_WRAP`| a buffer that wraps around to the beginning when going past it's initial size|
-
+___
 Buffer Data Types are the following:  
 | Constant| Description |
 |---|---|
@@ -358,14 +368,14 @@ Buffer Data Types are the following:
 |`BUFF_TEXT`| a `STRING` of any size without the final null terminating character.|
 |`BUFF_STRING`| a  `STRING` of any size with the final null terminating character.|
 |`BUFF_BOOL`| can be `1` or `0` for `true` or `false`.|
-
+___
 BUFF_SEEK uses the following contstants:  
 | Constant| Description |
 |---|---|
 |`BUFF_SEEK_START`| Sets the seek to the start of the buffer|
 |`BUFF_SEEK_REL`| Sets the seek to a position relative to the current seek position|
 |`BUFF_SEEK_END`| Sets the seek to the end of the buffer|
-  
+  ___
 A simple example of `BUFFER`s in use:  
 ```basic
 10 LET X = BUFF_CREATE(16, BUFF_FIXED, 1)
@@ -390,7 +400,7 @@ A simple example of `BUFFER`s in use:
 |`BUFF_DELETE(BUFFER)`| Deletes `BUFFER` and frees that memory.|
 |`BUFF_SAVE(BUFFER, FILENAME)`| Save the contents of `BUFFER` to `FILENAME`. |
 |`BUFF_LOAD(FILENAME)`| Returns the contents of `FILENAME` as a buffer. |
-
+___
 ## Files  
 `GMBASIC` allows for you to access up to `10` files at a time!
 Store a file handle in a variable like so:
@@ -407,7 +417,7 @@ This stores the file handle in variable `X`, which can then be used by all of th
 |`FWRITE_LINE_NUMBER(FILEHANDLE, VALUE)`| Writes `VALUE` to `FILEHANDLE` as a `NUMBER` and increases the write positiong for the next operation.|
 |`FCLOSE(FILEHANDLE)`| Closes the file handle `FILEHANDLE`, no further operations can be done after it's closed!(until it's reopened!)|
 |`FEXISTS(FILENAME)`| Returns whether a file with `FILENAME` exists.|
-
+___
 ## Vertex Buffers
 Feeling three dimensional? These help with threedee a lot, but have uses in twodee as well!  
 Currently they ONLY support the `VERTEX_FORMAT_DEFAULT` which is the same as GameMaker's, the underlying engine.  
@@ -420,7 +430,7 @@ The following functions deal with `VERTEX_BUFFER`s:
 |`VERTEX_GET_BUFF_SIZE(VERTEX_BUFFER)`|Returns the size of `VERTEX_BUFFER` in bytes.|
 |`VERTEX_BUFF_NUM(VERTEX_BUFFER)`| Returns the number of verticies in `VERTEX_BUFFER`.|
 |`VERTEX_BUFF_DELETE(VERTEX_BUFFER)`| Deletes `VERTEX_BUFFER`, freeing that memory.|
-
+___
 You can _fill_ `VERTEX_BUFFER`s with the following functions:
 | Function| Description |
 |---|---|
@@ -430,6 +440,7 @@ You can _fill_ `VERTEX_BUFFER`s with the following functions:
 |`VERTEX_TEXCOORD(VERTEX_BUFFER, U, V)`| Defines a point in 2D space for mapping a `TEXTURE` to the vertex.|
 |`VERTEX_END(VERTEX_BUFFER)`| Finish writing vertex data to `VERTEX_BUFFER`.|
 |`VERTEX_SUBMIT(VERTEX_BUFFER, [TEXTURE], [CULL_MODE])`| Submits the vertex for drawing next frame, optionally you can specify a `TEXTURE` to map to the buffer, and the `CULL_MODE` to use from the CONSTANTS below!|
+___
 
 These constants are used to tell the gpu what to cull from the buffer when drawing, COUNTERCLOCKWISE is the default unless otherwise specified.
 | Culling Constant| Description |
@@ -437,23 +448,28 @@ These constants are used to tell the gpu what to cull from the buffer when drawi
 |`CULL_CLOCKWISE`| Culls verticies in the clockwise direction.|
 |`CULL_COUNTERCLOCKWISE`| Culls verticies in the counterclockwise direction.|
 |`DONT_CULL`| Culls nothing.|
+___
 
 
 `TEXTURE`s for mapping to a vertex can be generated from `SPRITE`s via the following function:
 | Function| Description |
 |---|---|
 |`SPRITE_GET_TEXTURE(SPRITE, FRAME)`| Returns a `TEXTURE` of `FRAME` of `SPRITE`, which can be used in Texture Mapping in `VERTEX_BUFFER`s.|
+___
 
 >[!NOTE]
 >Right now the system ONLY supports drawing the DEFAULT FORMAT and TRIANGLE STRIPS! Format your buffer accordingly!
 
+## Asynchronous Functions
+These functions happen wile the program continues running, so you may want a loop that checks for them to finish.
 
-## Miscellany
-Various Functions that don't have enough sister functions for their own section yet:
 | Function| Description |
 |---|---|
 |`HTTP_GET(CALLBACK_VAR, URL)`| Sends a GET request to `URL` and stores the response in `CALLBACK_VAR` asynchronously. See below example for usage.|
-
+|`HTTP_POST(CALLBACK_VAR, URL, STRING)`| Sends a POST request to `URL` with `STRING` as the data to POST, and stores the response in `CALLBACK_VAR` asynchronously. See below example for usage.|
+|`HTTP_GET_FILE(CALLBACK_VAR, URL, TARGET)`|Requests a file from the server at the specified `URL` and stores it locally at `TARGET`, `CALLBACK_VAR` will store the location of the file once fully downloaded.|
+|`ZIP_UNZIP(CALLBACK_VAR, ZIP_FILE, TARGET)`|Unzips `ZIP_FILE` to `TARGET` asynchronously. `CALLBACK_VAR` holds `1` while it's working, `-1` if it failed, or `0` if it's done.|
+___
 An example of how to use `HTTP_GET`:
 ```basic
 10 LET RESP = "WAITING"
@@ -462,6 +478,15 @@ An example of how to use `HTTP_GET`:
 40 IF RESP = "WAITING" THEN GOTO 30
 50 PRINT RESP
 ```
+
+## Miscellany
+Various Functions that don't have enough sister functions for their own section yet:
+| Function| Description |
+|---|---|
+|`SPHERE_IS_VISIBLE(X, Y, Z, RADIUS)`| Returns whether or not a sphere at `(X, Y, Z)` with a radius of `RADIUS` can be seen by the current camera view frustum.|
+___
+
+
 
 ## Some Examples
 I struggle writing BASIC, which I know is funny, but here are some examples of the things I struggle to retain the most, array usage and loops.  
