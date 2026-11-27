@@ -2138,26 +2138,7 @@ function evaluate_postfix(_pf)
                     vertex_end(_args[0]);
                     array_push(_values, 0);
                     break;
-                } 
-                case function_ids.GOSUB:
-                {
-                    if (_arg_count != 1)
-                    {
-                        notify("GOSUB: EXPECTS 1 ARGUMENT", true);
-                        return 0;
-                    }
-                    var _target = find_line_token(_args[0]);
-                    if (_target == -1)
-                    {
-                        _running = false;
-                    }
-                    else
-                    {
-                        _i = _target;
-                    }
-                    array_push(_values, 0);
-                    break;
-                } 
+                }
                 case function_ids.VERTEX_SUBMIT:
                 {
                     if (_arg_count < 1)
