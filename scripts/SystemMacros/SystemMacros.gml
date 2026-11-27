@@ -14,14 +14,16 @@ function SCRIPT(_text = "") constructor
     func_cache = [];
     if_cache = [];
     let_cache = [];
-    output = $"GMBASIC v26.11.26.0";
+    output = $"GMBASIC v26.11.26.1";
     variables =  {};
     pc = 0;
     running = false;
     steps = 0;
     _out_of_time = false;
+    call_stack = [];
     
     current_line = -1;
+    return_spot = 0;
     
     errors = [];
     
@@ -36,8 +38,7 @@ function SCRIPT(_text = "") constructor
     //graphics api
     graphics = [];
     graphics_build = [];
-    graphics_last = graphics_build;
-    graphics_changed = false;
+    graphics_last = [];
     has_built_frame = false;
     //also graphics but kinda seperate
     sprites = {};
@@ -62,6 +63,7 @@ function SCRIPT(_text = "") constructor
         has_built_frame = false;
         current_line = -1;
         errors = [];
+        call_stack = [];
         running = true;
         if(array_length(self.tokens) == 0)
         {
@@ -222,6 +224,46 @@ function SCRIPT(_text = "") constructor
                     else
                     {
                         _running = false;
+                    }
+                }
+                else if (_token.value == "GOSUB")
+                {
+                    if (_i + 1 >= _len || self.tokens[_i + 1].kind != "NUMBER")
+                    {
+                        notify("GOSUB: EXPECTED A LINE NUMBER", true);
+                        _running = false;
+                    }
+                    else
+                    {
+                        var _target = find_line_token(self.tokens[_i + 1].value);
+                        
+                        if (_target == -1)
+                        {
+                            notify("GOSUB: TARGET LINE NOT FOUND", true);
+                            _running = false;
+                        }
+                        else if (array_length(self.call_stack) >= 64)
+                        {
+                            notify("GOSUB: STACK OVERFLOW", true);
+                            _running = false;
+                        }
+                        else
+                        {
+                            array_push(self.call_stack, _i + 2);
+                            _i = _target;
+                        }
+                    }
+                }
+                else if (_token.value == "RETURN")
+                {
+                    if (array_length(self.call_stack) == 0)
+                    {
+                        notify("RETURN WITHOUT GOSUB", true);
+                        _running = false;
+                    }
+                    else
+                    {
+                        _i = array_pop(self.call_stack);
                     }
                 }
                 else if (_token.value == "END")
@@ -2021,6 +2063,16 @@ function evaluate_postfix(_pf)
                     array_push(_values, vertex_get_number(_args[0]));
                     break;
                 }
+                case function_ids.VERTEX_BUFF_CREATE_FROM_BUFF:
+                {
+                    if (_arg_count != 1)
+                    {
+                        notify("VERTEX_BUFF_NUM: EXPECTS 1 ARGUMENT", true);
+                        return 0;
+                    }
+                    array_push(_values, vertex_get_number(_args[0]));
+                    break;
+                }
                 case function_ids.VERTEX_BUFF_DELETE:
                 {
                     if (_arg_count != 1)
@@ -2087,14 +2139,47 @@ function evaluate_postfix(_pf)
                     array_push(_values, 0);
                     break;
                 } 
-                case function_ids.VERTEX_SUBMIT:
+                case function_ids.GOSUB:
                 {
-                    if (_arg_count != 2)
+                    if (_arg_count != 1)
                     {
-                        notify("VERTEX_SUBMIT: EXPECTS 2 ARGUMENTS", true);
+                        notify("GOSUB: EXPECTS 1 ARGUMENT", true);
                         return 0;
                     }
-                    array_push(objSystem.program.graphics_build, {kind: "VERTEX_SUBMIT", buffer:_args[0], tex: _args[1]});
+                    var _target = find_line_token(_args[0]);
+                    if (_target == -1)
+                    {
+                        _running = false;
+                    }
+                    else
+                    {
+                        _i = _target;
+                    }
+                    array_push(_values, 0);
+                    break;
+                } 
+                case function_ids.VERTEX_SUBMIT:
+                {
+                    if (_arg_count < 1)
+                    {
+                        notify("VERTEX_SUBMIT: EXPECTS AT LEAST 1 ARGUMENT1", true);
+                        return 0;
+                    }
+                    else
+                    if(_arg_count == 1)
+                    {
+                        array_push(objSystem.program.graphics_build, {kind: "VERTEX_SUBMIT", buffer:_args[0], tex: -1, cull:cull_noculling});
+                    }
+                    else
+                    if(_arg_count == 2)
+                    {
+                    	array_push(objSystem.program.graphics_build, {kind: "VERTEX_SUBMIT", buffer:_args[0], tex: _args[1], cull:cull_noculling});
+                    }
+                    else
+                    if(_arg_count == 3)
+                    {
+                    	array_push(objSystem.program.graphics_build, {kind: "VERTEX_SUBMIT", buffer:_args[0], tex: _args[1], cull:_args[2]});
+                    }
                     array_push(_values, 0);
                     break;
                 }

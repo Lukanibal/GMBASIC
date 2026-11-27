@@ -86,6 +86,9 @@ function SPECIAL() constructor
         "BUFF_STRING": buffer_string,
         "BUFF_BOOL" : buffer_bool,
         "VERTEX_FORMAT_DEFAULT" : global.default_vertex_format,
+        "CULL_CLOCKWISE" : cull_clockwise,
+        "CULL_COUNTERCLOCKWISE" : cull_counterclockwise,
+        "DONT_CULL" : cull_noculling
     }
 }
 
@@ -124,3 +127,4 @@ if(room == rmRunnerOnly && program.lines[0] == "10 TYPE NEW TO BEGIN A NEW BASIC
     load_project(true);
 }
 
+_scissor = gpu_get_scissor();

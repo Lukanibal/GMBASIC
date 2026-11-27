@@ -66,6 +66,7 @@ global.function_bridge =
     "BUFF_POKE" : function_ids.BUFF_POKE,
     "BUFF_DELETE" : function_ids.BUFF_DELETE,
     "BUFF_TELL" : function_ids.BUFF_TELL,
+    "BUFF_CREATE_FROM_VERTEX_BUFF" : function_ids.BUFF_CREATE_FROM_VERTEX_BUFF,
     
     "FOPEN" : function_ids.FOPEN, 
     "FREAD_LINE_STRING" : function_ids.FREAD_LINE_STRING, 
@@ -105,6 +106,10 @@ global.function_bridge =
     "VERTEX_TEXCOORD" : function_ids.VERTEX_TEXCOORD,
     "VERTEX_END" : function_ids.VERTEX_END,
     "VERTEX_SUBMIT" : function_ids.VERTEX_SUBMIT,
+    "VERTEX_BUFF_CREATE_FROM_BUFF" : function_ids.VERTEX_BUFF_CREATE_FROM_BUFF,
+    "VERTEX_BUFF_SAVE" : function_ids.VERTEX_BUFF_SAVE,
+    "VERTEX_BUFF_LOAD" : function_ids.VERTEX_BUFF_LOAD,
+    
     
 }
 

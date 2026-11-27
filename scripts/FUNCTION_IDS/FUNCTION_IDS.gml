@@ -67,6 +67,7 @@ enum function_ids
     BUFF_POKE,
     BUFF_DELETE,
     BUFF_TELL,
+    BUFF_CREATE_FROM_VERTEX_BUFF,
     
     ///FILES
     FOPEN,
@@ -106,9 +107,17 @@ enum function_ids
     VERTEX_TEXCOORD,
     VERTEX_END,
     VERTEX_SUBMIT,
+    VERTEX_BUFF_CREATE_FROM_BUFF,
+    VERTEX_BUFF_SAVE,
+    VERTEX_BUFF_LOAD,
+    
     
     //TEXTUREs
-    SPRITE_GET_TEXTURE
+    SPRITE_GET_TEXTURE,
+    
+    //NEW CORE BASIC FUNCTIONALITY
+    GOSUB,
+    RETURN
     
 }
 

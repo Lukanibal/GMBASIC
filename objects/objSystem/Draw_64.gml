@@ -88,7 +88,7 @@ if(!array_equals(program.graphics_last, program.graphics_build))
         {
             gpu_set_ztestenable(true);
             gpu_set_zwriteenable(true);
-            gpu_set_cullmode(cull_counterclockwise);
+            gpu_set_cullmode(_item.cull);
             vertex_submit(_item.buffer, pr_trianglestrip, _item.tex);
             gpu_set_cullmode(cull_noculling);
             gpu_set_ztestenable(false);
@@ -96,6 +96,7 @@ if(!array_equals(program.graphics_last, program.graphics_build))
         }
     }
     surface_reset_target();
+    program.graphics_last = program.graphics_build;
 }
 
 
@@ -160,14 +161,10 @@ if(program.waiting_for_input)
 
 
 
-var _display_text = typed_text;
-if(on)
-{
-    _display_text = string_insert(cursor, _display_text, position);
-}
+
 if(room == rmConsole)
 {
-    draw_text(10, room_height - 36, ">"+_display_text);
+    
     
     ///PROGRAM PANE
     var _pane_left = row_length + 20;
@@ -176,14 +173,23 @@ if(room == rmConsole)
     var _pane_height = window_get_height() - 168; 
     var _line_h = 24;
     
-    var _scissor = gpu_get_scissor();
     
-    gpu_set_scissor(_pane_left, _pane_top, _pane_width, _pane_height);
     
+    
+    draw_line_width_colour(row_length+15, 0, row_length+15, window_get_height(), 4, text_color, text_color);
+    draw_line_width_colour(0, 610, window_get_width(), 610, 4, text_color, text_color);
     
     
     if(program.loaded && show_program)
     {
+        var _display_text = typed_text;
+        if(on)
+        {
+            _display_text = string_insert(cursor, _display_text, position);
+        }
+        draw_text(10, room_height - 36, ">"+_display_text);
+        
+        gpu_set_scissor(_pane_left, _pane_top, _pane_width, _pane_height);
         if(show_highlight)
         {
             var _b = program_line_bounds(program.current_line, _pane_width);
@@ -215,12 +221,12 @@ if(room == rmConsole)
             draw_set_color(text_color);
             draw_text(_pane_left, _y, string_copy(program.lines[_i], 1, 150));
         }
-    }
+        gpu_set_scissor(_scissor);
     
     
-    gpu_set_scissor(_scissor);
-    draw_line_width_colour(row_length+15, 0, row_length+15, window_get_height(), 4, text_color, text_color);
-    draw_line_width_colour(0, 610, window_get_width(), 610, 4, text_color, text_color);
+    
+    
+
     
     ///VARIABLES PANE
     _pane_left = row_length + 20;
@@ -235,7 +241,7 @@ if(room == rmConsole)
     var _first = max(0, floor(variables_scroll_y / _line_h));
     var _last = min(_count - 1, ceil((variables_scroll_y + _pane_height) / _line_h));
     
-    _scissor = gpu_get_scissor();
+    
     gpu_set_scissor(_pane_left, _pane_top, _pane_width, _pane_height);
     
     draw_text(_pane_left, _pane_top, "VARIABLES:");
@@ -252,9 +258,6 @@ if(room == rmConsole)
     
     gpu_set_scissor(_scissor);
     
-    draw_line_width_colour(row_length+15, 0, row_length+15, window_get_height(), 4, text_color, text_color);
-    draw_line_width_colour(0, 610, window_get_width(), 610, 4, text_color, text_color);
-    
     ///ERRORS PANE
     _pane_left = 10;
     _pane_top = 615;
@@ -267,7 +270,7 @@ if(room == rmConsole)
     _first = max(0, floor(errors_scroll_y / _line_h));
     _last = min(_count - 1, ceil((errors_scroll_y + _pane_height) / _line_h));
     
-    _scissor = gpu_get_scissor();
+    
     gpu_set_scissor(_pane_left, _pane_top, _pane_width, _pane_height);
     
     draw_text(_pane_left, _pane_top, "CONSOLE:");
@@ -280,5 +283,6 @@ if(room == rmConsole)
     }
     
     gpu_set_scissor(_scissor);
-    
+        
+    }
 }
