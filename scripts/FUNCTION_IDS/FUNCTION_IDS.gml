@@ -115,9 +115,7 @@ enum function_ids
     //TEXTUREs
     SPRITE_GET_TEXTURE,
     
-    //NEW CORE BASIC FUNCTIONALITY
-    GOSUB,
-    RETURN
+    
     
 }
 
