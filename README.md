@@ -1,13 +1,13 @@
 ![GMBASIC Logo](options/main/template_icon.png)
 # GMBASIC Language Reference
-CURRENT LANGUAGE SPEC AS OF v26.11.26.0
+CURRENT LANGUAGE SPEC AS OF `v26.11.26.1`
 
 A LIVE DEMO OF GMBASIC CAN BE FOUND ON ITCH.IO, YOU CAN ALSO DOWNLOAD A WINDOWS BUILD OF IT [HERE!](https://lukanspellweaver.itch.io/gmbasic)
 
 ## GMBASIC Syntax
 
 ```basic
-LET X = 5
+10 LET X = 5
 ```
 Assigns the value `5` to the variable `X`.
 
@@ -15,16 +15,22 @@ Assigns the value `5` to the variable `X`.
 Variable names must start with a letter and contain letters, digits, and underscores `_`.
 
 ```basic
-PRINT "HELLO WORLD"
+10 PRINT "HELLO WORLD"
 ```
 Prints `HELLO WORLD` to the console. `PRINT` also accepts variables and arrays.  
 This will NOT print a NEWLINE at the end.
 
+### Program Structure
+All lines must begin with their LINE NUMBER, PROGRAMs are run line by line in numerical order.  
+It is recommended to go in increments of `10` so you have wiggle room for mistake correction later. 
+
 `IF` `THEN` `ELSE` are supported, but only accept `GOTO` for `THEN` and `ELSE`, so  
 ```basic
-IF X = 1 THEN GOTO 100 ELSE GOTO 200
+10 IF X = 1 THEN GOTO 100 ELSE GOTO 200
 ```
-ELSE is optional. With no ELSE, a false condition falls through to the next line.  
+`ELSE` is optional. With no `ELSE`, a false condition falls through to the next line.  
+
+`GOSUB`/`RETURN` are supported in `v26.11.26.1` and on, and allow subroutines and up to 64 levels of recursion currently!
 
 `GOTO <LINE NUMBER>` is also supported for _BASIC_ loops, `<LINE NUMBER>` MUST be a literal number and not a variable!  
 
@@ -42,6 +48,7 @@ The Editor itself has some useful commands that cannot be used in a BASIC progra
 |`HELP` or `?`|Opens the manual in your default browser, you do need to be online!|
 |`NEW PROJECTNAME`| Opens the Windows File Dialog to create a Project Folder for a project with `PROJECTNAME`. This is required if you want to save your work!!!|
 |`RUN`| Runs the program to its natural end, til an `END` statement is reached, or ad infinitum via a `GOTO` loop.|
+|`STOP`| Stops the program.|
 |`SAVE`| Saves the current `PROJECT`|
 |`LOAD`| Load a `PROJECT`, if no assets folder is found, then only `MAIN.BAS` will be loaded.|
 |`COPY`| Copy the entire program into the clipboard|
@@ -402,7 +409,15 @@ You can _fill_ `VERTEX_BUFFER`s with the following functions:
 |`VERTEX_COLOR(VERTEX_BUFFER, COLOR, ALPHA)`| Defines a color and alpha for the vertex.|
 |`VERTEX_TEXCOORD(VERTEX_BUFFER, U, V)`| Defines a point in 2D space for mapping a `TEXTURE` to the vertex.|
 |`VERTEX_END(VERTEX_BUFFER)`| Finish writing vertex data to `VERTEX_BUFFER`.|
-|`VERTEX_SUBMIT(VERTEX_BUFFER, TEXTURE)`| Submits the vertex for drawing next frame.|
+|`VERTEX_SUBMIT(VERTEX_BUFFER, [TEXTURE], [CULL_MODE])`| Submits the vertex for drawing next frame, optionally you can specify a `TEXTURE` to map to the buffer, and the `CULL_MODE` to use from the CONSTANTS below!|
+
+These constants are used to tell the gpu what to cull from the buffer when drawing, COUNTERCLOCKWISE is the default unless otherwise specified.
+| Culling Constant| Description |
+|---|---|
+|`CULL_CLOCKWISE`| Culls verticies in the clockwise direction.|
+|`CULL_COUNTERCLOCKWISE`| Culls verticies in the counterclockwise direction.|
+|`DONT_CULL`| Culls nothing.|
+
 
 `TEXTURE`s for mapping to a vertex can be generated from `SPRITE`s via the following function:
 | Function| Description |
@@ -422,10 +437,10 @@ Various Functions that don't have enough sister functions for their own section 
 An example of how to use `HTTP_GET`:
 ```basic
 10 LET RESP = "WAITING"
-20 LET ID = HTTP_GET("RESP", "http://example.com/")
+20 HTTP_GET("RESP", "http://example.com/")
 30 VSYNC
 40 IF RESP = "WAITING" THEN GOTO 30
-50 PRINT "DONE!"
+50 PRINT RESP
 ```
 
 ## Some Examples
