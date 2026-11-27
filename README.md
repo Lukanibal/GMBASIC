@@ -32,7 +32,27 @@ It is recommended to go in increments of `10` so you have wiggle room for mistak
 
 `GOSUB`/`RETURN` are supported in `v26.11.26.1` and on, and allow subroutines and up to 64 levels of recursion currently!
 
+A simple `GOSUB` example:
+```basic
+10 PRINT "START\N"
+20 GOSUB 100
+30 PRINT "BACK FROM SUBROUTINE\N"
+40 END
+100 PRINT "INSIDE SUBROUTINE\N"
+110 RETURN
+
+```
+
 `GOTO <LINE NUMBER>` is also supported for _BASIC_ loops, `<LINE NUMBER>` MUST be a literal number and not a variable!  
+
+```basic
+10 PRINT "START\N"
+20 GOTO 50
+30 PRINT "THIS LINE IS SKIPPED\N"
+40 END
+50 PRINT "GOTO JUMPED HERE\n"
+60 END
+```
 
 `END` Ends the program  
 ## Editor Commands  
